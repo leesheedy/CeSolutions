@@ -10,13 +10,16 @@ const out = join(root, "dist/client");
 const origin = "https://cesolutions.com.au";
 const { default: handler } = await import(pathToFileURL(join(root, "dist/server/server.js")).href);
 
+// Pages are written as <route>.html, not <route>/index.html: Netlify serves
+// /solar from solar.html without the trailing-slash redirect a directory gets,
+// which keeps served URLs identical to the canonical links.
 const files = {
   "/": "index.html",
-  "/solar": "solar/index.html",
-  "/batteries": "batteries/index.html",
-  "/commercial-solar": "commercial-solar/index.html",
-  "/about": "about/index.html",
-  "/contact": "contact/index.html",
+  "/solar": "solar.html",
+  "/batteries": "batteries.html",
+  "/commercial-solar": "commercial-solar.html",
+  "/about": "about.html",
+  "/contact": "contact.html",
   "/robots.txt": "robots.txt",
   "/sitemap.xml": "sitemap.xml",
 };
