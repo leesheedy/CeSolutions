@@ -11,7 +11,8 @@ export function applySecurityHeaders(response: Response): Response {
     "default-src 'self'; " +
       "script-src 'self' 'unsafe-inline'; " +
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-      "font-src 'self' https://fonts.gstatic.com; " +
+      // Vite inlines small woff2 files as data: URIs in the built CSS.
+      "font-src 'self' data: https://fonts.gstatic.com; " +
       "img-src 'self' data: https:; media-src 'self' https: blob:; " +
       "connect-src 'self' https:; " +
       "frame-src 'self' https://auth.higgsfield.app https://auth.higgsfield-dev.app; " +

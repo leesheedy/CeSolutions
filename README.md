@@ -68,18 +68,20 @@ Only figures CES already publishes on its own FAQ are used on the site: 50–100
 
 ## Deploying
 
-The site currently deploys to Higgsfield. From a clone of the Higgsfield site repo (`website_repo_access` in the connector gives the URL and a scoped token), copy the changed files from `website/app` into the clone's `app/`, commit, push `main`, then call `deploy_website`. On Windows clone with `-c core.longpaths=true`; the vendored package paths exceed the default limit. Latest deployed revision: `f8a100b` (14 September 2026).
+**Netlify (public):** every push to `main` builds the site on Netlify (project `cesolutions`) and publishes it at https://cesolutions.netlify.app. `netlify.toml` sets the base to `website/app`, runs `bun install`, `bun run build` and `node scripts/prerender.mjs`, and publishes `dist/client`. The prerender step renders each route through the SSR bundle to a static file (`index.html`, `solar.html`, …, `robots.txt`, `sitemap.xml`, `404.html`); `public/_redirects` and `public/_headers` replace the Worker's redirect and security-header logic. To rebuild locally: `bun run build && node scripts/prerender.mjs`, then serve `dist/client`.
+
+**Higgsfield (gated preview):** the site also deploys to Higgsfield. From a clone of the Higgsfield site repo (`website_repo_access` in the connector gives the URL and a scoped token), copy the changed files from `website/app` into the clone's `app/`, commit, push `main`, then call `deploy_website`. On Windows clone with `-c core.longpaths=true`; the vendored package paths exceed the default limit. Latest deployed revision: `f8a100b` (14 September 2026).
 
 The `website/.github/workflows/ci.yml` file is the template's CI for Higgsfield's own runners; it is not at this repository's root, so GitHub Actions does not run it here.
 
 ## Launch status
 
-**Not yet public.** The Higgsfield host answers anonymous requests with HTTP 401 and shows the site only to a signed-in Higgsfield account. Until that gate is lifted or the built output is moved to a public host under cesolutions.com.au, customers cannot reach the new site. cesolutions.com.au, its DNS and hosting are unchanged.
+**Public on Netlify, not yet on the CES domain.** https://cesolutions.netlify.app serves the new site to anyone. cesolutions.com.au still points at the WordPress site; its DNS is managed in Cloudflare. To switch: add `cesolutions.com.au` and `www.cesolutions.com.au` as custom domains on the Netlify project, then set the apex `A` record to `75.2.60.5` and `www` to a `CNAME` for `cesolutions.netlify.app`, both DNS-only, and let Netlify issue the certificate. The Higgsfield host remains a sign-in-gated preview.
 
 Remaining launch work, from the audit:
 
-1. Resolve anonymous access, or host `dist/` (Cloudflare Worker + static client) elsewhere.
-2. Add a receiving endpoint for the enquiry form if email preparation is not enough.
+1. Attach the domain and switch DNS (above).
+2. Add a receiving endpoint for the enquiry form if email preparation is not enough — Netlify Forms is the natural fit now that the pages are static.
 3. Coordinate DNS, canonical/robots checks and legacy redirects when switching the domain.
 4. Add consent-appropriate analytics and Search Console after public hosting, then measure Core Web Vitals and enquiry completion.
 5. Replace the thumbnail-sized Instagram images with CES originals when available.

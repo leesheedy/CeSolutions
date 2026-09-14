@@ -1,6 +1,14 @@
 # Clean Energy Solutions website
 
-[Open the deployed website](https://clean-energy-solutions.higgsfield.app)
+## Netlify (public) — 14 September 2026
+
+The site now also builds and deploys on Netlify from the GitHub repository (https://github.com/leesheedy/CeSolutions, project `cesolutions`, team `leesheedy`): **https://cesolutions.netlify.app** — publicly reachable, no sign-in. Every push to `main` rebuilds it: `netlify.toml` runs the Bun build in `website/app` and `scripts/prerender.mjs` writes the six pages, `robots.txt`, `sitemap.xml` and `404.html` as static files; `public/_redirects` carries the legacy WordPress redirects and `public/_headers` the security headers.
+
+To serve it at cesolutions.com.au: add `cesolutions.com.au` (primary) and `www.cesolutions.com.au` as custom domains on the Netlify project, then in the Cloudflare DNS zone (nameservers nina/stan.ns.cloudflare.com) point the apex `A` record at Netlify (`75.2.60.5`) and `www` as a `CNAME` to `cesolutions.netlify.app`, both **DNS only** (grey cloud) so Netlify can issue the certificate. The apex currently points at the WordPress host (45.77.235.129); changing it takes the old site offline for visitors.
+
+## Higgsfield host (gated)
+
+[Open the Higgsfield deployment](https://clean-energy-solutions.higgsfield.app)
 
 Higgsfield confirmed the updated deployment on 14 September 2026. Website ID: `229de0b0-bdd3-4434-b5f3-57faea419641`.
 
