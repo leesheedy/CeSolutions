@@ -1,0 +1,11 @@
+# Netlify build for the CES website. The app lives in website/app; the build
+# emits a client bundle plus an SSR bundle, then scripts/prerender.mjs renders
+# every page to static HTML so the site is served without a server.
+[build]
+  base = "website/app"
+  command = "bun install --frozen-lockfile && bun run build && node scripts/prerender.mjs"
+  publish = "dist/client"
+
+[build.environment]
+  NODE_VERSION = "24"
+  BUN_VERSION = "1.4.2"

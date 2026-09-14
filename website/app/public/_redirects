@@ -1,0 +1,14 @@
+# Legacy cesolutions.com.au (WordPress) paths -> new pages. Mirrors src/server.ts.
+/solar-systems/solar-systems-info/     /solar      301
+/solar-systems/*                       /solar      301
+/heat-pumps/benefits-of-batteries/     /batteries  301
+/battery-systems/benefits-of-batteries/ /batteries 301
+/battery-systems/*                     /batteries  301
+/battery-products/                     /batteries  301
+/contact-us/contact-ces/               /contact    301
+/contact-us/*                          /contact    301
+/clean-energy-solutions-book-online/   /about      301
+/faq/                                  /#faq       301
+/ces-home-page/                        /           301
+/app                                   /           301
+/app/*                                 /           301
