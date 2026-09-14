@@ -1,9 +1,26 @@
+import {useRef} from 'react';
+import {motion,useReducedMotion,useScroll,useTransform} from 'motion/react';
 import {HardHat,Ruler,Smartphone} from 'lucide-react';
+import {ScrollStroke} from '@/components/ui/svg-follow-scroll';
 import {Arrow} from './shell';
-import {HeroChips,Parallax,ParallaxBackdrop,Reveal,Rise,Stack,StackItem} from './motion';
+import {Parallax,ParallaxBackdrop,Reveal,Rise,Stack,StackItem} from './motion';
 export const MAPS='https://www.google.com/maps/search/?api=1&query=79%20Elgin%20Boulevard%20Wodonga%20Victoria%203690';
-/** Dark hero over a generated (labelled) backdrop that scrolls slower than the copy. */
-export function Hero(){return <ParallaxBackdrop className="hero" eager width={2048} height={880} label="Solar and batteries in Albury-Wodonga" image="/assets/hero-backdrop.webp" alt="Illustration: a regional Australian home with black solar panels on a corrugated roof at golden hour"><p className="eyebrow">Solar &amp; batteries · Albury-Wodonga</p><Reveal as="h1" lines={['Cut your power bill','in half. Or more.']} stagger={.08}/><Rise delay={.25}><p className="hero__body">Systems designed from your electricity bills and installed by our own local electricians. Most CES households save 50–100% on power and pay the system off in 3 to 6 years.</p><div className="hero-action-row"><a href="/contact" className="hero-quote">Get my free quote <Arrow/></a><a href="tel:+61260212000" className="hero-call">Call (02) 6021 2000</a></div><a href="https://www.solarquotes.com.au/installer-review/clean-energy-solutions/" className="hero-review"><strong>4.8/5</strong><span>26 SolarQuotes ratings ↗</span></a><p className="hero-note">Typical range. Your figure depends on system size and when you use power — we calculate it from your actual bills before you decide anything.</p></Rise><HeroChips items={['Installed in a day','Battery-ready designs','Our own electricians']}/><span className="hero__caption">Illustration · real CES installs are in <a href="#our-work">our work</a></span></ParallaxBackdrop>}
+/** Light, centred hero: a brand-gradient stroke draws behind the headline as you scroll, and the
+ * (labelled) generated illustration sits below in a rounded panel that rises slightly. */
+export function Hero(){
+  const ref=useRef<HTMLElement>(null);
+  const reduce=useReducedMotion();
+  const {scrollYProgress}=useScroll({target:ref,offset:['start start','end start']});
+  const mediaY=useTransform(scrollYProgress,[0,1],[0,-140]);
+  return <section ref={ref} className="hero2" aria-label="Solar and batteries in Albury-Wodonga">
+    <div className="hero2__copy wrap"><ScrollStroke progress={scrollYProgress} className="hero2__stroke" from={.15} strokeWidth={18}/>
+      <p className="eyebrow">Solar &amp; batteries · Albury-Wodonga</p>
+      <Reveal as="h1" lines={['Cut your power bill','in half. Or more.']} stagger={.08}/>
+      <Rise delay={.25}><p className="hero2__body">Designed from your electricity bills. Installed by our own local electricians. Most CES households save 50–100% on power and pay the system off in 3 to 6 years.</p><div className="hero-action-row"><a href="/contact" className="hero-quote">Get my free quote <Arrow/></a><a href="tel:+61260212000" className="hero-call">Call (02) 6021 2000</a></div><a href="https://www.solarquotes.com.au/installer-review/clean-energy-solutions/" className="hero-review"><strong>4.8/5</strong><span>26 SolarQuotes ratings ↗</span></a><p className="hero-note">Typical range. Your figure depends on system size and when you use power — we calculate it from your actual bills before you decide anything.</p></Rise>
+    </div>
+    <motion.div className="hero2__media wrap" data-motion="" style={reduce?undefined:{y:mediaY}}><img src="/assets/hero-backdrop.webp" alt="Illustration: a regional Australian home with black solar panels on a corrugated roof at golden hour" width={2048} height={878} fetchPriority="high" decoding="async"/><span className="hero__caption">Illustration · real CES installs are in <a href="#our-work">our work</a></span></motion.div>
+  </section>;
+}
 const steps=[
 {Icon:Ruler,title:'We design it from your bills',body:'Bree reads your recent bills and your roof, then sizes a system around how you actually use power. You see the expected savings before you sign anything.'},
 {Icon:HardHat,title:'Our own electricians install it',body:'CEC-accredited, on our payroll and led by Daniel. Most homes are finished in a day, with the distributor paperwork handled for you.'},

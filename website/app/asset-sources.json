@@ -22,27 +22,28 @@
     "source": "https://www.instagram.com/cesolutions1/p/DdISbZLDSY9/",
     "retrieved": "2026-09-14",
     "dimensions": [
-      512,
-      640
+      1200,
+      1500
     ],
-    "note": "Public profile image; no invented project specifications or location"
+    "note": "Public profile image (512x640 original) upscaled 4x with Higgsfield's ByteDance upscaler on 2026-09-15 and re-encoded to WebP; replace with the CES original when available. No invented project specifications or location"
   },
   "instagram-rooftop.webp": {
     "source": "https://www.instagram.com/cesolutions1/p/DdBGXypjZuT/",
     "retrieved": "2026-09-14",
     "dimensions": [
-      512,
-      640
+      1200,
+      1500
     ],
-    "note": "Public profile image; no invented project specifications or location"
+    "note": "Public profile image (512x640 original) upscaled 4x with Higgsfield's ByteDance upscaler on 2026-09-15 and re-encoded to WebP; replace with the CES original when available. No invented project specifications or location"
   },
   "instagram-crew.webp": {
     "source": "https://www.instagram.com/cesolutions1/p/DdAkDIQIPCf/",
     "retrieved": "2026-09-14",
     "dimensions": [
-      640,
-      427
+      1600,
+      1060
     ],
-    "note": "Public profile image; no invented project specifications or location"
-  }
+    "note": "Public profile image (640x427 original) upscaled with Higgsfield's ByteDance upscaler on 2026-09-15 and re-encoded to WebP; replace with the CES original when available. No invented project specifications or location"
+  },
+  "team.webp (shopfront)": "https://cesolutions.com.au/wp-content/uploads/2025/02/qw2.jpg, 1024x562 original upscaled to 1800x992 with Higgsfield's ByteDance upscaler on 2026-09-15"
 }

@@ -1,6 +1,21 @@
 # CES website UI, content and technical audit
 Reviewed 14 September 2026. Scope: the six-page Higgsfield redesign, the supplied homepage copy, CES source imagery, and the ThrillX reference. This report distinguishes implemented fixes from hosting and operational work still required.
 
+## Update — 15 September 2026 (later): simpler hero, "Our work" scroll intro, review marquee, glow footer, upscaled photos
+**Components (skiperui / mvpblocks / designali, adapted).** Four primitives now live in `src/components/ui/` as the task specified: `svg-follow-scroll.tsx` (a brand-gradient stroke whose drawn length follows scroll), `text-scroll-animation.tsx` (characters and photos that converge from the edges), `marquee.tsx` (CSS track, keyframes in `styles.css`) and the footer pattern composed in `shell.tsx`. All were rewritten on `motion/react` (already installed; same API as framer-motion) and brand tokens. Not adopted: Lenis smooth scrolling (would fight the GSAP ScrollTrigger and native scroll already in use), the "liquid glass" SVG displacement filter on cards (heavy, hurts legibility on light surfaces), Next.js `Link`, and the demo's rose/lime colours.
+
+**Hero.** Now light and centred: uppercase Saira headline, the cyan→green stroke draws behind it as you scroll, pill CTA, review line and the savings qualifier, then the (labelled) illustration in a rounded panel that rises slightly. The chips and dark treatment are gone; the copy is unchanged.
+
+**Our work.** The gallery opens with a pinned intro: the letters of "Our work" converge from the edges while six CES photos fan in from both sides, then the filterable two-speed grid follows.
+
+**Reviews.** A slow, pause-on-hover marquee of ten short excerpts from the SolarQuotes listing (first name, area, month, star rating), each a contiguous fragment of the published review — nothing joined across omissions — beneath the existing 4.8/5 score and the Lois Nolan feature, with a source line and the listing's sub-ratings. The Google share link supplied resolved to a search knowledge panel rather than a review list; SolarQuotes remains the cited source. That listing also gives CES an Albury address (560 Olive Street) alongside the Wodonga shopfront — worth confirming which to publish.
+
+**Photo quality.** Instagram serves only 640 px crops without a session, so the three Instagram photos and the shopfront were upscaled with Higgsfield's ByteDance upscaler (to 1200×1500, 1600×1060 and 1800×992) and re-encoded as WebP; provenance is in `asset-sources.json` with a note to swap in CES originals when available.
+
+**Footer.** Glass card over the black base with two soft cyan/green glow blobs: logo, one-line description, Facebook/Instagram, Services and Company columns, contact with icons, then the copyright row.
+
+**Checks.** Typecheck, `check:ui`, production build; hydration clean on `/`, `/solar`, `/contact`; 26-check sweep (320/390/768/1440, no-JS, reduced-motion) clean. One regression caught before shipping: a `>*` positioning rule turned the hero stroke into an inline 1,600 px-tall SVG and pushed the hero copy off-screen.
+
 ## Update — 15 September 2026: brand realignment, generated hero, plainer explanation
 **Brand, taken from the live site rather than assumed.** cesolutions.com.au uses Saira Condensed for headings, buttons and navigation, Roboto for body copy, a black header and footer, cyan `#00ADF0` as the primary colour with teal/green `#00C8CF`/`#00E0B4` (the logo's gradient), a light-blue tint `#DBEDF3` and cream `#FBF3EA` for surfaces, and pill-shaped buttons. The earlier redesign's navy-and-orange palette and Outfit typeface were not CES's; every colour in `styles.css` was remapped and the fonts switched (Google Fonts, already permitted by the CSP). The full-size logo (`logo-wide-full.png`, 1905×542) and the square mark were downloaded from the site; the logo is designed for dark backgrounds, so the header and footer are black and the earlier `brightness(0)` filter is gone. One deliberate deviation: primary buttons use black text on cyan, because the live site's white-on-cyan is 2.6:1 and fails WCAG AA.
 
