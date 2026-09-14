@@ -241,14 +241,14 @@
  },
  {
   "route": "/ (no JS)",
-  "motionEls": 112,
+  "motionEls": 120,
   "hidden": 0,
-  "h1": "Cut your power bill\nin half. Or more.",
+  "h1": "Cut your power billin half. Or more.",
   "quote": true
  },
  {
   "route": "/ (reduced motion)",
-  "motionEls": 112,
+  "motionEls": 120,
   "hiddenAtTop": 0,
   "marqueeAnim": "none",
   "videos": 0

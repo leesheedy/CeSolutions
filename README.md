@@ -58,9 +58,13 @@ website/app/src
 
 `public/assets` holds the photography (three public Instagram posts and images from cesolutions.com.au, listed in `asset-sources.json`), the encoded hero clips and their exact first-frame posters. `packages/` contains Higgsfield's vendored template packages; the site does not use them at runtime, but the build depends on the Quanta Tailwind entry, so they stay in place. Note that `@higgsfield/fnf` and `fnf-react` are marked `UNLICENSED` by Higgsfield.
 
+### Brand
+
+Tokens are taken from the live cesolutions.com.au site, not invented: Saira Condensed (headings, buttons, navigation), Roboto (body), cyan `#00ADF0` primary, the logo's green→cyan gradient, light-blue `#DBEDF3` and cream `#FBF3EA` surfaces, black header and footer, pill buttons. The one deliberate deviation is black text on cyan buttons — the live site's white-on-cyan is 2.6:1 and fails WCAG AA. The homepage hero backdrop is a Higgsfield-generated illustration, labelled as such on the page and in `asset-sources.json`; all other photography is CES's own.
+
 ### Motion
 
-`src/site/motion.tsx` adapts several [21st.dev](https://21st.dev) components onto Motion for React: parallax image (#20023), masked text reveal (#19257), scroll word reveal (#24525), logo marquee (#21470), stacking cards (#25275) and two-speed grid columns (#1224). Every animated element carries `data-motion`; a `<noscript>` sheet and a `prefers-reduced-motion` rule force them visible, so content reads without JavaScript and for reduced-motion users. The hero uses the template's scroll-scrub engine, which seeks a short clip as you scroll and falls back to a still image.
+Two libraries, each used where it fits. `src/site/flow.tsx` uses **GSAP + ScrollTrigger** (loaded on the client after mount) for the six-step "how your system works" diagram, whose connectors draw as you scroll, and for the progress line that fills beside the process steps. `src/site/motion.tsx` adapts several [21st.dev](https://21st.dev) components onto Motion for React: parallax image (#20023), masked text reveal (#19257), scroll word reveal (#24525), logo marquee (#21470), stacking cards (#25275) and two-speed grid columns (#1224). Every animated element carries `data-motion`; a `<noscript>` sheet and a `prefers-reduced-motion` rule force them visible, so content reads without JavaScript and for reduced-motion users. The hero uses the template's scroll-scrub engine, which seeks a short clip as you scroll and falls back to a still image.
 
 ### Copy rules
 

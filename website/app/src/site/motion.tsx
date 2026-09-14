@@ -92,13 +92,13 @@ export function Float({children,className,y=[40,-40],x,opacity,decorative}:{chil
 }
 
 /** Full-bleed photo that scrolls slower than the page, with the copy drifting over it. */
-export function ParallaxBackdrop({image,alt,children,className}:{image:string;alt:string;children:ReactNode;className?:string}){
+export function ParallaxBackdrop({image,alt,children,className,eager,width=1024,height=562,label}:{image:string;alt:string;children:ReactNode;className?:string;eager?:boolean;width?:number;height?:number;label?:string}){
   const ref=useRef<HTMLElement>(null);
   const reduce=useReducedMotion();
-  const {scrollYProgress}=useScroll({target:ref,offset:THROUGH});
-  const y=useTransform(scrollYProgress,[0,1],['-14%','14%']);
-  const copyY=useTransform(scrollYProgress,[0,1],[70,-50]);
-  return <section ref={ref} className={className?'band '+className:'band'}><motion.div className="band__bg" data-motion="" style={reduce?undefined:{y}}><img src={image} alt={alt} loading="lazy" decoding="async" width="1024" height="562"/></motion.div><div className="band__shade" aria-hidden="true"/><motion.div className="band__content" data-motion="" style={reduce?undefined:{y:copyY}}>{children}</motion.div></section>;
+  const {scrollYProgress}=useScroll({target:ref,offset:eager?['start start','end start']:THROUGH});
+  const y=useTransform(scrollYProgress,[0,1],eager?['0%','18%']:['-14%','14%']);
+  const copyY=useTransform(scrollYProgress,[0,1],eager?[0,-90]:[70,-50]);
+  return <section ref={ref} className={className?'band '+className:'band'} aria-label={label}><motion.div className="band__bg" data-motion="" style={reduce?undefined:{y}}><img src={image} alt={alt} loading={eager?'eager':'lazy'} fetchPriority={eager?'high':undefined} decoding="async" width={width} height={height}/></motion.div><div className="band__shade" aria-hidden="true"/><motion.div className="band__content" data-motion="" style={reduce?undefined:{y:copyY}}>{children}</motion.div></section>;
 }
 
 const StackContext=createContext<{progress:MotionValue<number>;total:number}|null>(null);

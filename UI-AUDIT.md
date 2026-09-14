@@ -1,6 +1,19 @@
 # CES website UI, content and technical audit
 Reviewed 14 September 2026. Scope: the six-page Higgsfield redesign, the supplied homepage copy, CES source imagery, and the ThrillX reference. This report distinguishes implemented fixes from hosting and operational work still required.
 
+## Update — 15 September 2026: brand realignment, generated hero, plainer explanation
+**Brand, taken from the live site rather than assumed.** cesolutions.com.au uses Saira Condensed for headings, buttons and navigation, Roboto for body copy, a black header and footer, cyan `#00ADF0` as the primary colour with teal/green `#00C8CF`/`#00E0B4` (the logo's gradient), a light-blue tint `#DBEDF3` and cream `#FBF3EA` for surfaces, and pill-shaped buttons. The earlier redesign's navy-and-orange palette and Outfit typeface were not CES's; every colour in `styles.css` was remapped and the fonts switched (Google Fonts, already permitted by the CSP). The full-size logo (`logo-wide-full.png`, 1905×542) and the square mark were downloaded from the site; the logo is designed for dark backgrounds, so the header and footer are black and the earlier `brightness(0)` filter is gone. One deliberate deviation: primary buttons use black text on cyan, because the live site's white-on-cyan is 2.6:1 and fails WCAG AA.
+
+**Hero.** The scroll-scrub video hero is replaced by a dark full-bleed hero over a Higgsfield-generated illustration (GPT Image 2.5, 21:9, 2K, encoded to a 196 KB WebP), scrolling slower than the copy, with the fact chips layered over it. The image is labelled “Illustration” on the page and in `asset-sources.json`; CES's real photography remains in the gallery, service cards and team sections. The scroll-scrub engine stays in the repository unused, per the template's rules.
+
+**Explaining what CES does.** A three-step strip directly under the hero — design from your bills, our own electricians install, you watch it work and we stay on call — with SVG icons (Lucide), in the order a customer experiences it. Copy still follows the claim rules above.
+
+**GSAP.** Added alongside Motion for two scroll-driven pieces Motion is less suited to: a six-node SVG diagram of how a system works (sun → panels → inverter → home → battery → grid) whose connectors draw and nodes light up with ScrollTrigger scrub, and a gradient progress line beside the process steps with each step highlighted as it reaches mid-viewport. GSAP loads on the client after mount; start states apply only once it has initialised, so the markup reads normally with scripts off and under reduced motion. On phones the diagram switches to a vertical, labels-only layout; the numbered list beneath carries the explanations.
+
+**Mobbin.** Signed in on the free tier, but its search returned "page not found" under automation, so no specific screens were retrieved; the page order (hero → what we do → proof → services → how it works → gallery → reasons → team → reviews → visit → process → rebates → FAQ → CTA) follows the conventional service-landing pattern.
+
+**Checks.** Typecheck, `check:ui` and production build pass; hydration clean on the static build; sweep across 320/390/768/1440, no-JS and reduced-motion clean after fixing a 320 px overflow in the gallery filter row and a counter-sizing bug in the trust strip. Screenshots: `brand-*.png` and `reference-live-wordpress-1440.png` in `website/app/audit/`.
+
 ## Update — 14 September 2026 (late): layered parallax revamp
 Builds on the evening pass below. Local source only; still not deployed.
 

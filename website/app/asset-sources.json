@@ -1,5 +1,11 @@
 {
   "logo.png": "https://cesolutions.com.au/wp-content/uploads/2023/10/CES-logo-dark-large-transparent-wide-768x219.png",
+  "logo-wide-full.png": "https://cesolutions.com.au/wp-content/uploads/2023/10/CES-logo-dark-large-transparent-wide.png (1905x542, retrieved 2026-09-15)",
+  "ces-mark.png": "https://cesolutions.com.au/wp-content/uploads/2023/09/cropped-CES-Logo-Transparent-Large-270x270.png",
+  "hero-backdrop.webp": {
+    "source": "Higgsfield gpt_image_2_5 generation, 2026-09-15",
+    "note": "AI illustration of a regional Australian home with black solar panels at golden hour, used as the homepage hero backdrop and labelled 'Illustration' on the page. Not a CES installation. Encoded to 2048px WebP from the 2688x1152 PNG."
+  },
   "icon-192.png": "https://cesolutions.com.au/wp-content/uploads/2023/09/cropped-CES-Logo-Transparent-Large-192x192.png",
   "team.jpg": "https://cesolutions.com.au/wp-content/uploads/2025/02/qw2.jpg",
   "solar-roof.jpg": "https://cesolutions.com.au/wp-content/uploads/2025/09/Image-from-iOS.jpg",
