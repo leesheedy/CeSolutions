@@ -1,0 +1,2 @@
+import {createFileRoute} from '@tanstack/react-router';
+export const Route=createFileRoute('/robots.txt')({server:{handlers:{GET:async({request})=>{const u=new URL(request.url);const prod=['cesolutions.com.au','www.cesolutions.com.au'].includes(u.hostname);return new Response(prod?'User-agent: *\nAllow: /\nDisallow: /app\nSitemap: https://cesolutions.com.au/sitemap.xml':'User-agent: *\nAllow: /\n# Preview responses carry X-Robots-Tag: noindex to avoid duplicate search listings.',{headers:{'Content-Type':'text/plain; charset=utf-8'}});}}}});

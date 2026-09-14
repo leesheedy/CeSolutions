@@ -1,0 +1,412 @@
+{
+  "date": "2026-09-14",
+  "routes": [
+    {
+      "width": 320,
+      "path": "/",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Solar & Battery Installers Albury-Wodonga | Clean Energy Solutions",
+      "hero": {
+        "x": 16,
+        "y": 104,
+        "width": 288,
+        "height": 319.65625,
+        "top": 104,
+        "right": 304,
+        "bottom": 423.65625,
+        "left": 16
+      },
+      "media": {
+        "x": 0,
+        "y": 486.390625,
+        "width": 320,
+        "height": 309.59375,
+        "top": 486.390625,
+        "right": 320,
+        "bottom": 795.984375,
+        "left": 0
+      },
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 320,
+      "path": "/solar",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Solar Installers Albury-Wodonga | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 320,
+      "path": "/batteries",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Home Battery Installation Albury-Wodonga | CES",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 320,
+      "path": "/commercial-solar",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Commercial Solar Albury-Wodonga | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 320,
+      "path": "/about",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Meet Your Local Solar Team | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 320,
+      "path": "/contact",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Get a Solar & Battery Quote | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Solar & Battery Installers Albury-Wodonga | Clean Energy Solutions",
+      "hero": {
+        "x": 19.5,
+        "y": 104,
+        "width": 351,
+        "height": 341.921875,
+        "top": 104,
+        "right": 370.5,
+        "bottom": 445.921875,
+        "left": 19.5
+      },
+      "media": {
+        "x": 0,
+        "y": 589,
+        "width": 390,
+        "height": 387,
+        "top": 589,
+        "right": 390,
+        "bottom": 976,
+        "left": 0
+      },
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 390,
+      "path": "/solar",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Solar Installers Albury-Wodonga | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 390,
+      "path": "/batteries",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Home Battery Installation Albury-Wodonga | CES",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 390,
+      "path": "/commercial-solar",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Commercial Solar Albury-Wodonga | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 390,
+      "path": "/about",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Meet Your Local Solar Team | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 390,
+      "path": "/contact",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Get a Solar & Battery Quote | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 768,
+      "path": "/",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Solar & Battery Installers Albury-Wodonga | Clean Energy Solutions",
+      "hero": {
+        "x": 38.390625,
+        "y": 120,
+        "width": 620,
+        "height": 362.8125,
+        "top": 120,
+        "right": 658.390625,
+        "bottom": 482.8125,
+        "left": 38.390625
+      },
+      "media": {
+        "x": 0,
+        "y": 600,
+        "width": 768,
+        "height": 378,
+        "top": 600,
+        "right": 768,
+        "bottom": 978,
+        "left": 0
+      },
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 768,
+      "path": "/solar",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Solar Installers Albury-Wodonga | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 768,
+      "path": "/batteries",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Home Battery Installation Albury-Wodonga | CES",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 768,
+      "path": "/commercial-solar",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Commercial Solar Albury-Wodonga | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 768,
+      "path": "/about",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Meet Your Local Solar Team | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 768,
+      "path": "/contact",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Get a Solar & Battery Quote | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "path": "/",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Solar & Battery Installers Albury-Wodonga | Clean Energy Solutions",
+      "hero": {
+        "x": 72,
+        "y": 275.5625,
+        "width": 570.234375,
+        "height": 531.875,
+        "top": 275.5625,
+        "right": 642.234375,
+        "bottom": 807.4375,
+        "left": 72
+      },
+      "media": {
+        "x": 705.59375,
+        "y": 94,
+        "width": 734.390625,
+        "height": 900,
+        "top": 94,
+        "right": 1439.984375,
+        "bottom": 994,
+        "left": 705.59375
+      },
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "path": "/solar",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Solar Installers Albury-Wodonga | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "path": "/batteries",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Home Battery Installation Albury-Wodonga | CES",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "path": "/commercial-solar",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Commercial Solar Albury-Wodonga | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "path": "/about",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Meet Your Local Solar Team | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "path": "/contact",
+      "overflow": false,
+      "h1": 1,
+      "brokenImages": [],
+      "title": "Get a Solar & Battery Quote | Clean Energy Solutions",
+      "errors": [],
+      "violations": []
+    }
+  ],
+  "interactions": {
+    "filter-390": true,
+    "faq-390": true,
+    "mobileMenu": true,
+    "escape": true,
+    "enquiryPrepared": true,
+    "enquiryNotSent": true,
+    "mailto": true,
+    "filter-1440": true,
+    "faq-1440": true,
+    "noJsHeading": "Lower power bills.\nA local team\nyou can call.",
+    "noJsContact": true
+  },
+  "seo": [
+    {
+      "path": "/",
+      "status": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://cesolutions.com.au/\"/>",
+      "description": "<meta name=\"description\" content=\"Solar and battery systems in Albury-Wodonga, designed around your home or business. Meet the local Clean Energy Solutions team. Call (02) 6021 2000.\"/>",
+      "robots": "noindex, nofollow",
+      "schemaCount": 1
+    },
+    {
+      "path": "/solar",
+      "status": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://cesolutions.com.au/solar\"/>",
+      "description": "<meta name=\"description\" content=\"Residential solar installation in Albury-Wodonga. Local design, in-house electricians and ongoing support from Clean Energy Solutions. Request a tailored quote.\"/>",
+      "robots": "noindex, nofollow",
+      "schemaCount": 1
+    },
+    {
+      "path": "/batteries",
+      "status": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://cesolutions.com.au/batteries\"/>",
+      "description": "<meta name=\"description\" content=\"Store your solar for later with a home battery in Albury-Wodonga. Explore compatibility, backup options and a tailored battery design with Clean Energy Solutions.\"/>",
+      "robots": "noindex, nofollow",
+      "schemaCount": 1
+    },
+    {
+      "path": "/commercial-solar",
+      "status": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://cesolutions.com.au/commercial-solar\"/>",
+      "description": "<meta name=\"description\" content=\"Solar for businesses in Albury-Wodonga. Match a commercial solar system to your operating hours, roof and electricity use with the local CES team.\"/>",
+      "robots": "noindex, nofollow",
+      "schemaCount": 1
+    },
+    {
+      "path": "/about",
+      "status": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://cesolutions.com.au/about\"/>",
+      "description": "<meta name=\"description\" content=\"Meet Bree and Daniel Grubisa and the local Clean Energy Solutions team in Wodonga. Personal solar advice, in-house electricians and ongoing support.\"/>",
+      "robots": "noindex, nofollow",
+      "schemaCount": 1
+    },
+    {
+      "path": "/contact",
+      "status": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://cesolutions.com.au/contact\"/>",
+      "description": "<meta name=\"description\" content=\"Talk to the local CES team about solar and batteries in Albury-Wodonga. Call (02) 6021 2000 or prepare an enquiry for your home or business.\"/>",
+      "robots": "noindex, nofollow",
+      "schemaCount": 0
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "robots": "noindex, nofollow",
+      "schemaCount": 0
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "robots": "noindex, nofollow",
+      "schemaCount": 0
+    }
+  ],
+  "motion": {
+    "reduce": {
+      "mp4Requests": 0,
+      "forward": null,
+      "back": null
+    },
+    "no-preference": {
+      "mp4Requests": 1,
+      "forward": 1.106232,
+      "back": 0.006563
+    }
+  }
+}

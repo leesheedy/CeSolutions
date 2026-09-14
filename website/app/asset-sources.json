@@ -1,0 +1,42 @@
+{
+  "logo.png": "https://cesolutions.com.au/wp-content/uploads/2023/10/CES-logo-dark-large-transparent-wide-768x219.png",
+  "icon-192.png": "https://cesolutions.com.au/wp-content/uploads/2023/09/cropped-CES-Logo-Transparent-Large-192x192.png",
+  "team.jpg": "https://cesolutions.com.au/wp-content/uploads/2025/02/qw2.jpg",
+  "solar-roof.jpg": "https://cesolutions.com.au/wp-content/uploads/2025/09/Image-from-iOS.jpg",
+  "installation.jpg": "https://cesolutions.com.au/wp-content/uploads/2025/09/Image-from-iOS-1.jpg",
+  "local-project.jpg": "https://cesolutions.com.au/wp-content/uploads/2025/09/Image-from-iOS-2.jpg",
+  "daniel.jpg": "https://cesolutions.com.au/wp-content/uploads/2023/11/IMG_5658-1152x1536.jpg",
+  "battery.webp": "https://cesolutions.com.au/wp-content/uploads/2025/09/imgi_8_E_Batteries_5-min-scaled.jpg",
+  "world/scene-01.mp4": {
+    "source": "https://www.instagram.com/cesolutions1/p/DdBGXypjZuT/",
+    "note": "6-second slow zoom over public CES rooftop photograph; animated still, not drone footage. Replaces generated house visual. Mobile encode and exact-frame posters derived from this clip."
+  },
+  "ces-cover.png": "Higgsfield generated brand cover; job 6aaa4598-4855-4694-b9b3-c826c1bed174",
+  "instagram-team.webp": {
+    "source": "https://www.instagram.com/cesolutions1/p/DdISbZLDSY9/",
+    "retrieved": "2026-09-14",
+    "dimensions": [
+      512,
+      640
+    ],
+    "note": "Public profile image; no invented project specifications or location"
+  },
+  "instagram-rooftop.webp": {
+    "source": "https://www.instagram.com/cesolutions1/p/DdBGXypjZuT/",
+    "retrieved": "2026-09-14",
+    "dimensions": [
+      512,
+      640
+    ],
+    "note": "Public profile image; no invented project specifications or location"
+  },
+  "instagram-crew.webp": {
+    "source": "https://www.instagram.com/cesolutions1/p/DdAkDIQIPCf/",
+    "retrieved": "2026-09-14",
+    "dimensions": [
+      640,
+      427
+    ],
+    "note": "Public profile image; no invented project specifications or location"
+  }
+}

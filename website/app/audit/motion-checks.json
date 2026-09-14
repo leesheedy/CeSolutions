@@ -1,0 +1,256 @@
+[
+ {
+  "route": "/",
+  "width": 320,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/solar",
+  "width": 320,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/batteries",
+  "width": 320,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/commercial-solar",
+  "width": 320,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/about",
+  "width": 320,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/contact",
+  "width": 320,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/",
+  "width": 390,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/solar",
+  "width": 390,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/batteries",
+  "width": 390,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/commercial-solar",
+  "width": 390,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/about",
+  "width": 390,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/contact",
+  "width": 390,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/",
+  "width": 768,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/solar",
+  "width": 768,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/batteries",
+  "width": 768,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/commercial-solar",
+  "width": 768,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/about",
+  "width": 768,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/contact",
+  "width": 768,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/",
+  "width": 1440,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/solar",
+  "width": 1440,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/batteries",
+  "width": 1440,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/commercial-solar",
+  "width": 1440,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/about",
+  "width": 1440,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/contact",
+  "width": 1440,
+  "overflow": false,
+  "h1": 1,
+  "hiddenHeadings": [],
+  "fadedMotionEls": 0,
+  "brokenImgs": [],
+  "errors": []
+ },
+ {
+  "route": "/ (no JS)",
+  "motionEls": 112,
+  "hidden": 0,
+  "h1": "Cut your power bill\nin half. Or more.",
+  "quote": true
+ },
+ {
+  "route": "/ (reduced motion)",
+  "motionEls": 112,
+  "hiddenAtTop": 0,
+  "marqueeAnim": "none",
+  "videos": 0
+ }
+]

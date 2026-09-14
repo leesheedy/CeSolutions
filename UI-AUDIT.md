@@ -1,0 +1,98 @@
+# CES website UI, content and technical audit
+Reviewed 14 September 2026. Scope: the six-page Higgsfield redesign, the supplied homepage copy, CES source imagery, and the ThrillX reference. This report distinguishes implemented fixes from hosting and operational work still required.
+
+## Update — 14 September 2026 (late): layered parallax revamp
+Builds on the evening pass below. Local source only; still not deployed.
+
+**New scrolling layers (all Motion for React, in `src/site/motion.tsx` and `src/site/sections.tsx`).**
+- Services are now three full-width cards that pin under the header and scale back as the next slides over them (21st #25275 “Stacking Cards”), each with its own drifting photo. The business card uses the CES crew photo.
+- The work gallery runs as two columns moving at different rates (21st #1224 “Parallax Grid Scroll”) and grows from three to six authentic photos: the three Instagram posts plus the Wodonga shopfront, Daniel on a roof and the wall-mounted battery from cesolutions.com.au (sources already in `asset-sources.json`). Filters: All / Solar / Batteries / Our team. The stock sunset, EV-charger and handshake images on the CES site were not used.
+- A full-bleed “Come and see us on Elgin Boulevard” band with the shopfront photo scrolling slower than the copy over it, on the homepage and every service/about page, linking to directions and the phone number.
+- Decorative fact chips (“Installed in a day”, “Battery-ready designs”, “Our own electricians”) drift at three speeds over the pinned hero on desktop; hidden on phones and from assistive tech.
+- Team collage: the crew photo floats over the portrait at a second speed. The process heading is sticky beside its steps. The footer wordmark slides in.
+
+**Checks.** Playwright, real Chrome channel: 6 routes × 320/390/768/1440 — one H1, no overflow, no broken images, no console errors, all headings settled. No-JS: 112 motion elements, none hidden. Reduced motion: none hidden, marquee static, no video request. Full-page scroll at 1528×684, DPR 1.25 with the hero clip loaded: 345 frames in 6 s, worst frame 83 ms (three frames over 50 ms, coinciding with lazy image decodes — `decoding="async"` added). Typecheck, `check:ui` and production build pass. Section captures: `services-stack-1440.png`, `gallery-columns-1440.png`, `visit-band-1440.png`, `team-collage-1440.png`, `hero-chips-1440.png`, `services-stack-390.png`, `visit-band-390.png`; results in `motion-checks.json`.
+
+**Note on tooling.** The Claude-in-Chrome extension’s debugger channel repeatedly timed out during scripted scrolling on this page; the same page in the same Chrome build via Playwright scrolled at ~57 fps. Treat that as an extension limitation, not a site defect.
+
+## Update — 14 September 2026 (evening): 21st.dev motion and copy pass
+Applied to the local source in `website/app` only. The Higgsfield deployment has **not** been redeployed and cesolutions.com.au is unchanged.
+
+**Sources re-checked.** cesolutions.com.au homepage, FAQ and “Why Locals Choose CES” pages, and the public @cesolutions1 Instagram profile (105 followers; bio locates the business in Albury, NSW while the footer address is 79 Elgin Boulevard, Wodonga — worth aligning). No new imagery was downloaded; the three Instagram photos already in `public/assets` are reused.
+
+**21st.dev components.** Ten catalogue entries were pulled with the `21st` CLI (paid tier: unlimited code retrieval, AI generation not enabled). Four fit the site’s constraints and were rewritten on `motion/react` in `src/site/motion.tsx`: Parallax Image (#20023, scroll-linked image drift on every photo), Text Reveal Mask (#19257, masked line reveals on section headings), Scroll word reveal (#24525, official Motion example, used for the new “Solar, explained properly” statement), and Logo Cloud Marquee (#21470, equipment wordmarks). Rejected: GSAP/Lenis-based parallax (second scroll engine beside scroll-scrub), remix-icon logo clouds, and a Motion accordion (native `<details>` keeps the FAQ usable without JavaScript). The hero scroll-scrub engine is untouched.
+
+**Copy.** Rewritten from `homepage-copy-rewrite.md`, restricted to claims CES already publishes on its own FAQ: 50–100% bill savings, 3–6 year payback, one-day installs, 25–30 year panel life, in-house CEC-accredited electricians led by Daniel (15+ years), and the 4.8/5 from 26 SolarQuotes ratings. The hero now leads with “Cut your power bill in half. Or more.” with the range and a qualifier in the same viewport. Not used, per the original audit: “up to 80%”, dollar savings, NETCC status, founding year, and rebate dollar amounts. The rebate section names both programs and that CES handles the paperwork (stated on the CES FAQ) without amounts. Lois Nolan’s quote is unchanged and her fuller review is paraphrased with attribution. Buttons read “Get my free quote”.
+
+**Motion safety.** All entrance states are inline styles written by Motion; a `<noscript>` sheet in `__root.tsx` and a `prefers-reduced-motion` rule force every `[data-motion]` element visible when scripts or motion are off. `MotionConfig reducedMotion="user"` is set at the root. Counters render their final value in HTML and only animate once seen.
+
+**Checks (Chromium via Playwright, dev server).** Six routes × 320/390/768/1440: one H1 per page, no horizontal overflow, no broken images, no console errors, all headings settled visible. No-JS render of the homepage: 90 motion elements, none hidden. Reduced-motion render: none hidden, marquee static, zero video requests. Frame timing while scrolling: 182 frames/3 s on `/solar` and 238 frames/4 s on `/` with no frame over 50 ms. Typecheck, `check:ui` gate and production build (client + Workers SSR bundle) pass. Results in `website/app/audit/motion-checks.json`; screenshots `home-1440.png`, `home-390.png`, `solar-390.png`, `about-1440.png`, `home-nojs.png` replaced.
+
+**Known, pre-existing.** `bun test` fails `tests/landing-contract.test.ts` (“keeps public landing and full app routes separate”) because the earlier redesign replaced `src/routes/app.tsx` with a redirect; the vendored Quanta component suites under `packages/` also fail without their private environment. Neither is caused by this pass. A React hydration warning about `cz-shortcut-listen` comes from a browser extension, not the site.
+
+**Fixed during the pass.** Masked headings never revealed because their observer target sat outside its `overflow:hidden` clip; the heading container is observed instead. Grid/FAQ `:first-child`/`:last-child` rules were retargeted after wrapping items in motion containers.
+
+## Outcome
+The redesign now leads with a concrete benefit and a local team: “Lower power bills. A local team you can call.” It uses authentic CES Instagram photographs, a short photographic scroll animation, stronger project presentation, clearer service navigation and accessible contact options. Code validation and browser checks passed within the scope below.
+
+**Customer launch is still blocked by the Higgsfield host's sign-in redirect.** A successful code deployment does not establish anonymous public access. The existing cesolutions.com.au site, DNS and hosting have not been changed.
+
+## Findings and corrections
+| Priority | Finding | Change or remaining action |
+|---|---|---|
+| Critical | Logged-out visitors reach Higgsfield authentication instead of CES. This prevents normal customer acquisition and public crawling. | Source has no customer login. Platform access must be corrected before treating the host as a public customer website. No connector setting exposed for this restriction. |
+| High | The enquiry form has no receiving backend. | Labels explicitly explain that it prepares an email and that nothing has been sent. Visitors can open their email app or use the existing CES form. A receiving endpoint and delivery monitoring remain required for a native submission flow. |
+| High | The generated hero weakened the request for authentic imagery and had a large transfer cost. | Replaced it with a six-second, restrained camera move over CES's own Instagram roof photograph. It is an animated still, not drone footage. |
+| High | Benefit, differentiation and proof were less direct than the reference's hierarchy. | New benefit-led hero, review link near the CTA, tailored-design reasons, clearer service outcomes and contextual contact copy. |
+| High | There was no convincing project-led section. | Added a dark, editorial gallery with three CES photos, All/Solar/Our team filters and links to original Instagram posts. No invented installation results, capacities or locations. |
+| High | Existing source filenames were misleading: a “solar-roof” image showed an installer and “local-project” showed a handshake. | Visually checked the image collection. Used the actual Instagram roof for solar/hero and the CES crew for the business page; removed the handshake from the gallery. |
+| High | Original light logo lettering disappeared on the light header. | Used the actual CES logo with a dark monochrome header treatment and a light footer treatment. |
+| Medium | Orange contact section body text had 3.82:1 contrast, below the 4.5:1 normal-text requirement. | Changed body text to the site's dark ink. No colour-contrast failures remained in the automated scans. |
+| Medium | Mobile footer contact targets were approximately 21.6px high. | Increased telephone/email targets to 44px and enlarged other footer link spacing. |
+| Medium | At 320px, the large footer wordmark overflowed; short phones placed review text against the photo. | Scaled footer typography, adjusted FAQ spacing, and provided sufficient hero layout height on short viewports. |
+| Medium | Active page and quick mobile contact were not prominent enough. | Active service navigation uses aria-current; a mobile bottom bar offers call and quote actions. Menu supports Escape and returns focus to the trigger. |
+| Medium | Requiring both phone and email increased form friction. | Email is optional; phone remains required for contact. Optional project details are labelled. |
+| Medium | Animation could distract or hide content. | Retained the existing seek/reverse engine, shortened the scroll journey, added small transform-only entrances and honoured reduced motion. Essential content is visible without JavaScript. |
+
+## Design and content decisions
+[ThrillX's work page](https://thrillxdesign.com/work/) informed the large project imagery, dark section, strong typography, restrained card effects and clear onward links. CES keeps its own logo, palette, language and customer needs. Agency statistics, exact marketing copy and case-study outcomes were not reused.
+
+The provided homepage-copy-rewrite.md was treated as proposed copy, not verified business data. Its 80% savings, annual dollar savings, payback, founding-date and rebate figures were not published without substantiation. The site instead explains the factors that affect savings and what a tailored assessment involves.
+
+The correct [SolarQuotes CES listing](https://www.solarquotes.com.au/installer-review/clean-energy-solutions/) showed 4.8/5 from 26 ratings during research; the review section dates that snapshot. The short Lois Nolan quotation is attributed and links to [CES's original page](https://cesolutions.com.au/clean-energy-solutions-book-online/). Self-serving aggregate-review structured data was not added.
+
+## Photography and motion
+Public CES Instagram photographs were obtained from the profile and stored as WebP assets:
+- [Team portrait](https://www.instagram.com/cesolutions1/p/DdISbZLDSY9/): 512 × 640.
+- [Rooftop solar](https://www.instagram.com/cesolutions1/p/DdBGXypjZuT/): 512 × 640.
+- [CES crew](https://www.instagram.com/cesolutions1/p/DdAkDIQIPCf/): 640 × 427.
+
+Source URLs and retrieval notes are recorded in the cloud repository's asset-sources.json. These are locally served assets, not an Instagram embed or live feed. The available public images have modest resolution; original high-resolution photography would improve large-screen sharpness.
+
+The desktop MP4 fell from 6,640,794 to 890,403 bytes; mobile fell from 4,614,328 to 574,036 bytes. Combined video transfer is approximately **87% smaller**. Posters are extracted from the encoded clips' first frames. Only the applicable clip is requested; reduced-motion mode requested zero MP4s in testing. No animation framework was added.
+
+## Validation evidence
+- TypeScript and production build, including the repository's UI policy check: passed.
+- Six routes at widths 320, 390, 768 and 1440: 24 checks; one H1 per page, no page overflow, no broken images after scrolling, no recorded JavaScript runtime exceptions.
+- Additional 320 × 568 visual check: hero text and photo no longer overlap.
+- Axe WCAG 2/2.1/2.2 A/AA-tag scans on all six routes at 390 and 1440: zero reported violations.
+- Gallery filtering and pressed state, native FAQ toggles, mobile menu and Escape: passed.
+- Keyboard skip link receives visible focus; service navigation identifies the active page.
+- Enquiry validation and email preparation work without an email address. The prepared-state message states the enquiry has not been sent. No email or live enquiry was submitted during testing.
+- Scroll video advanced to about 1.1 seconds and returned close to the first frame when scrolling back. Reduced-motion mode rendered without a video request.
+- With JavaScript disabled, the primary headline and quote link remained available.
+- All six internal page destinations returned 200 in the built Worker; unknown route returned 404.
+- SSR titles, descriptions, canonical links, structured data, robots and sitemap were inspected. The intended production hostname permits crawling; the Higgsfield review hostname carries noindex and canonical URLs targeting cesolutions.com.au.
+- Visual inspection covered desktop/mobile hero, project gallery and short-phone layout. Runtime tests used Chromium against the compiled Worker via a local request bridge.
+
+Automated accessibility results are not a complete accessibility certification. Browser-engine coverage is Chromium, not physical Safari/iOS/Android device testing. No Lighthouse score, real-user Core Web Vitals, measured conversion uplift or search-ranking improvement is claimed. The recorded checks validate implementation; field performance and conversion require an accessible deployed site and real traffic.
+
+## Remaining launch work
+1. Resolve anonymous access on the Higgsfield host, or move the completed source to an appropriate public host.
+2. Connect and verify a native enquiry delivery service if email preparation is insufficient.
+3. When moving the intended domain, coordinate DNS/hosting, verify canonical/robots behavior on the actual domain, and check existing URL redirects before switching traffic.
+4. Add consent-appropriate analytics and Search Console after public hosting is resolved, then measure Core Web Vitals and enquiry completion.
+5. Replace public thumbnail-sized images with CES originals when available.
+
+The website remains outside Higgsfield's community gallery, as requested. Source code, original test JSON and screenshots are saved in the Higgsfield cloud repository under app/audit.
+

@@ -1,0 +1,50 @@
+{
+  "keyboardSkip": {
+    "text": "Skip to content",
+    "outline": "solid"
+  },
+  "links": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/solar",
+      "status": 200
+    },
+    {
+      "path": "/batteries",
+      "status": 200
+    },
+    {
+      "path": "/commercial-solar",
+      "status": 200
+    },
+    {
+      "path": "/about",
+      "status": 200
+    },
+    {
+      "path": "/contact",
+      "status": 200
+    },
+    {
+      "path": "/not-a-real-page",
+      "status": 404,
+      "robots": null
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "robots": null,
+      "body": "User-agent: *\nAllow: /\nDisallow: /app\nSitemap: https://cesolutions.com.au/sitemap.xml"
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200,
+      "robots": null,
+      "body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"><url><loc>https://cesolutions.com.au/</loc></url><url><loc>https://cesolutions.com.au/solar</loc></url><url><loc>https://cesolutions.com.au/batteries</loc></url><url><loc>https://cesolutions.com.au/commercial-solar</loc></url><url><loc>https://cesolutions.com.au/about</loc></url><url><loc>https://cesolutions.com.au/contact</loc></url></urlset>"
+    }
+  ],
+  "activeNav": "Solar"
+}
