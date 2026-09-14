@@ -70,6 +70,8 @@ Only figures CES already publishes on its own FAQ are used on the site: 50–100
 
 **Netlify (public):** every push to `main` builds the site on Netlify (project `cesolutions`) and publishes it at https://cesolutions.netlify.app. `netlify.toml` sets the base to `website/app`, runs `bun install`, `bun run build` and `node scripts/prerender.mjs`, and publishes `dist/client`. The prerender step renders each route through the SSR bundle to a static file (`index.html`, `solar.html`, …, `robots.txt`, `sitemap.xml`, `404.html`); `public/_redirects` and `public/_headers` replace the Worker's redirect and security-header logic. To rebuild locally: `bun run build && node scripts/prerender.mjs`, then serve `dist/client`.
 
+Netlify's edge injects a hosting comment, two `<meta>` tags and a HUD `<script>` into every HTML page. Because React hydrates the whole document, those nodes (and the newlines around them) break hydration, so `__root.tsx` ships a first-in-head script that removes them as the parser inserts them. If Netlify ever offers a switch for that injection, the script becomes redundant but harmless.
+
 **Higgsfield (gated preview):** the site also deploys to Higgsfield. From a clone of the Higgsfield site repo (`website_repo_access` in the connector gives the URL and a scoped token), copy the changed files from `website/app` into the clone's `app/`, commit, push `main`, then call `deploy_website`. On Windows clone with `-c core.longpaths=true`; the vendored package paths exceed the default limit. Latest deployed revision: `f8a100b` (14 September 2026).
 
 The `website/.github/workflows/ci.yml` file is the template's CI for Higgsfield's own runners; it is not at this repository's root, so GitHub Actions does not run it here.
