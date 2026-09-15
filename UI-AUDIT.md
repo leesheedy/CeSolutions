@@ -1,6 +1,25 @@
 # CES website UI, content and technical audit
 Reviewed 14 September 2026. Scope: the six-page Higgsfield redesign, the supplied homepage copy, CES source imagery, and the ThrillX reference. This report distinguishes implemented fixes from hosting and operational work still required.
 
+## Update — 15 September 2026 (night): enquiry form rebuilt from the CES brief, live hero, real install photos
+
+**Photos.** The studio crew shot is retired from the Why-choose split and the business card. Two real drone installs from @cesolutions1 replace it — the black-panel shed (27 Aug, "Solar isn't just for homes") and the red-roof home (24 Aug, "Some of the best views come with the job") — upscaled 4× from Instagram's 486 px previews and added to the gallery, which now holds eight photos. The crew photo remains as a team story in the gallery.
+
+**Enquiry form, rebuilt from the brief.** Now a **Netlify Form** (enabled on the project) rather than a prepared email: submissions land in the Netlify dashboard and can be emailed to Ella. Fields follow the brief — name, phone, email, property address (browser autofill via `autocomplete="street-address"`), a "what are you looking at?" chip row covering solar, home battery, EV charger, hot water heat pump, air conditioning, commercial and "not sure yet", a free-text note, and an optional expandable uploads panel for a recent bill and photos of the meter box, roof and battery location (phone users get the camera directly). Honeypot field included. Without JavaScript the form still posts natively. The success message names Ella.
+
+**Hero.** An 8-second Higgsfield (Kling v3, 12 credits) animation of the hero illustration now loops behind the copy — gentle push-in, light moving across the panels, leaves and cloud drift — under the existing scroll parallax, with a slow cyan/mint light bloom on top. The still stays as poster until the clip can play and is all that shows under reduced motion; encoded to WebM + MP4 at 1440 px, silent.
+
+**Recommendations from the brief (not on the page).**
+- *Address autocomplete with a real suggestions dropdown* needs Google Places (or Geoapify/AddressFinder AU) — a paid key. The field is ready for it; add the key as a Netlify environment variable and I'll wire it.
+- *"See what panels would look like on your roof"* — that is an aerial-imagery design tool (OpenSolar, SolarEdge Designer, Google Solar API). OpenSolar is free for installers and Australian-native; its embeddable lead form returns a roof render + estimate and would replace this form entirely. Worth a trial before building anything custom.
+- *Events page (events.cesolutions…)* — RSVPify embeds cleanly; a `/events` route listing the next session with an RSVPify iframe is a half-day job once there is an event to list.
+- *Team/contact page* — Ella (solar consultant, first contact), Charlie (customer care, follow-ups and reviews), Ruby (marketing and growth) should replace the current Bree/Daniel/Andrew contact structure on `/about` when CES confirms titles and consent for photos.
+- *Locations* — the Framer project already has `/locations`; the brief names Wagga Wagga (the Instagram feed announces it), Shepparton and Yarrawonga as target areas. Three short location pages with the same structure (service area, local rebates, one install photo, the enquiry form) are the right SEO move; the audit's earlier note about the Albury (560 Olive St) vs Wodonga (79 Elgin Blvd) address still needs an answer.
+- *Commercial pivot* — the commercial card, shed photo and "Solar isn't just for homes" story now lean that way; a dedicated commercial page with a bill-upload-first form and a daytime-load explainer would carry it.
+- *Internal (SharePoint resource bank, ServiceM8, Top to Bottom)* — not website material; noted for the CRM conversation.
+
+**Domain.** During this pass the Netlify project's primary URL became `https://cesolutions.automatrix.au` (returns 200), so a custom domain was attached outside this session. cesolutions.com.au itself is unchanged.
+
 ## Update — 15 September 2026 (evening): Framer reference adopted
 **Reference.** The Framer project "Clean Energy Solutions" (Home, /residential with solar-panels, ev-charges and solar-batteries, /commercial, /rebates, /locations, /about-us) was read without modification via the Framer CLI: its page tree, every text run, referenced styles and section renders (`reference-framer-*.jpg` in `website/app/audit/`). Its design system: **Inter** 600 headings at −0.04em and 1.1 line-height, sentence case, Inter 400 body at −0.02em / 1.7; **`Site/primary blue` rgb(8,189,221)** and **`Site/second Green` rgb(5,176,133)**; cyan pill buttons; a corner-bracket eyebrow device; section order hero → enquiry form → services → impact → why-us → process → CTA → FAQ → testimonials.
 

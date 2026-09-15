@@ -45,5 +45,27 @@
     ],
     "note": "Public profile image (640x427 original) upscaled with Higgsfield's ByteDance upscaler on 2026-09-15 and re-encoded to WebP; replace with the CES original when available. No invented project specifications or location"
   },
-  "team.webp (shopfront)": "https://cesolutions.com.au/wp-content/uploads/2025/02/qw2.jpg, 1024x562 original upscaled to 1800x992 with Higgsfield's ByteDance upscaler on 2026-09-15"
+  "team.webp (shopfront)": "https://cesolutions.com.au/wp-content/uploads/2025/02/qw2.jpg, 1024x562 original upscaled to 1800x992 with Higgsfield's ByteDance upscaler on 2026-09-15",
+  "instagram-shed.webp": {
+    "source": "https://www.instagram.com/cesolutions1/p/DciM1ayIAv3/",
+    "retrieved": "2026-09-15",
+    "dimensions": [
+      1600,
+      1600
+    ],
+    "note": "Public post image (486x486 preview) upscaled with Higgsfield ByteDance upscaler and re-encoded to WebP; replace with the CES original when available"
+  },
+  "instagram-roof-drone.webp": {
+    "source": "https://www.instagram.com/cesolutions1/p/Dccg6arnFf3/",
+    "retrieved": "2026-09-15",
+    "dimensions": [
+      1600,
+      1600
+    ],
+    "note": "Public post image (486x486 preview) upscaled with Higgsfield ByteDance upscaler and re-encoded to WebP; replace with the CES original when available"
+  },
+  "hero-loop.mp4 / hero-loop.webm": {
+    "source": "Higgsfield Kling v3.0 image-to-video from hero-backdrop.webp, 2026-09-15, 8 s, silent",
+    "note": "AI animation of the labelled hero illustration; loops behind the hero copy, poster shown until playable and under reduced motion"
+  }
 }
