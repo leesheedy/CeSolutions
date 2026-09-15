@@ -12,3 +12,5 @@
 /ces-home-page/                        /           301
 /app                                   /           301
 /app/*                                 /           301
+/locations                              /locations/wagga-wagga 302
+/loctions                               /locations/wagga-wagga 302

@@ -523,7 +523,7 @@ body{padding-bottom:68px}.site-header{height:76px}.site-header .brand img{width:
 .glow-footer__social{list-style:none;margin:26px 0 0;padding:0;display:flex;gap:12px}
 .glow-footer__social a{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid #ffffff1f;color:var(--sun);transition:background .2s,color .2s}
 .glow-footer__social a:hover{background:var(--sun);color:var(--ink)}
-.glow-footer__nav{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.glow-footer__nav{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
 .glow-footer__nav h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--sun);font-weight:600;margin-bottom:18px}
 .glow-footer__nav ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .glow-footer__nav a{color:#e6eef2;font-size:15px;min-height:28px;display:inline-flex;align-items:center;gap:10px}
@@ -538,7 +538,7 @@ body{padding-bottom:68px}.site-header{height:76px}.site-header .brand img{width:
 /* Framer-reference layout (15 Sep 2026): full-bleed hero, black enquiry band, corner-bracket kickers, why-choose
  * split, mint process cards, CTA split. Mint = the Framer project's "Site/second Green" rgb(5,176,133); cyan stays #00adf0. */
 :root{--mint:#05b085;--mint-soft:#00e0b4}
-.kicker{position:relative;display:inline-block;font-size:13px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);padding:4px 10px;margin-bottom:18px}
+.kicker{position:relative;display:inline-block;width:max-content;max-width:100%;font-size:13px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);padding:4px 10px;margin-bottom:18px}
 .kicker--light{color:#fff}
 .kicker__bl,.kicker__tr{position:absolute;width:12px;height:12px;border:0 solid var(--sun)}
 .kicker__bl{left:0;bottom:0;border-left-width:1.5px;border-bottom-width:1.5px}
@@ -636,3 +636,44 @@ body{padding-bottom:68px}.site-header{height:76px}.site-header .brand img{width:
 .quote-form2 input[type=file]{padding:10px 12px;font-size:13px;color:#cfd6db;border-style:dashed;cursor:pointer}
 .quote-form2 input[type=file]::file-selector-button{background:#1f2124;color:#fff;border:0;border-radius:6px;padding:6px 12px;margin-right:12px;cursor:pointer}
 .quote-form2__submit:disabled{opacity:.7;cursor:progress}
+
+/* Location pages (/locations/{wagga-wagga,shepparton,yarrawonga}) */
+.loc-hero{padding:60px 0 0;display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center}
+.loc-hero .breadcrumb{grid-column:1/-1;margin-bottom:-24px}
+.loc-hero h1{font-size:clamp(42px,5.6vw,80px);margin-top:6px}
+.loc-hero__intro{font-size:19px;line-height:1.6;max-width:50ch;margin-top:22px}
+.loc-hero .hero-action-row{margin-top:28px;gap:22px}
+.loc-hero .hero-quote{display:inline-flex;align-items:center;gap:10px}
+.loc-hero .hero-call{display:inline-flex;align-items:center;min-height:44px;font-weight:500}
+.loc-facts{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:10px;font-size:15px;color:var(--muted)}
+.loc-facts li{display:flex;align-items:center;gap:10px}.loc-facts svg{color:var(--sun);flex-shrink:0}
+.loc-hero__media{border-radius:16px;height:min(560px,58vw)}.loc-hero__media .parallax__layer>img{height:100%}
+.loc-why{padding:100px 0 80px}
+.loc-why__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:8px}
+.loc-why__grid article{border-top:1px solid var(--line);padding-top:22px}
+.loc-why__n{display:block;font-size:13px;font-weight:500;color:#0089c0;letter-spacing:.02em;margin-bottom:14px}
+.loc-why__grid h3{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:10px}
+.loc-why__grid p{font-size:15px;line-height:1.65}
+.loc-rebates{background:#101010;color:#fff;padding:96px 0}
+.loc-rebates__grid{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:start}
+.loc-rebates h2{color:#fff;font-size:clamp(34px,4.2vw,54px)}
+.loc-rebates p{color:#cfd6db;font-size:16px;line-height:1.65;max-width:44ch;margin-top:18px}
+.loc-rebates__list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.loc-rebates__list a{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;column-gap:16px;align-items:center;padding:20px 22px;border:1px solid #2a2e33;border-radius:14px;color:#fff;transition:border-color .2s,background .2s}
+.loc-rebates__list a:hover{border-color:var(--sun);background:#ffffff08}
+.loc-rebates__list strong{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.loc-rebates__list span{grid-column:1;font-size:14px;color:#a9b3bb;margin-top:4px;line-height:1.5}
+.loc-rebates__list svg{grid-column:2;grid-row:1/3;color:var(--sun)}
+.loc-areas{padding:90px 0 60px}
+.loc-areas h2{font-size:clamp(32px,3.8vw,46px);margin-top:6px}
+.loc-areas__list{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.loc-areas__list li{border:1px solid var(--line);border-radius:100px;padding:9px 16px;font-size:15px;color:var(--ink)}
+.loc-areas>p{margin-top:22px;font-size:15px}
+.loc-faq{display:grid;grid-template-columns:1fr 1.25fr;gap:10%;padding:100px 0 80px}
+.loc-faq h2{font-size:clamp(34px,4.2vw,54px)}
+.loc-others{padding:20px 0 90px}
+.loc-others>p{font-size:13px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:#0089c0;margin-bottom:14px}
+.loc-others>div{display:flex;flex-wrap:wrap;gap:12px}
+.loc-others a{display:inline-flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:100px;padding:12px 20px;font-weight:500;min-height:44px;transition:border-color .2s}.loc-others a:hover{border-color:var(--sun)}
+@media(max-width:1100px){.loc-why__grid{grid-template-columns:1fr 1fr}}
+@media(max-width:860px){.loc-hero{grid-template-columns:1fr;gap:32px;padding-top:36px}.loc-hero .breadcrumb{margin-bottom:-12px}.loc-hero__media{height:min(420px,70vw)}.loc-why{padding:70px 0 50px}.loc-why__grid{grid-template-columns:1fr;gap:24px}.loc-rebates{padding:70px 0}.loc-rebates__grid{grid-template-columns:1fr;gap:36px}.loc-areas{padding:64px 0 40px}.loc-faq{grid-template-columns:1fr;gap:32px;padding:70px 0 50px}}

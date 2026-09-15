@@ -20,6 +20,9 @@ const files = {
   "/commercial-solar": "commercial-solar.html",
   "/about": "about.html",
   "/contact": "contact.html",
+  "/locations/wagga-wagga": "locations/wagga-wagga.html",
+  "/locations/shepparton": "locations/shepparton.html",
+  "/locations/yarrawonga": "locations/yarrawonga.html",
   "/robots.txt": "robots.txt",
   "/sitemap.xml": "sitemap.xml",
 };
