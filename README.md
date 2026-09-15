@@ -60,7 +60,7 @@ website/app/src
 
 ### Brand
 
-Tokens are taken from the live cesolutions.com.au site, not invented: Saira Condensed (headings, buttons, navigation), Roboto (body), cyan `#00ADF0` primary, the logo's green→cyan gradient, light-blue `#DBEDF3` and cream `#FBF3EA` surfaces, black header and footer, pill buttons. The one deliberate deviation is black text on cyan buttons — the live site's white-on-cyan is 2.6:1 and fails WCAG AA. The homepage hero backdrop is a Higgsfield-generated illustration, labelled as such on the page and in `asset-sources.json`; all other photography is CES's own.
+Colours come from the live cesolutions.com.au site and the layout/typography from CES's Framer project (read-only reference, see the audit): Inter (600 headings at −0.04em, sentence case; 400 body), cyan `#00ADF0` primary with mint `#05B085` as the second accent, the logo's green→cyan gradient, light-blue `#DBEDF3` and cream `#FBF3EA` surfaces, black header, enquiry and process bands, pill buttons, and a corner-bracket eyebrow on section labels. The one deliberate deviation is black text on cyan buttons — the live site's white-on-cyan is 2.6:1 and fails WCAG AA. The homepage hero backdrop is a Higgsfield-generated illustration, labelled as such on the page and in `asset-sources.json`; all other photography is CES's own.
 
 ### Reusable UI primitives
 

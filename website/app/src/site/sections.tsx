@@ -1,37 +1,55 @@
-import {useRef} from 'react';
+import {useRef,useState,type FormEvent} from 'react';
 import {motion,useReducedMotion,useScroll,useTransform} from 'motion/react';
-import {HardHat,Ruler,Smartphone} from 'lucide-react';
-import {ScrollStroke} from '@/components/ui/svg-follow-scroll';
+import {ArrowRight,Clock,Headset,HardHat,MessageCircle,PencilRuler,Phone,ShieldCheck,Users} from 'lucide-react';
 import {Arrow} from './shell';
 import {Parallax,ParallaxBackdrop,Reveal,Rise,Stack,StackItem} from './motion';
 export const MAPS='https://www.google.com/maps/search/?api=1&query=79%20Elgin%20Boulevard%20Wodonga%20Victoria%203690';
-/** Light, centred hero: a brand-gradient stroke draws behind the headline as you scroll, and the
- * (labelled) generated illustration sits below in a rounded panel that rises slightly. */
+/** Small uppercase label with the corner-bracket device used across the Framer reference. */
+export function Kicker({children,light}:{children:string;light?:boolean}){return <span className={light?'kicker kicker--light':'kicker'}><span aria-hidden="true" className="kicker__bl"/><span aria-hidden="true" className="kicker__tr"/>{children}</span>}
+/** Full-bleed hero on the (labelled) illustration: kicker, sentence-case headline, one line, two actions. */
 export function Hero(){
   const ref=useRef<HTMLElement>(null);
   const reduce=useReducedMotion();
   const {scrollYProgress}=useScroll({target:ref,offset:['start start','end start']});
-  const mediaY=useTransform(scrollYProgress,[0,1],[0,-140]);
-  return <section ref={ref} className="hero2" aria-label="Solar and batteries in Albury-Wodonga">
-    <div className="hero2__copy wrap"><ScrollStroke progress={scrollYProgress} className="hero2__stroke" from={.15} strokeWidth={18}/>
-      <p className="eyebrow">Solar &amp; batteries · Albury-Wodonga</p>
-      <Reveal as="h1" lines={['Cut your power bill','in half. Or more.']} stagger={.08}/>
-      <Rise delay={.25}><p className="hero2__body">Designed from your electricity bills. Installed by our own local electricians. Most CES households save 50–100% on power and pay the system off in 3 to 6 years.</p><div className="hero-action-row"><a href="/contact" className="hero-quote">Get my free quote <Arrow/></a><a href="tel:+61260212000" className="hero-call">Call (02) 6021 2000</a></div><a href="https://www.solarquotes.com.au/installer-review/clean-energy-solutions/" className="hero-review"><strong>4.8/5</strong><span>26 SolarQuotes ratings ↗</span></a><p className="hero-note">Typical range. Your figure depends on system size and when you use power — we calculate it from your actual bills before you decide anything.</p></Rise>
-    </div>
-    <motion.div className="hero2__media wrap" data-motion="" style={reduce?undefined:{y:mediaY}}><img src="/assets/hero-backdrop.webp" alt="Illustration: a regional Australian home with black solar panels on a corrugated roof at golden hour" width={2048} height={878} fetchPriority="high" decoding="async"/><span className="hero__caption">Illustration · real CES installs are in <a href="#our-work">our work</a></span></motion.div>
+  const bgY=useTransform(scrollYProgress,[0,1],['0%','22%']);
+  const copyY=useTransform(scrollYProgress,[0,1],[0,-70]);
+  return <section ref={ref} className="hero3" aria-label="Solar and batteries in Albury-Wodonga">
+    <motion.div className="hero3__bg" data-motion="" style={reduce?undefined:{y:bgY}}><img src="/assets/hero-backdrop.webp" alt="" width={2048} height={878} fetchPriority="high" decoding="async"/></motion.div>
+    <div className="hero3__shade" aria-hidden="true"/>
+    <motion.div className="hero3__copy wrap" data-motion="" style={reduce?undefined:{y:copyY}}>
+      <Kicker light>Your local clean energy experts</Kicker>
+      <Reveal as="h1" lines={['Power your home','for less.']} stagger={.08}/>
+      <Rise delay={.22}><p className="hero3__body">Solar, batteries and EV charging designed from your bills and installed by our own Albury-Wodonga electricians. Most CES households cut their power bill by 50–100%.</p><div className="hero-action-row"><a href="#quote" className="hero-quote">Get a free quote <ArrowRight size={18} aria-hidden="true"/></a><a href="tel:+61260212000" className="hero-call"><Phone size={16} aria-hidden="true"/>(02) 6021 2000</a></div><a href="https://www.solarquotes.com.au/installer-review/clean-energy-solutions/" className="hero-review"><strong>4.8/5</strong><span>26 SolarQuotes ratings ↗</span></a></Rise>
+    </motion.div>
+    <span className="hero__caption">Illustration · real CES installs are in <a href="#our-work">our work</a></span>
   </section>;
 }
-const steps=[
-{Icon:Ruler,title:'We design it from your bills',body:'Bree reads your recent bills and your roof, then sizes a system around how you actually use power. You see the expected savings before you sign anything.'},
-{Icon:HardHat,title:'Our own electricians install it',body:'CEC-accredited, on our payroll and led by Daniel. Most homes are finished in a day, with the distributor paperwork handled for you.'},
-{Icon:Smartphone,title:'You watch it work. We stay on call.',body:'A monitoring app on your phone shows what you generate, use and export. The same local team answers the phone afterwards.'}];
-/** Plain-language summary of what CES does, in the order a customer experiences it. */
-export function WhatWeDo(){return <section className="what-strip wrap" aria-label="What Clean Energy Solutions does">{steps.map((s,i)=><Rise key={s.title} delay={i*.1}><article><span className="what-icon"><s.Icon size={26} strokeWidth={1.75} aria-hidden="true"/></span><h3>{s.title}</h3><p>{s.body}</p></article></Rise>)}</section>}
+/** Black band under the hero: pitch on the left, enquiry form on the right (Framer "Contact us" section). */
+export function QuoteBand(){
+  const [service,setService]=useState('');
+  const [prepared,setPrepared]=useState('');
+  function submit(e:FormEvent<HTMLFormElement>){e.preventDefault();const d=new FormData(e.currentTarget);const body=`Hello Clean Energy Solutions,\n\nName: ${String(d.get('name'))}\nEmail: ${String(d.get('email'))}\nPhone: ${String(d.get('phone'))}\nService: ${service||'Not sure yet'}\n\nAbout the job:\n${String(d.get('message'))}\n\nPlease contact me about a tailored quote.`;setPrepared(`mailto:info@cesolutions.com.au?subject=${encodeURIComponent((service||'Solar')+' enquiry')}&body=${encodeURIComponent(body)}`);}
+  return <section id="quote" className="quote-band" aria-labelledby="quote-heading"><div className="wrap quote-band__grid"><div className="quote-band__pitch"><Kicker light>Get started</Kicker><Reveal id="quote-heading" lines={['Let’s talk about','your energy needs.']}/><Rise delay={.15}><p>Straightforward advice from our local team. No pressure, just the right system for your home or business.</p><p className="quote-band__promise"><Clock size={20} aria-hidden="true"/>We respond within one business day</p><a className="quote-band__call" href="tel:+61260212000"><span className="quote-band__call-icon"><Phone size={22} aria-hidden="true"/></span><span>Call us<strong>(02) 6021 2000</strong></span></a></Rise></div>
+    <form className="quote-form2" onSubmit={submit} onChange={()=>setPrepared('')}><div className="quote-form2__grid"><label>Name<span aria-hidden="true">*</span><input name="name" autoComplete="name" required maxLength={100} placeholder="Full name"/></label><label>Email<span aria-hidden="true">*</span><input name="email" type="email" autoComplete="email" required maxLength={254} placeholder="name@example.com"/></label><label>Phone<input name="phone" type="tel" autoComplete="tel" maxLength={30} placeholder="04 0000 0000"/></label><label>Service<span aria-hidden="true">*</span><select name="service" required value={service} onChange={e=>setService(e.target.value)}><option value="" disabled>Select…</option><option>Solar panels</option><option>Home battery</option><option>Solar + battery</option><option>EV charger</option><option>Commercial solar</option></select></label></div><label>Tell us about the job<textarea name="message" rows={4} maxLength={1500} placeholder="I’d like a quote for solar and a battery…"/></label><button type="submit" className="quote-form2__submit">{prepared?'Enquiry ready':'Submit'}</button>{prepared&&<p className="quote-form2__ready" role="status">Your enquiry is prepared on your device, nothing has been sent yet. <a href={prepared}>Open your email app to send it</a>, or call us.</p>}<p className="quote-form2__note">We reply from our Wodonga office. Your details go only to CES.</p></form></div></section>;
+}
 const services=[
-{id:'solar',href:'/solar',kicker:'01 / Residential solar',title:['Put your roof','to work.'],body:'Panels sized to your roof and your bills, so daytime power comes from above you instead of the grid.',cta:'Explore solar',image:'instagram-rooftop.webp',alt:'Solar panels on a metal roof, shared by CES on Instagram',width:512,height:640},
+{id:'solar',href:'/solar',kicker:'01 / Residential solar',title:['Put your roof','to work.'],body:'Panels sized to your roof and your bills, so daytime power comes from above you instead of the grid.',cta:'Explore solar',image:'instagram-rooftop.webp',alt:'Solar panels on a metal roof, shared by CES on Instagram',width:1200,height:1500},
 {id:'battery',href:'/batteries',kicker:'02 / Battery storage',title:['Keep your solar','for after sunset.'],body:'Store the surplus and run the evening on it instead of buying power back at peak rates. Blackout backup if you want it.',cta:'Explore batteries',image:'battery.webp',alt:'Home battery system featured by Clean Energy Solutions',width:1500,height:1000},
-{id:'business',href:'/commercial-solar',kicker:'03 / Business & commercial',title:['Make your working hours','work for your bill.'],body:'Daytime demand is a natural match for solar. We plan around your premises, roof and operating schedule.',cta:'Explore business solar',image:'instagram-crew.webp',alt:'The CES team together at their workplace',width:640,height:427}];
+{id:'business',href:'/commercial-solar',kicker:'03 / Business & commercial',title:['Make your working hours','work for your bill.'],body:'Daytime demand is a natural match for solar. We plan around your premises, roof and operating schedule.',cta:'Explore business solar',image:'instagram-crew.webp',alt:'The CES team together at their workplace',width:1600,height:1060}];
 /** Three service cards that pin under the header and stack as you scroll. */
 export function ServiceStack(){return <Stack className="service-stack" total={services.length}>{services.map((s,i)=><StackItem key={s.id} index={i}><a className={'stack-card service-'+s.id} href={s.href}><div className="service-copy"><span>{s.kicker}</span><h3>{s.title[0]}<br/>{s.title[1]}</h3><p>{s.body}</p><span className="service-destination">{s.cta} <Arrow/></span></div><Parallax className="service-image" intensity={44}><img src={'/assets/'+s.image} alt={s.alt} width={s.width} height={s.height} loading="lazy" decoding="async"/></Parallax></a></StackItem>)}</Stack>}
+const reasons=[
+{Icon:ShieldCheck,title:'Reliable products',body:'Tesla, Sungrow, Sigenergy, BYD, Fronius, Enphase and Jinko — brands we know, backed by 25–30 year panel warranties.'},
+{Icon:HardHat,title:'Skilled, careful workmanship',body:'Installed by our own CEC-accredited electricians, led by Daniel, with attention to detail on every roof.'},
+{Icon:Users,title:'A team you can actually call',body:'The people who quote, install and answer the phone afterwards all work from the same Wodonga office.'}];
+/** "Why choose CES": photo on the left, three reasons with icons on the right (Framer "About us" section). */
+export function WhyChoose(){return <section className="why wrap" aria-labelledby="why-heading"><Parallax className="why__photo" intensity={30}><img src="/assets/instagram-crew.webp" alt="The Clean Energy Solutions team together at their Wodonga workplace" width={1600} height={1060} loading="lazy" decoding="async"/></Parallax><div className="why__copy"><Kicker>Why choose CES</Kicker><Reveal id="why-heading" lines={['Quality today.','Support for the future.']}/><Rise delay={.15}><p className="why__intro">We focus on reliable products, careful workmanship and systems designed around how you actually use power.</p></Rise><ul className="why__list">{reasons.map((r,i)=><Rise key={r.title} delay={.2+i*.08}><li><span className="why__icon"><r.Icon size={26} strokeWidth={1.75} aria-hidden="true"/></span><div><h3>{r.title}</h3><p>{r.body}</p></div></li></Rise>)}</ul></div></section>}
+const steps=[
+{Icon:MessageCircle,title:'Consultation',body:'We learn about your property, energy use, budget and goals.'},
+{Icon:PencilRuler,title:'Tailored design',body:'Bree designs a system around your bills and your roof, with the expected savings.'},
+{Icon:HardHat,title:'Installation',body:'Our licensed team completes a safe, tidy installation, usually in a day.'},
+{Icon:Headset,title:'Ongoing support',body:'We set up your monitoring app and stay on the phone afterwards.'}];
+/** Black band with four mint step cards (Framer "Process" section). */
+export function ProcessCards(){return <section className="process4" aria-labelledby="process-heading"><div className="wrap"><div className="process4__head"><div><Kicker light>Our process</Kicker><Reveal id="process-heading" lines={['Simple from start','to support.']}/><Rise delay={.15}><p>Clear advice, a tailored design and a professional installation, without making the process complicated.</p></Rise></div><a className="btn-pill" href="#quote">Get a quote <ArrowRight size={18} aria-hidden="true"/></a></div><ol className="process4__cards">{steps.map((s,i)=><Rise key={s.title} delay={.1+i*.08}><li><div className="process4__top"><span className="process4__icon"><s.Icon size={22} strokeWidth={1.75} aria-hidden="true"/></span><span className="process4__n">{String(i+1).padStart(2,'0')}</span></div><h3>{s.title}</h3><p>{s.body}</p></li></Rise>)}</ol></div></section>}
 /** Full-bleed storefront band: the photo scrolls slower than the copy over it. */
-export function VisitBand(){return <ParallaxBackdrop image="/assets/team.webp" alt="The Clean Energy Solutions shopfront on the corner of Elgin Boulevard, Wodonga"><span className="eyebrow">Visit us</span><Reveal lines={['Come and see us','on Elgin Boulevard.']}/><Rise delay={.2}><p>79 Elgin Boulevard, Wodonga. Bring a recent bill and we’ll talk through your options in person.</p><div className="band__links"><a href={MAPS}>Get directions <Arrow/></a><a href="tel:+61260212000">(02) 6021 2000</a></div></Rise></ParallaxBackdrop>}
+export function VisitBand(){return <ParallaxBackdrop image="/assets/team.webp" alt="The Clean Energy Solutions shopfront on the corner of Elgin Boulevard, Wodonga" width={1800} height={992}><Kicker light>Visit us</Kicker><Reveal lines={['Come and see us','on Elgin Boulevard.']}/><Rise delay={.2}><p>79 Elgin Boulevard, Wodonga. Bring a recent bill and we’ll talk through your options in person.</p><div className="band__links"><a href={MAPS}>Get directions <Arrow/></a><a href="tel:+61260212000">(02) 6021 2000</a></div></Rise></ParallaxBackdrop>}
