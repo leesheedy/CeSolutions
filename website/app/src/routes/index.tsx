@@ -6,13 +6,15 @@ import {ProjectGallery} from '@/site/projects';
 import {Hero,Kicker,ProcessCards,QuoteBand,ServiceStack,VisitBand,WhyChoose} from '@/site/sections';
 import {SystemFlow} from '@/site/flow';
 import {ReviewMarquee} from '@/site/reviews';
+import {Estimator} from '@/site/estimator';
 import {Counter,Marquee,Reveal,RevealWords,Rise} from '@/site/motion';
 export const Route=createFileRoute('/')({head:()=>pageHead('Solar & Battery Installers Albury-Wodonga | Clean Energy Solutions',description,'/'),component:Home});
 const brands=['Tesla','Sungrow','Sigenergy','BYD','Fronius','Enphase','Jinko'];
 // Section order follows the Framer reference: hero → enquiry → services → proof → why us → process → CTA → FAQ → reviews.
 function Home(){return <><Header/><main id="main"><Hero/><QuoteBand/>
 <section id="solutions" className="services-section wrap"><div className="section-heading"><div><Kicker>What we do</Kicker><Reveal lines={['Power your home,','your way.']}/></div><Rise delay={.15}><p>From solar and battery storage to EV charging, we design smarter energy systems around your home, your bills and what you’re planning next.</p></Rise></div><ServiceStack/></section>
-<section className="trust-strip" aria-label="Why choose Clean Energy Solutions"><div><strong><Counter value={4.8} decimals={1}/><span className="unit">/5</span></strong><span>Rated by 26 customers on SolarQuotes</span></div><div><strong><Counter value={15} suffix="+"/></strong><span>Years Daniel has installed solar on the Border</span></div><div><strong>In-house</strong><span>Our own CEC-accredited electricians</span></div><div><strong><Counter value={1}/> day</strong><span>Most home systems are installed in a single day</span></div></section>
+<section className="trust-strip" aria-label="Why choose Clean Energy Solutions"><div><strong><Counter value={4.8} decimals={1}/><span className="unit">/5</span></strong><span>Rated by 26 customers on SolarQuotes</span></div><div><strong><Counter value={15} suffix="+"/></strong><span>Years Daniel has installed solar on the Border</span></div><div><strong><Counter value={25} suffix="–30 yr"/></strong><span>Panel warranties on the brands we install</span></div><div><strong><Counter value={1}/> day</strong><span>Most home systems are installed in a single day</span></div></section>
+<Estimator/>
 <SystemFlow/>
 <WhyChoose/>
 <ProjectGallery/>

@@ -47,9 +47,13 @@ website/app/src
 ├─ routes/            index.tsx (home), $page.tsx (service/team pages), contact.tsx, __root.tsx
 ├─ site/
 │  ├─ content.ts      page copy, FAQ, metadata, structured data
-│  ├─ shell.tsx       header, footer, contact band, FAQ, enquiry form
-│  ├─ sections.tsx    stacked service cards, shopfront parallax band
-│  ├─ projects.tsx    six-photo gallery with filters
+│  ├─ shell.tsx       header, glow footer, contact band, FAQ
+│  ├─ sections.tsx    hero (video), enquiry band, service stack, why-us, process, visit band
+│  ├─ quote-form.tsx  three-step Netlify Forms enquiry (services → contact → bill/photos)
+│  ├─ estimator.tsx   bill-slider savings estimator (CES-published 50–100% range only)
+│  ├─ flow.tsx        GSAP "sun to switchboard" six-step diagram with a following detail panel
+│  ├─ projects.tsx    "Our work" scroll intro + filterable photo grid with a feature tile
+│  ├─ locations.ts    Wagga Wagga / Shepparton / Yarrawonga page content
 │  └─ motion.tsx      scroll and entrance motion (Motion for React)
 ├─ scroll-scrub-scenes.ts   hero scene: clip, poster, headline, actions
 ├─ components/scroll-scrub/ the template's video scrub engine (do not rewrite)
@@ -91,7 +95,7 @@ The `website/.github/workflows/ci.yml` file is the template's CI for Higgsfield'
 Remaining launch work, from the audit:
 
 1. Attach the domain and switch DNS (above).
-2. Add a receiving endpoint for the enquiry form if email preparation is not enough — Netlify Forms is the natural fit now that the pages are static.
+2. The enquiry form posts to Netlify Forms (form name `enquiry`, with file uploads). Set the notification email under Netlify → Forms → Notifications so submissions reach Ella.
 3. Coordinate DNS, canonical/robots checks and legacy redirects when switching the domain.
 4. Add consent-appropriate analytics and Search Console after public hosting, then measure Core Web Vitals and enquiry completion.
 5. Replace the thumbnail-sized Instagram images with CES originals when available.

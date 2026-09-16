@@ -1,7 +1,8 @@
-import {useEffect,useRef,useState,type FormEvent} from 'react';
+import {useEffect,useRef} from 'react';
 import {motion,useReducedMotion,useScroll,useTransform} from 'motion/react';
 import {ArrowRight,Clock,Headset,HardHat,MessageCircle,PencilRuler,Phone,ShieldCheck,Users} from 'lucide-react';
 import {Arrow} from './shell';
+import {QuoteForm} from './quote-form';
 import {Parallax,ParallaxBackdrop,Reveal,Rise,Stack,StackItem} from './motion';
 export const MAPS='https://www.google.com/maps/search/?api=1&query=79%20Elgin%20Boulevard%20Wodonga%20Victoria%203690';
 /** Small uppercase label with the corner-bracket device used across the Framer reference. */
@@ -26,31 +27,8 @@ export function Hero(){
     <span className="hero__caption">Illustration · real CES installs are in <a href="#our-work">our work</a></span>
   </section>;
 }
-/** Black band under the hero: pitch on the left, enquiry form on the right (Framer "Contact us" section).
- * Posts to Netlify Forms (uploads included); the hidden form-name field and data-netlify attribute are what
- * Netlify's build scans for. Without JavaScript the native POST still works. */
-const SERVICES=['Solar panels','Home battery','EV charger','Hot water heat pump','Air conditioning','Commercial solar','Not sure yet'];
-export function QuoteBand(){
-  const [state,setState]=useState<'idle'|'sending'|'sent'|'error'>('idle');
-  async function submit(e:FormEvent<HTMLFormElement>){
-    e.preventDefault();const form=e.currentTarget;setState('sending');
-    try{const res=await fetch('/',{method:'POST',body:new FormData(form)});if(!res.ok)throw new Error(String(res.status));setState('sent');form.reset();}
-    catch{setState('error');}
-  }
-  return <section id="quote" className="quote-band" aria-labelledby="quote-heading"><div className="wrap quote-band__grid"><div className="quote-band__pitch"><Kicker light>Get started</Kicker><Reveal id="quote-heading" lines={['Let’s talk about','your energy needs.']}/><Rise delay={.15}><p>Tell us what you’re after and send a recent bill if you have one. Ella, our solar consultant, will come back with a tailored design and clear pricing.</p><p className="quote-band__promise"><Clock size={20} aria-hidden="true"/>We respond within one business day</p><a className="quote-band__call" href="tel:+61260212000"><span className="quote-band__call-icon"><Phone size={22} aria-hidden="true"/></span><span>Call us<strong>(02) 6021 2000</strong></span></a></Rise></div>
-    <form className="quote-form2" name="enquiry" method="POST" action="/?enquiry=sent" encType="multipart/form-data" data-netlify="true" data-netlify-honeypot="company" onSubmit={submit}>
-      <input type="hidden" name="form-name" value="enquiry"/>
-      <p className="quote-form2__hp" aria-hidden="true"><label>Company<input name="company" tabIndex={-1} autoComplete="off"/></label></p>
-      <fieldset className="quote-form2__services"><legend>What are you looking at?<span aria-hidden="true">*</span></legend><div>{SERVICES.map(s=><label key={s} className="chip"><input type="checkbox" name="services" value={s}/><span className="chip__label">{s}</span></label>)}</div></fieldset>
-      <div className="quote-form2__grid"><label>Name<span aria-hidden="true">*</span><input name="name" autoComplete="name" required maxLength={100} placeholder="Full name"/></label><label>Phone<span aria-hidden="true">*</span><input name="phone" type="tel" autoComplete="tel" required maxLength={30} placeholder="04 0000 0000"/></label><label>Email<span aria-hidden="true">*</span><input name="email" type="email" autoComplete="email" required maxLength={254} placeholder="name@example.com"/></label><label>Property address<span aria-hidden="true">*</span><input name="address" autoComplete="street-address" required maxLength={200} placeholder="Start typing your address"/></label></div>
-      <label>Anything else we should know?<textarea name="message" rows={3} maxLength={1500} placeholder="Roof type, current bill, when you’d like it done…"/></label>
-      <details className="quote-form2__uploads"><summary>Add a bill or photos (optional)<span>Helps us quote accurately, first time</span></summary><div className="quote-form2__grid"><label>Recent electricity bill<input type="file" name="bill" accept=".pdf,image/*"/></label><label>Photo of your meter box<input type="file" name="meter_photo" accept="image/*" capture="environment"/></label><label>Photo of your roof<input type="file" name="roof_photo" accept="image/*" capture="environment"/></label><label>Where a battery could go<input type="file" name="battery_photo" accept="image/*" capture="environment"/></label></div><p className="quote-form2__note">Up to 8 MB each. Photos and bills go only to CES.</p></details>
-      <button type="submit" className="quote-form2__submit" disabled={state==='sending'}>{state==='sending'?'Sending…':state==='sent'?'Sent — thanks!':'Get my free quote'}</button>
-      {state==='sent'&&<p className="quote-form2__ready" role="status">Thanks — your enquiry is with the CES team. Ella will be in touch within one business day.</p>}
-      {state==='error'&&<p className="quote-form2__ready" role="alert">That didn’t send. Please call <a href="tel:+61260212000">(02) 6021 2000</a> or email <a href="mailto:info@cesolutions.com.au">info@cesolutions.com.au</a>.</p>}
-      <p className="quote-form2__note">We reply from our Wodonga office. Your details go only to CES.</p>
-    </form></div></section>;
-}
+/** Black band under the hero: pitch on the left, the three-step enquiry form on the right. */
+export function QuoteBand(){return <section id="quote" className="quote-band" aria-labelledby="quote-heading"><div className="wrap quote-band__grid"><div className="quote-band__pitch"><Kicker light>Get started</Kicker><Reveal id="quote-heading" lines={['Let’s talk about','your energy needs.']}/><Rise delay={.15}><p>Three quick steps and Ella, our solar consultant, comes back with a tailored design and clear pricing. No pressure, no call centre.</p><p className="quote-band__promise"><Clock size={20} aria-hidden="true"/>We respond within one business day</p><a className="quote-band__call" href="tel:+61260212000"><span className="quote-band__call-icon"><Phone size={22} aria-hidden="true"/></span><span>Prefer to talk?<strong>(02) 6021 2000</strong></span></a></Rise></div><QuoteForm/></div></section>}
 const services=[
 {id:'solar',href:'/solar',kicker:'01 / Residential solar',title:['Put your roof','to work.'],body:'Panels sized to your roof and your bills, so daytime power comes from above you instead of the grid.',cta:'Explore solar',image:'instagram-rooftop.webp',alt:'Solar panels on a metal roof, shared by CES on Instagram',width:1200,height:1500},
 {id:'battery',href:'/batteries',kicker:'02 / Battery storage',title:['Keep your solar','for after sunset.'],body:'Store the surplus and run the evening on it instead of buying power back at peak rates. Blackout backup if you want it.',cta:'Explore batteries',image:'battery.webp',alt:'Home battery system featured by Clean Energy Solutions',width:1500,height:1000},
