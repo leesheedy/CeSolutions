@@ -10,6 +10,7 @@ import {ArrowRight,BadgePercent,BatteryCharging,Building2,Car,Droplets,HelpCircl
 import type {ComponentType} from 'react';
 import {NavigationMenu,NavigationMenuContent,NavigationMenuItem,NavigationMenuLink,NavigationMenuList,NavigationMenuTrigger} from '@/components/ui/navigation-menu';
 import {useScrolled} from './motion';
+import {lockScroll} from './scroll-lock';
 
 // Lucide no longer ships brand marks; these are the Simple Icons paths.
 export const Facebook=({size=20}:{size?:number})=><svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg>;
@@ -40,12 +41,12 @@ function PanelLink({item,current}:{item:Item;current:string}){
   return <li><NavigationMenuLink asChild active={item.href===current}><a href={item.href} className="nm-link">{item.Icon&&<span className="nm-link__icon"><item.Icon size={18} strokeWidth={1.75} aria-hidden="true"/></span>}<span><strong>{item.title}</strong><em>{item.desc}</em></span></a></NavigationMenuLink></li>;
 }
 
-function DesktopNav({current}:{current:string}){
+function DesktopNav({current,quote}:{current:string;quote:string}){
   return <NavigationMenu viewport={false} className="desk-nav" aria-label="Main navigation">
     <NavigationMenuList className="desk-nav__list">
       <NavigationMenuItem><NavigationMenuTrigger className="nm-trigger">Solar & batteries</NavigationMenuTrigger><NavigationMenuContent className="nm-panel nm-panel--wide">
         <div className="nm-panel__grid"><ul className="nm-panel__links">{SOLUTIONS.map(i=><PanelLink key={i.title} item={i} current={current}/>)}</ul>
-        <NavigationMenuLink asChild><a href="/#quote" className="nm-feature"><span className="nm-feature__kicker">Free quote</span><strong>Not sure where to start?</strong><p>Send a bill. Our solar consultant designs the right setup and replies within one business day.</p><span className="nm-feature__cta">Get my free quote <ArrowRight size={16} aria-hidden="true"/></span></a></NavigationMenuLink></div>
+        <NavigationMenuLink asChild><a href={quote} className="nm-feature"><span className="nm-feature__kicker">Free quote</span><strong>Not sure where to start?</strong><p>Send a bill. Our solar consultant designs the right setup and replies within one business day.</p><span className="nm-feature__cta">Get my free quote <ArrowRight size={16} aria-hidden="true"/></span></a></NavigationMenuLink></div>
       </NavigationMenuContent></NavigationMenuItem>
       <NavigationMenuItem><NavigationMenuLink asChild active={current==='/'&&false}><a href="/#our-work" className="nm-trigger nm-trigger--plain">Our work</a></NavigationMenuLink></NavigationMenuItem>
       <NavigationMenuItem><NavigationMenuTrigger className="nm-trigger">Areas</NavigationMenuTrigger><NavigationMenuContent className="nm-panel"><ul className="nm-panel__links nm-panel__links--one">{AREAS.map(i=><li key={i.title}><NavigationMenuLink asChild active={i.href===current}><a href={i.href} className="nm-link"><span className="nm-link__icon"><MapPin size={18} strokeWidth={1.75} aria-hidden="true"/></span><span><strong>{i.title}</strong><em>{i.desc}</em></span></a></NavigationMenuLink></li>)}</ul></NavigationMenuContent></NavigationMenuItem>
@@ -54,14 +55,14 @@ function DesktopNav({current}:{current:string}){
   </NavigationMenu>;
 }
 
-function MobileMenu({open,onClose,closeRef}:{open:boolean;onClose:()=>void;closeRef:React.RefObject<HTMLButtonElement|null>}){
+function MobileMenu({open,onClose,closeRef,quote}:{open:boolean;onClose:()=>void;closeRef:React.RefObject<HTMLButtonElement|null>;quote:string}){
   const reduce=useReducedMotion();
   const primary=[['Solar','/solar',Sun],['Batteries','/batteries',BatteryCharging],['Business & farm','/commercial-solar',Building2],['EV charging','/#quote',Car],['Hot water heat pumps','/#quote',Droplets]] as const;
   const secondary=[['How it works','/#flow-heading'],['Our work','/#our-work'],['Our team','/about'],['Reviews','/#reviews'],['Rebates','/#rebates'],['FAQ','/#faq']] as const;
   const t=(i:number)=>reduce?{duration:0}:{duration:.32,delay:.06+i*.035,ease:[.2,.65,.3,1] as const};
   return <AnimatePresence>{open&&<motion.div className="mnav" role="dialog" aria-modal="true" aria-label="Menu" id="mobile-menu" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:reduce?0:.22}}>
     <motion.div className="mnav__panel" initial={{y:reduce?0:28}} animate={{y:0}} exit={{y:reduce?0:20}} transition={reduce?{duration:0}:{type:'spring',stiffness:300,damping:32}} onClick={e=>{if((e.target as HTMLElement).closest('a'))onClose();}}>
-      <div className="mnav__top"><a href="/" className="brand" aria-label="Clean Energy Solutions home"><img src="/assets/logo-wide-full.png" width="1905" height="542" alt="Clean Energy Solutions"/></a><button ref={closeRef} type="button" className="mnav__close" onClick={onClose}><X size={20} aria-hidden="true"/>Close</button></div>
+      <div className="mnav__top"><a href="/" className="brand" aria-label="Clean Energy Solutions home"><img src="/assets/logo-wide-420.webp" width="420" height="120" alt="Clean Energy Solutions"/></a><button ref={closeRef} type="button" className="mnav__close" onClick={onClose}><X size={20} aria-hidden="true"/>Close</button></div>
       <nav className="mnav__body" aria-label="Menu">
         <p className="mnav__label">What we do</p>
         <ul className="mnav__primary">{primary.map(([label,href,Icon],i)=><motion.li key={label} initial={{opacity:0,y:14}} animate={{opacity:1,y:0}} transition={t(i)}><a href={href}><span className="mnav__icon"><Icon size={20} strokeWidth={1.75} aria-hidden="true"/></span>{label}<ArrowRight size={18} aria-hidden="true" className="mnav__arrow"/></a></motion.li>)}</ul>
@@ -71,7 +72,7 @@ function MobileMenu({open,onClose,closeRef}:{open:boolean;onClose:()=>void;close
         <motion.ul className="mnav__chips" initial={{opacity:0}} animate={{opacity:1}} transition={t(11)}>{AREAS.map(a=><li key={a.title}><a href={a.href}>{a.title}</a></li>)}</motion.ul>
       </nav>
       <motion.div className="mnav__cta" initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={t(8)}>
-        <a href="/#quote" className="mnav__quote">Get my free quote <ArrowRight size={18} aria-hidden="true"/></a>
+        <a href={quote} className="mnav__quote">Get my free quote <ArrowRight size={18} aria-hidden="true"/></a>
         <a href={PHONE} className="mnav__call"><Phone size={18} aria-hidden="true"/>(02) 6021 2000</a>
         <p className="mnav__promise">Reply within one business day · Free, no obligation</p>
         <div className="mnav__foot"><a href="mailto:info@cesolutions.com.au"><Mail size={16} aria-hidden="true"/>info@cesolutions.com.au</a><span><a href="https://www.facebook.com/CESolutionsNSW/" aria-label="CES on Facebook"><Facebook size={18}/></a><a href="https://www.instagram.com/cesolutions1/" aria-label="CES on Instagram"><Instagram size={18}/></a></span></div>
@@ -86,26 +87,31 @@ export function Header(){
   const scrolled=useScrolled();
   const trigger=useRef<HTMLButtonElement>(null);
   const closeBtn=useRef<HTMLButtonElement>(null);
-  const close=()=>{setOpen(false);trigger.current?.focus();};
+  // Pages that carry the enquiry form link to it in place; everything else goes to the homepage form.
+  const quote=path==='/'||path==='/contact'||path.startsWith('/locations/')?'#quote':'/#quote';
+  // Focus goes back to the button after the effect cleanup has lifted `inert` from the header.
+  const close=()=>{setOpen(false);window.setTimeout(()=>trigger.current?.focus({preventScroll:true}),0);};
   useEffect(()=>{
     if(!open)return;
-    document.body.style.overflow='hidden';
+    const unlock=lockScroll();
+    const others=[...document.querySelectorAll<HTMLElement>('header,main,footer,.mobile-dock')];
+    for(const el of others)el.setAttribute('inert','');
     const onKey=(e:KeyboardEvent)=>{if(e.key==='Escape')close();};
     document.addEventListener('keydown',onKey);
-    const id=window.setTimeout(()=>closeBtn.current?.focus(),50);
-    return()=>{document.body.style.overflow='';document.removeEventListener('keydown',onKey);window.clearTimeout(id);};
+    const id=window.setTimeout(()=>closeBtn.current?.focus({preventScroll:true}),50);
+    return()=>{unlock();for(const el of others)el.removeAttribute('inert');document.removeEventListener('keydown',onKey);window.clearTimeout(id);};
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[open]);
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
     <header className={scrolled?'site-header is-scrolled':'site-header'}>
-      <a href="/" className="brand" aria-label="Clean Energy Solutions home"><img src="/assets/logo-wide-full.png" width="1905" height="542" alt="Clean Energy Solutions"/></a>
-      <DesktopNav current={path}/>
+      <a href="/" className="brand" aria-label="Clean Energy Solutions home"><img src="/assets/logo-wide-420.webp" width="420" height="120" alt="Clean Energy Solutions"/></a>
+      <DesktopNav current={path} quote={quote}/>
       <a className="nav-phone" href={PHONE}><Phone size={18} aria-hidden="true"/>(02) 6021 2000</a>
-      <a className="nav-quote" href="/#quote">Get a free quote</a>
+      <a className="nav-quote" href={quote}>Get my free quote</a>
       <button className="menu-toggle" type="button" ref={trigger} aria-expanded={open} aria-controls="mobile-menu" onClick={()=>setOpen(o=>!o)}>Menu<Menu size={22} aria-hidden="true"/></button>
     </header>
-    <MobileMenu open={open} onClose={close} closeRef={closeBtn}/>
-    <nav className="mobile-dock" aria-label="Quick contact"><a href={PHONE}>Call local team</a><a href="/#quote">Get a free quote</a></nav>
+    <MobileMenu open={open} onClose={close} closeRef={closeBtn} quote={quote}/>
+    <nav className="mobile-dock" aria-label="Quick contact"><a href={PHONE}>Call the local team</a><a href={quote}>Get my free quote</a></nav>
   </>;
 }

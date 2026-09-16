@@ -62,7 +62,7 @@ export function SystemFlow(){
   return <section ref={ref} className="flow-section" aria-labelledby="flow-heading"><div className="wrap">
     <div className="flow-head"><div><Kicker>How it works</Kicker><h2 id="flow-heading">Sun to switchboard,<br/>in six steps.</h2></div><p className="flow-intro">Every system we install does this. We size each part to your roof and your bills, and walk you through it again on install day.</p></div>
     <Diagram vertical={false} active={active} onPick={pick}/><Diagram vertical active={active} onPick={pick}/>
-    <div className="flow-detail-panel" aria-live="polite"><span className="flow-detail-n">{String(active+1).padStart(2,'0')} / 06 · {node.time}</span><h3>{node.short}</h3><p>{node.detail}</p><div className="flow-dots" role="tablist" aria-label="Steps">{nodes.map((n,i)=><button key={n.id} type="button" role="tab" aria-selected={i===active} aria-label={n.label} className={i===active?'is-on':''} onClick={()=>pick(i)}/>)}</div></div>
+    <div className="flow-detail-panel"><span className="flow-detail-n">{String(active+1).padStart(2,'0')} / 06 · {node.time}</span><h3>{node.short}</h3><p>{node.detail}</p><div className="flow-dots" aria-label="Steps">{nodes.map((n,i)=><button key={n.id} type="button" aria-pressed={i===active} aria-label={n.label} className={i===active?'is-on':''} onClick={()=>pick(i)}/>)}</div></div>
     <ol className="flow-steps sr-only">{nodes.map((n,i)=><li key={n.id}>{i+1}. {n.short} — {n.detail}</li>)}</ol>
   </div></section>;
 }

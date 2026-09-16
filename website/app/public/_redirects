@@ -14,3 +14,5 @@
 /app/*                                 /           301
 /locations                              /locations/wagga-wagga 302
 /loctions                               /locations/wagga-wagga 302
+/privacy-policy/                        /privacy    301
+/privacy-policy                         /privacy    301

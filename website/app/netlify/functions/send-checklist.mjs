@@ -1,10 +1,13 @@
 // Emails the enquirer a short "what to send us" checklist. Called from the enquiry form's third step.
 // Sends through Resend (https://resend.com) when RESEND_API_KEY and CHECKLIST_FROM are set on the Netlify
 // project; otherwise answers {ok:false, reason:'unconfigured'} and the form falls back to telling the team.
-// Nothing here is stored; the request body is the visitor's own name, email and chosen services.
+// Guard rails so this cannot be used as an open relay: same-site Origin only, rate-limited per IP, the
+// service list is matched against the form's own values, and nothing from the request is used unescaped.
 
 const OFFICE='(02) 6021 2000';
 const REPLY_TO=process.env.CHECKLIST_REPLY_TO||'info@cesolutions.com.au';
+const ALLOWED_ORIGIN=/^https:\/\/(www\.)?cesolutions\.com\.au$|^https:\/\/[a-z0-9-]+\.netlify\.app$|^https:\/\/cesolutions\.automatrix\.au$/;
+const SERVICES=new Set(['Solar panels','Solar + battery','Home battery','EV charger','Hot water heat pump','Air conditioning','Commercial solar','Not sure yet']);
 const ITEMS=[
   ['A recent power bill','A photo or PDF of your latest bill (all pages if you can). It tells us how much power you use and when, which sets the system size.'],
   ['Your roof','A photo from the street or the backyard showing the roof. A screenshot of your house on Google Maps satellite view works well too.'],
@@ -15,9 +18,11 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 
 export default async(req)=>{
   if(req.method!=='POST')return Response.json({ok:false,reason:'method'},{status:405});
+  const origin=req.headers.get('origin')||'';
+  if(!ALLOWED_ORIGIN.test(origin))return Response.json({ok:false,reason:'origin'},{status:403});
   let body;try{body=await req.json();}catch{return Response.json({ok:false,reason:'body'},{status:400});}
-  const email=String(body.email||'').trim(),name=String(body.name||'').trim().slice(0,100);
-  const services=Array.isArray(body.services)?body.services.map(String).slice(0,8):[];
+  const email=String(body.email||'').trim(),name=String(body.name||'').trim().slice(0,100).replace(/[\r\n<>]/g,'');
+  const services=Array.isArray(body.services)?body.services.map(String).filter(s=>SERVICES.has(s)).slice(0,8):[];
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)return Response.json({ok:false,reason:'email'},{status:400});
   const key=process.env.RESEND_API_KEY,from=process.env.CHECKLIST_FROM;
   if(!key||!from)return Response.json({ok:false,reason:'unconfigured'},{status:200});
@@ -32,4 +37,5 @@ export default async(req)=>{
   return Response.json({ok:true});
 };
 
-export const config={path:'/api/send-checklist'};
+// Netlify rate limiting: five requests per IP per minute is plenty for a human clicking a button.
+export const config={path:'/api/send-checklist',rateLimit:{windowLimit:5,windowSize:60,aggregateBy:['ip']}};

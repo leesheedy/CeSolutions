@@ -18,27 +18,27 @@ export type Location={
 const federal=[
 {name:'Small-scale Technology Certificates (STCs)',who:'Every eligible solar install, applied as a point-of-sale discount',href:'https://cer.gov.au/schemes/renewable-energy-target/small-scale-renewable-energy-scheme'},
 {name:'Cheaper Home Batteries Program',who:'Eligible home batteries, discount applied by the installer and stepping down on a fixed schedule',href:'https://www.dcceew.gov.au/energy/programs/cheaper-home-batteries'}];
-const victoria={name:'Solar Victoria panel rebate',who:'Victorian owner-occupiers under the income threshold, with an optional interest-free loan',href:'https://www.solar.vic.gov.au/solar-panel-rebate'};
+const victoria={name:'Solar Victoria panel rebate',who:'Victorian owner-occupiers who meet Solar Victoria’s current eligibility rules — we check before we quote',href:'https://www.solar.vic.gov.au/solar-panel-rebate'};
 export const locations:Location[]=[
 {slug:'wagga-wagga',name:'Wagga Wagga',state:'NSW',postcode:'2650',region:'the Riverina',fromWodonga:'about 130 km, an hour and a half up the Olympic Highway',
- title:'Solar & Battery Installers Wagga Wagga | Clean Energy Solutions',
- description:'Solar, batteries and EV charging in Wagga Wagga from Clean Energy Solutions. Designed from your bills, installed by our own CEC-accredited electricians. Free quote: (02) 6021 2000.',
+ title:'Solar & Battery Installers Wagga Wagga | CES',
+ description:'Solar, batteries and EV charging in Wagga Wagga, designed from your bills and installed by our own accredited electricians. Free quote: (02) 6021 2000.',
  heading:['Solar for Wagga Wagga,','designed from your bills.'],
  intro:'We’re now taking on solar, battery and EV charging work across Wagga Wagga and the Riverina. Same family-owned team, same in-house electricians, quoted from your actual electricity bills.',
- image:'instagram-roof-drone.webp',alt:'Drone view of black solar panels on a red corrugated roof, installed by CES',imageWidth:1600,imageHeight:1600,
+ image:'ces-drone-pool-tile.webp',alt:'Drone view of a tile-roof home with solar panels across several roof faces, installed by CES',imageWidth:1600,imageHeight:900,
  suburbs:['Wagga Wagga','Lake Albert','Estella','Bourkelands','Tatton','Glenfield Park','Kooringal','Forest Hill','Uranquinty','Ladysmith'],
  why:[
- {title:'Long, hot summers with big daytime loads.',body:'Riverina summers mean cooling runs through the middle of the day, exactly when panels generate most. A system sized to that pattern covers the expensive hours from your own roof.'},
+ {title:'Long, hot summers with big daytime loads.',body:'Riverina summers mean cooling runs through the middle of the day, exactly when panels generate most. A system sized to that pattern can cover the expensive hours from your own roof.'},
  {title:'Wide blocks and simple roofs.',body:'Much of Wagga’s housing sits on generous blocks with unshaded north- and west-facing roof. That gives us room to size a system for a battery or an EV later, not just today’s bill.'},
  {title:'NSW rebates, handled for you.',body:'New South Wales homes get the federal STC discount on panels and the Cheaper Home Batteries discount on storage. There is no state panel rebate in NSW, so we make sure the federal ones are applied properly at quote time.'}],
  rebates:federal,
  faqs:[
  {q:'Do you really cover Wagga Wagga from Wodonga?',a:'Yes. Our team travels up the Olympic Highway for site visits and installs, and we group Riverina jobs so scheduling stays tight. Our solar consultant will confirm timing with your quote.'},
  {q:'Which rebates apply in Wagga Wagga?',a:'The federal STC discount on panels and the federal Cheaper Home Batteries discount on eligible batteries. NSW does not currently run a state panel rebate, so those two are what we apply.'},
- {q:'How long does an install take?',a:'Most residential systems are installed in one day. Larger systems or those with batteries may take two to three days.'}]},
+ {q:'How long does an install take?',a:'Most home systems are installed in a single day by our own electricians. If yours needs longer — a larger system, or a battery on a tricky site — our solar consultant tells you before you commit, and we leave the site tidy either way.'}]},
 {slug:'shepparton',name:'Shepparton',state:'VIC',postcode:'3630',region:'the Goulburn Valley',fromWodonga:'about 180 km, two hours west along the Murray Valley Highway',
- title:'Solar & Battery Installers Shepparton | Clean Energy Solutions',
- description:'Solar, home batteries and EV charging in Shepparton and the Goulburn Valley from Clean Energy Solutions. Solar Victoria and federal rebates handled. Free quote: (02) 6021 2000.',
+ title:'Solar & Battery Installers Shepparton | CES',
+ description:'Solar, home batteries and EV charging in Shepparton and the Goulburn Valley. Solar Victoria and federal rebates handled. Free quote: (02) 6021 2000.',
  heading:['Solar for Shepparton','and the Goulburn Valley.'],
  intro:'Shepparton households and businesses get the full set of Victorian and federal rebates. We design around your bills, install with our own electricians and handle every application.',
  image:'instagram-shed.webp',alt:'Black solar panels across a new shed roof, installed by CES',imageWidth:1600,imageHeight:1600,
@@ -53,19 +53,19 @@ export const locations:Location[]=[
  {q:'Do you do commercial and farm work in the Goulburn Valley?',a:'Yes. Sheds, packing facilities and dairies are a good fit for solar because their demand is in daylight. Send a recent bill and we’ll size it from your actual consumption.'},
  {q:'How far is Shepparton from your office?',a:'About two hours west of Wodonga. We plan Goulburn Valley site visits and installs in runs, and our solar consultant confirms dates with your quote.'}]},
 {slug:'yarrawonga',name:'Yarrawonga',state:'VIC',postcode:'3730',region:'Lake Mulwala and the Murray',fromWodonga:'about 90 km, just over an hour along the Murray Valley Highway',
- title:'Solar & Battery Installers Yarrawonga | Clean Energy Solutions',
- description:'Solar, home batteries and EV charging in Yarrawonga, Mulwala and along the Murray from Clean Energy Solutions. Victorian and federal rebates handled. Free quote: (02) 6021 2000.',
+ title:'Solar & Battery Installers Yarrawonga | CES',
+ description:'Solar, home batteries and EV charging in Yarrawonga, Mulwala and along the Murray. Victorian and federal rebates handled. Free quote: (02) 6021 2000.',
  heading:['Solar for Yarrawonga','and the Murray.'],
- intro:'From Yarrawonga and Mulwala to Cobram and Rutherglen, we design solar and battery systems from your bills and install them with our own CEC-accredited electricians.',
- image:'instagram-rooftop.webp',alt:'Solar panels on a metal roof beneath a cloudy sky, photographed by CES',imageWidth:1200,imageHeight:1500,
+ intro:'From Yarrawonga and Mulwala to Cobram and Rutherglen, we design solar and battery systems from your bills and install them with our own accredited electricians.',
+ image:'ces-drone-rural-court.webp',alt:'Aerial view of a country home with solar panels on its roof, installed by CES',imageWidth:1600,imageHeight:1095,
  suburbs:['Yarrawonga','Mulwala','Cobram','Rutherglen','Bundalong','Tungamah','Katamatite','Corowa','Barooga','Wilby'],
  why:[
- {title:'Two states, one river.',body:'Yarrawonga is Victorian; Mulwala and Corowa across the bridge are in New South Wales. The rebates differ, so we check your address first and quote against the programmes that actually apply to it.'},
- {title:'Holiday homes and lake living.',body:'Plenty of Yarrawonga homes sit empty for stretches. Export credits keep working while you’re away, and a battery with backup keeps the fridge and security running if the grid drops.'},
+ {title:'Two states, one river.',body:'Yarrawonga is Victorian; Mulwala and Corowa across the bridge are in New South Wales. The rebates differ, so we check your address first and quote with the rebates that actually apply to it.'},
+ {title:'Holiday homes and lake living.',body:'Plenty of Yarrawonga homes sit empty for stretches. Export credits keep working while you’re away, and a battery with backup can keep the fridge and security running if the grid drops.'},
  {title:'Close enough for a quick site visit.',body:'We’re just over an hour away, so a roof check and a follow-up are easy to fit in, and the same team that quotes is the team that installs.'}],
  rebates:[victoria,...federal],
  faqs:[
  {q:'Which rebates apply in Yarrawonga?',a:'On the Victorian side (Yarrawonga, Bundalong, Cobram, Rutherglen) eligible owner-occupiers get the Solar Victoria panel rebate plus the federal STC and Cheaper Home Batteries discounts. On the NSW side (Mulwala, Corowa, Barooga) the two federal discounts apply.'},
  {q:'Can you help with a holiday house we’re not always at?',a:'Yes. We size for the way the house is actually used, set up monitoring so you can see it from anywhere, and design battery backup around what needs to stay on when you’re away.'},
- {q:'How soon can someone come out?',a:'Yarrawonga is just over an hour from our Wodonga office. Our solar consultant will book a site visit when they come back with your quote, usually within a business day of your enquiry.'}]}];
+ {q:'How soon can someone come out?',a:'Yarrawonga is just over an hour from our Wodonga office. Our solar consultant replies within one business day to book a site visit, and the same team that quotes is the team that installs.'}]}];
 export const locationBySlug=Object.fromEntries(locations.map(l=>[l.slug,l]));

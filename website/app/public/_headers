@@ -1,8 +1,9 @@
-# Security headers, mirroring src/lib/security-headers.server.ts (minus the
-# Higgsfield auth frame-src). Static assets share /assets with the photography,
-# so the cache is a week rather than immutable.
+# Security headers for the static Netlify deploy. Inline scripts are needed by the router's hydration
+# payload and the host-injection guard in __root.tsx. connect-src lists the two address-suggestion
+# services the enquiry form can call; the checklist email goes through the same-origin /api function.
+# Static assets share /assets with the photography, so the cache is a week rather than immutable.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' https: blob:; connect-src 'self' https:; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; media-src 'self'; connect-src 'self' https://photon.komoot.io https://places.googleapis.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

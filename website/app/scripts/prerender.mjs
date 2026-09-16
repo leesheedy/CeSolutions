@@ -20,6 +20,7 @@ const files = {
   "/commercial-solar": "commercial-solar.html",
   "/about": "about.html",
   "/contact": "contact.html",
+  "/privacy": "privacy.html",
   "/locations/wagga-wagga": "locations/wagga-wagga.html",
   "/locations/shepparton": "locations/shepparton.html",
   "/locations/yarrawonga": "locations/yarrawonga.html",
@@ -41,6 +42,9 @@ for (const [path, file] of Object.entries(files)) {
   console.log(`prerendered ${path} -> ${file} (${body.length} bytes)`);
 }
 
-const notFound = await render("/this-page-does-not-exist", 404);
+const notFound = (await render("/this-page-does-not-exist", 404))
+  // The 404 page is served for any unknown URL, so the router's embedded state would never match: ship it static.
+  .replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "")
+  .replace("</head>", '<meta name="robots" content="noindex"></head>');
 await writeFile(join(out, "404.html"), notFound);
 console.log("prerendered 404.html");
