@@ -9,3 +9,8 @@
 [build.environment]
   NODE_VERSION = "24"
   BUN_VERSION = "1.4.2"
+
+# Serverless functions (website/app/netlify/functions). send-checklist emails the enquirer a
+# what-to-send list via Resend when RESEND_API_KEY and CHECKLIST_FROM are set on the project.
+[functions]
+  directory = "netlify/functions"

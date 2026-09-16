@@ -49,7 +49,9 @@ website/app/src
 │  ├─ content.ts      page copy, FAQ, metadata, structured data
 │  ├─ shell.tsx       header, glow footer, contact band, FAQ
 │  ├─ sections.tsx    hero (video), enquiry band, service stack, why-us, process, visit band
-│  ├─ quote-form.tsx  three-step Netlify Forms enquiry (services → contact → bill/photos)
+│  ├─ quote-form.tsx  three-step Netlify Forms enquiry (services → contact → bill/photos), photo shrinking, checklist button
+│  ├─ address-field.tsx  address combobox (Google Places when keyed, else OpenStreetMap) → suburb/state/postcode
+│  netlify/functions/send-checklist.mjs  emails the visitor a what-to-send list via Resend
 │  ├─ estimator.tsx   bill-slider savings estimator (CES-published 50–100% range only)
 │  ├─ flow.tsx        GSAP "sun to switchboard" six-step diagram with a following detail panel
 │  ├─ projects.tsx    "Our work" scroll intro + filterable photo grid with a feature tile
@@ -95,7 +97,10 @@ The `website/.github/workflows/ci.yml` file is the template's CI for Higgsfield'
 Remaining launch work, from the audit:
 
 1. Attach the domain and switch DNS (above).
-2. The enquiry form posts to Netlify Forms (form name `enquiry`, with file uploads). Set the notification email under Netlify → Forms → Notifications so submissions reach Ella.
+2. The enquiry form posts to Netlify Forms (forms `enquiry`, with file uploads, and `checklist-request`). Set the notification email under Netlify → Forms → Notifications so submissions reach Ella.
+3. Optional environment variables on the Netlify project (Site configuration → Environment variables):
+   - `VITE_GOOGLE_PLACES_KEY` — a Google Maps Platform key with **Places API (New)** enabled, restricted to the site's domains. With it the address field uses Google suggestions; without it, it uses Photon (OpenStreetMap, free, no key), which resolves Albury-Wodonga street addresses well but has thinner coverage in small towns.
+   - `RESEND_API_KEY` and `CHECKLIST_FROM` (e.g. `Clean Energy Solutions <hello@cesolutions.com.au>`, a sender on a domain verified in [Resend](https://resend.com)) — enable the "Email me a list of what to send" button to actually email the visitor. `CHECKLIST_REPLY_TO` defaults to `info@cesolutions.com.au`. Until these are set the button records a `checklist-request` submission for the team and tells the visitor Ella will email the list.
 3. Coordinate DNS, canonical/robots checks and legacy redirects when switching the domain.
 4. Add consent-appropriate analytics and Search Console after public hosting, then measure Core Web Vitals and enquiry completion.
 5. Replace the thumbnail-sized Instagram images with CES originals when available.

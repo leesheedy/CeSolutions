@@ -1,8 +1,8 @@
 import {useEffect,useRef} from 'react';
 import {motion,useReducedMotion,useScroll,useTransform} from 'motion/react';
-import {ArrowRight,Clock,Headset,HardHat,MessageCircle,PencilRuler,Phone,ShieldCheck,Users} from 'lucide-react';
+import {ArrowRight,BadgeCheck,Clock,HardHat,Headset,MessageCircle,PencilRuler,Phone,ShieldCheck,Star,Users} from 'lucide-react';
 import {Arrow} from './shell';
-import {QuoteForm} from './quote-form';
+import {ChecklistFormRegistration,QuoteForm} from './quote-form';
 import {Parallax,ParallaxBackdrop,Reveal,Rise,Stack,StackItem} from './motion';
 export const MAPS='https://www.google.com/maps/search/?api=1&query=79%20Elgin%20Boulevard%20Wodonga%20Victoria%203690';
 /** Small uppercase label with the corner-bracket device used across the Framer reference. */
@@ -22,13 +22,13 @@ export function Hero(){
     <motion.div className="hero3__copy wrap" data-motion="" style={reduce?undefined:{y:copyY}}>
       <Kicker light>Your local clean energy experts</Kicker>
       <Reveal as="h1" lines={['Power your home','for less.']} stagger={.08}/>
-      <Rise delay={.22}><p className="hero3__body">Solar, batteries and EV charging designed from your bills and installed by our own Albury-Wodonga electricians. Most CES households cut their power bill by 50–100%.</p><div className="hero-action-row"><a href="#quote" className="hero-quote">Get a free quote <ArrowRight size={18} aria-hidden="true"/></a><a href="tel:+61260212000" className="hero-call"><Phone size={16} aria-hidden="true"/>(02) 6021 2000</a></div><a href="https://www.solarquotes.com.au/installer-review/clean-energy-solutions/" className="hero-review"><strong>4.8/5</strong><span>26 SolarQuotes ratings ↗</span></a></Rise>
+      <Rise delay={.22}><p className="hero3__body">Solar, batteries and EV charging designed from your bills and installed by our own Albury-Wodonga electricians. Most CES households cut their power bill by 50–100%.</p><div className="hero-action-row"><a href="#quote" className="hero-quote">Get a free quote <ArrowRight size={18} aria-hidden="true"/></a></div><ul className="hero-trust" aria-label="Why people choose CES"><li><a href="tel:+61260212000"><Phone size={15} aria-hidden="true"/><strong>(02) 6021 2000</strong></a></li><li><a href="https://www.solarquotes.com.au/installer-review/clean-energy-solutions/"><span className="hero-trust__stars" aria-hidden="true">{[0,1,2,3,4].map(i=><Star key={i} size={13} fill="currentColor"/>)}</span><strong>4.8/5</strong><span>26 SolarQuotes ratings ↗</span></a></li><li><ShieldCheck size={15} aria-hidden="true"/>Own local electricians</li><li><BadgeCheck size={15} aria-hidden="true"/>25–30 yr panel warranties</li></ul></Rise>
     </motion.div>
     <span className="hero__caption">Illustration · real CES installs are in <a href="#our-work">our work</a></span>
   </section>;
 }
 /** Black band under the hero: pitch on the left, the three-step enquiry form on the right. */
-export function QuoteBand(){return <section id="quote" className="quote-band" aria-labelledby="quote-heading"><div className="wrap quote-band__grid"><div className="quote-band__pitch"><Kicker light>Get started</Kicker><Reveal id="quote-heading" lines={['Let’s talk about','your energy needs.']}/><Rise delay={.15}><p>Three quick steps and Ella, our solar consultant, comes back with a tailored design and clear pricing. No pressure, no call centre.</p><p className="quote-band__promise"><Clock size={20} aria-hidden="true"/>We respond within one business day</p><a className="quote-band__call" href="tel:+61260212000"><span className="quote-band__call-icon"><Phone size={22} aria-hidden="true"/></span><span>Prefer to talk?<strong>(02) 6021 2000</strong></span></a></Rise></div><QuoteForm/></div></section>}
+export function QuoteBand(){return <section id="quote" className="quote-band" aria-labelledby="quote-heading"><div className="wrap quote-band__grid"><div className="quote-band__pitch"><Kicker light>Get started</Kicker><Reveal id="quote-heading" lines={['Let’s talk about','your energy needs.']}/><Rise delay={.15}><p>Three quick steps and Ella, our solar consultant, comes back with a tailored design and clear pricing. No pressure, no call centre.</p><p className="quote-band__promise"><Clock size={20} aria-hidden="true"/>We respond within one business day</p><a className="quote-band__call" href="tel:+61260212000"><span className="quote-band__call-icon"><Phone size={22} aria-hidden="true"/></span><span>Prefer to talk?<strong>(02) 6021 2000</strong></span></a></Rise></div><QuoteForm/><ChecklistFormRegistration/></div></section>}
 const services=[
 {id:'solar',href:'/solar',kicker:'01 / Residential solar',title:['Put your roof','to work.'],body:'Panels sized to your roof and your bills, so daytime power comes from above you instead of the grid.',cta:'Explore solar',image:'instagram-rooftop.webp',alt:'Solar panels on a metal roof, shared by CES on Instagram',width:1200,height:1500},
 {id:'battery',href:'/batteries',kicker:'02 / Battery storage',title:['Keep your solar','for after sunset.'],body:'Store the surplus and run the evening on it instead of buying power back at peak rates. Blackout backup if you want it.',cta:'Explore batteries',image:'battery.webp',alt:'Home battery system featured by Clean Energy Solutions',width:1500,height:1000},
