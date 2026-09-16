@@ -33,7 +33,7 @@ export const locations:Location[]=[
  {title:'NSW rebates, handled for you.',body:'New South Wales homes get the federal STC discount on panels and the Cheaper Home Batteries discount on storage. There is no state panel rebate in NSW, so we make sure the federal ones are applied properly at quote time.'}],
  rebates:federal,
  faqs:[
- {q:'Do you really cover Wagga Wagga from Wodonga?',a:'Yes. Our team travels up the Olympic Highway for site visits and installs, and we group Riverina jobs so scheduling stays tight. Ella will confirm timing when she quotes.'},
+ {q:'Do you really cover Wagga Wagga from Wodonga?',a:'Yes. Our team travels up the Olympic Highway for site visits and installs, and we group Riverina jobs so scheduling stays tight. Our solar consultant will confirm timing with your quote.'},
  {q:'Which rebates apply in Wagga Wagga?',a:'The federal STC discount on panels and the federal Cheaper Home Batteries discount on eligible batteries. NSW does not currently run a state panel rebate, so those two are what we apply.'},
  {q:'How long does an install take?',a:'Most residential systems are installed in one day. Larger systems or those with batteries may take two to three days.'}]},
 {slug:'shepparton',name:'Shepparton',state:'VIC',postcode:'3630',region:'the Goulburn Valley',fromWodonga:'about 180 km, two hours west along the Murray Valley Highway',
@@ -51,7 +51,7 @@ export const locations:Location[]=[
  faqs:[
  {q:'Which rebates apply in Shepparton?',a:'Three: the Solar Victoria panel rebate for eligible owner-occupiers, the federal STC discount on panels, and the federal Cheaper Home Batteries discount on eligible batteries. We handle the Solar Victoria application and the distributor paperwork.'},
  {q:'Do you do commercial and farm work in the Goulburn Valley?',a:'Yes. Sheds, packing facilities and dairies are a good fit for solar because their demand is in daylight. Send a recent bill and we’ll size it from your actual consumption.'},
- {q:'How far is Shepparton from your office?',a:'About two hours west of Wodonga. We plan Goulburn Valley site visits and installs in runs, and Ella confirms dates when she quotes.'}]},
+ {q:'How far is Shepparton from your office?',a:'About two hours west of Wodonga. We plan Goulburn Valley site visits and installs in runs, and our solar consultant confirms dates with your quote.'}]},
 {slug:'yarrawonga',name:'Yarrawonga',state:'VIC',postcode:'3730',region:'Lake Mulwala and the Murray',fromWodonga:'about 90 km, just over an hour along the Murray Valley Highway',
  title:'Solar & Battery Installers Yarrawonga | Clean Energy Solutions',
  description:'Solar, home batteries and EV charging in Yarrawonga, Mulwala and along the Murray from Clean Energy Solutions. Victorian and federal rebates handled. Free quote: (02) 6021 2000.',
@@ -67,5 +67,5 @@ export const locations:Location[]=[
  faqs:[
  {q:'Which rebates apply in Yarrawonga?',a:'On the Victorian side (Yarrawonga, Bundalong, Cobram, Rutherglen) eligible owner-occupiers get the Solar Victoria panel rebate plus the federal STC and Cheaper Home Batteries discounts. On the NSW side (Mulwala, Corowa, Barooga) the two federal discounts apply.'},
  {q:'Can you help with a holiday house we’re not always at?',a:'Yes. We size for the way the house is actually used, set up monitoring so you can see it from anywhere, and design battery backup around what needs to stay on when you’re away.'},
- {q:'How soon can someone come out?',a:'Yarrawonga is just over an hour from our Wodonga office. Ella will book a site visit when she comes back with your quote, usually within a business day of your enquiry.'}]}];
+ {q:'How soon can someone come out?',a:'Yarrawonga is just over an hour from our Wodonga office. Our solar consultant will book a site visit when they come back with your quote, usually within a business day of your enquiry.'}]}];
 export const locationBySlug=Object.fromEntries(locations.map(l=>[l.slug,l]));

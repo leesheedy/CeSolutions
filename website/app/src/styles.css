@@ -832,3 +832,29 @@ html:not(.js-form) .qf__progress,html:not(.js-form) .qf__back{display:none}
 .hero-trust li>svg{color:var(--mint-soft)}
 .hero-trust__stars{display:inline-flex;gap:1px;color:#ffc531}
 @media(max-width:600px){.hero-trust{margin-top:20px;font-size:13px;gap:8px 0}.hero-trust li{padding-right:12px;margin-right:12px}.hero-trust li:nth-child(2){flex-basis:100%;border-right:0}}
+
+/* Mobile pass (16 Sep): tighter section gaps, no empty pin space in the "Our work" intro, 44px tap targets. */
+.flow-dots button{position:relative}
+.flow-dots button::before{content:"";position:absolute;inset:-16px -4px}
+.hero3 .hero__caption{font-size:11px}.hero3 .hero__caption a{display:inline-block;padding:8px 0;text-decoration:underline;text-underline-offset:3px}
+.glow-footer__nav a{min-height:40px}
+.footer-bottom{font-size:12px}.footer-bottom a{min-height:40px}
+@media(max-width:860px){
+  .work-intro{height:auto}
+  .work-intro__pin{position:static;height:auto;padding:24px 5% 8px;gap:26px}
+  .work-section{padding:56px 0 60px}
+}
+@media(max-width:600px){
+  .services-section{padding-bottom:36px}
+  .stack-item:last-child{margin-bottom:0}
+  .flow-section{padding:64px 0 40px}
+  .why{padding:48px 0 64px;gap:28px}
+  .rebate-section{padding-block:56px 48px}
+  .cta-split{padding:48px 0 30px}
+  .faq-section{padding-top:64px}
+  .estimator{padding:64px 0}
+  .work-controls{margin-bottom:22px}
+  .work-intro__caption{font-size:15px}
+  .hero-trust li{min-height:40px}
+}
+.faq-phone{min-height:44px;display:inline-flex;align-items:center;gap:10px}
