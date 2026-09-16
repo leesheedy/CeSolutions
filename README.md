@@ -47,7 +47,8 @@ website/app/src
 ├─ routes/            index.tsx (home), $page.tsx (service/team pages), contact.tsx, __root.tsx
 ├─ site/
 │  ├─ content.ts      page copy, FAQ, metadata, structured data
-│  ├─ shell.tsx       header, glow footer, contact band, FAQ
+│  ├─ nav.tsx         header: Radix navigation menu (desktop) + full-screen mobile menu
+│  ├─ shell.tsx       glow footer, contact band, FAQ
 │  ├─ sections.tsx    hero (video), enquiry band, service stack, why-us, process, visit band
 │  ├─ quote-form.tsx  three-step Netlify Forms enquiry (services → contact → bill/photos), photo shrinking, checklist button
 │  ├─ address-field.tsx  address combobox (Google Places when keyed, else OpenStreetMap) → suburb/state/postcode

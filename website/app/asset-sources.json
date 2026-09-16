@@ -67,5 +67,77 @@
   "hero-loop.mp4 / hero-loop.webm": {
     "source": "Higgsfield Kling v3.0 image-to-video from hero-backdrop.webp, 2026-09-15, 8 s, silent",
     "note": "AI animation of the labelled hero illustration; loops behind the hero copy, poster shown until playable and under reduced motion"
+  },
+  "ces-roof-sunset-hills.webp": {
+    "file": "ces-roof-sunset-hills.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2024/10/376768841_122093388974048004_4038690504057307547_n.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "shed roof array at sunset, snow-capped ranges"
+  },
+  "ces-drone-pool-tile.webp": {
+    "file": "ces-drone-pool-tile.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2024/07/449227164_122156891258048004_4321261754821303861_n.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "drone, tile-roof home with pool"
+  },
+  "ces-drone-pool-faces.webp": {
+    "file": "ces-drone-pool-faces.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2024/12/464104545_122172630314048004_4039973574351579339_n.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "drone, large Colorbond roof with pool"
+  },
+  "ces-drone-rural-court.webp": {
+    "file": "ces-drone-rural-court.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2024/07/437852367_122146860554048004_6254682893982731082_n.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "drone, rural homestead with tennis court"
+  },
+  "ces-install-crew-roof.webp": {
+    "file": "ces-install-crew-roof.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2024/10/452585770_122160758114048004_6022858744998500927_n.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "two installers fixing panels on a tin roof"
+  },
+  "ces-install-battery-lift.webp": {
+    "file": "ces-install-battery-lift.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2024/10/456532695_122165236412048004_3727492665566319869_n.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "installer lifting a wall unit into place"
+  },
+  "ces-install-battery-wiring.webp": {
+    "file": "ces-install-battery-wiring.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2024/07/404190485_122121000098048004_3679437875014750170_n.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "installer wiring a battery under an inverter"
+  },
+  "ces-garage-byd-fronius.webp": {
+    "file": "ces-garage-byd-fronius.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2023/11/Clean-energysolutions-byd-fronius.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "garage: BYD towers, Fronius inverters, EV charger"
+  },
+  "ces-powerwalls-enclosure.webp": {
+    "file": "ces-powerwalls-enclosure.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2024/07/411993516_122125702616048004_9137714959685578142_n.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "two Tesla Powerwalls in an enclosure"
+  },
+  "ces-installer-selfie.webp": {
+    "file": "ces-installer-selfie.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2023/11/IMG_5658.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "Daniel on a roof beside panels"
+  },
+  "ces-roof-big-sky.webp": {
+    "file": "ces-roof-big-sky.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2023/10/clean-energy-solutions-solar-roof-01.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "two rows on a white corrugated roof"
+  },
+  "ces-roof-gums.webp": {
+    "file": "ces-roof-gums.webp",
+    "source": "https://cesolutions.com.au/wp-content/uploads/2025/08/486680435_122191374530048004_7484476388065899833_n-e1754961841656.jpg",
+    "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
+    "shows": "panels on a dark tin roof, gum trees"
   }
 }
