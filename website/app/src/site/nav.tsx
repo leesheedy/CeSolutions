@@ -10,6 +10,7 @@ import {ArrowRight,BadgePercent,BatteryCharging,Building2,Car,Droplets,HelpCircl
 import type {ComponentType} from 'react';
 import {NavigationMenu,NavigationMenuContent,NavigationMenuItem,NavigationMenuLink,NavigationMenuList,NavigationMenuTrigger} from '@/components/ui/navigation-menu';
 import {useScrolled} from './motion';
+import {SunLayer} from './sun';
 import {lockScroll} from './scroll-lock';
 
 // Lucide no longer ships brand marks; these are the Simple Icons paths.
@@ -104,6 +105,7 @@ export function Header(){
   },[open]);
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
+    <SunLayer/>
     <header className={scrolled?'site-header is-scrolled':'site-header'}>
       <a href="/" className="brand" aria-label="Clean Energy Solutions home"><img src="/assets/logo-wide-420.webp" width="420" height="120" alt="Clean Energy Solutions"/></a>
       <DesktopNav current={path} quote={quote}/>

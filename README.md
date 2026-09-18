@@ -48,6 +48,7 @@ website/app/src
 ├─ site/
 │  ├─ content.ts      page copy, FAQ, metadata, structured data
 │  ├─ nav.tsx         header: Radix navigation menu (desktop) + full-screen mobile menu
+│  ├─ sun.tsx         the light engine: real solar position for Wodonga → CSS custom properties
 │  ├─ shell.tsx       glow footer, contact band, FAQ
 │  ├─ sections.tsx    hero (video), enquiry band, service stack, why-us, process, visit band
 │  ├─ quote-form.tsx  three-step Netlify Forms enquiry (services → contact → bill/photos), photo shrinking, checklist button
