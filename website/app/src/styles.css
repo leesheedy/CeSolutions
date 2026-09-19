@@ -525,7 +525,7 @@ body{padding-bottom:68px}.site-header{height:76px}.site-header .brand img{width:
 .glow-footer__social a{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid #ffffff1f;color:var(--sun);transition:background .2s,color .2s}
 .glow-footer__social a:hover{background:var(--sun);color:var(--ink)}
 .glow-footer__nav{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
-.glow-footer__nav h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--sun);font-weight:600;margin-bottom:18px}
+.glow-footer__nav h3{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--sun);font-weight:600;margin-bottom:18px}
 .glow-footer__nav ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .glow-footer__nav a{color:#e6eef2;font-size:15px;min-height:28px;display:inline-flex;align-items:center;gap:10px}
 .glow-footer__nav a:hover{color:var(--sun)}
@@ -1129,10 +1129,6 @@ html[data-phase=night] .hero3__glow,html[data-phase=dusk] .hero3__glow{opacity:.
 .rebate-section,.cta-split,.band{position:relative}
 
 /* ── Hero depth: two planes cut from one frame ──────────────────────────────────────────────────── */
-.hero3__fg{position:absolute;inset:-4% 0 0;z-index:1;pointer-events:none;will-change:transform;
-  -webkit-mask-image:linear-gradient(180deg,transparent 50%,#000 72%);
-          mask-image:linear-gradient(180deg,transparent 50%,#000 72%)}
-.hero3__fg img{width:100%;height:100%;object-fit:cover;object-position:center 58%}
 /* The sky wash stops where the roofline starts, so the photograph itself is never tinted. */
 .hero3::after{-webkit-mask-image:linear-gradient(180deg,#000 38%,transparent 66%);
                       mask-image:linear-gradient(180deg,#000 38%,transparent 66%)}
@@ -1143,3 +1139,65 @@ html[data-phase=night] .hero3__glow,html[data-phase=dusk] .hero3__glow{opacity:.
 .roof__cap{display:block;padding:10px 14px;border-top:1px solid var(--rule-dark);
   font-family:var(--fm);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--amber);
   font-variant-numeric:tabular-nums;min-height:36px}
+
+/* ═══ QA pass, 20 Sep 2026 — fixes from the full layout audit (11 pages × 8 widths) ═══════════════ */
+
+/* 1 — The sticky header was 94% opaque with no blur, so headlines read straight through it. */
+.site-header{background:#070C11;backdrop-filter:saturate(120%) blur(12px)}
+
+/* 3 — Day stamps resolved `right` against the section box, so stamps inside a section that is itself
+   `.wrap` landed 65px further in than stamps in full-bleed sections. One content edge for all of them. */
+section.wrap>.daystamp,.cta-split>.daystamp{right:0}
+
+/* 4 — The work grid used align-items:start, so a tall feature card left a 300px hole beside it.
+   Rows now stretch and the card body absorbs the slack, with the blurb clamped so cards stay comparable. */
+.work-masonry{align-items:stretch}
+.work-masonry>*{display:flex}
+.work-masonry .work-card{display:flex;flex-direction:column;width:100%}
+.work-card__body{display:flex;flex-direction:column;flex:1}
+.work-masonry .work-card p{display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.work-card__source{margin-top:auto;padding-top:12px}
+
+/* 6 — The sun rail sits in the page gutter, but full-bleed bands ran underneath it and its hairline
+   cut through review cards. Reserve the gutter on the bands that bleed. */
+.review-marquee,.brand-section .marquee{
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 90%,transparent 97%);
+          mask-image:linear-gradient(90deg,transparent,#000 5%,#000 90%,transparent 97%)}
+
+/* 7 — Peer section headings were rendering at six different sizes (56/58/64/66/68/70px at 1440)
+   because each section carried its own clamp. One token, one size. */
+:root{--h2:clamp(36px,4.6vw,62px)}
+h2{font-size:var(--h2)}
+main :is(section,.band) :is(h2,.cta-split__title):not(.work-intro__title){font-size:var(--h2)}
+.work-intro__title{font-size:clamp(52px,11vw,150px)}
+
+/* 8 — Headline orphans: "homes." and "answered." were dropping to a line of their own. */
+h1,h2,h3,.reveal,.reveal__line{text-wrap:balance}
+.loc-hero h1{font-size:clamp(38px,5.4vw,68px)}
+
+/* 9 — Below 430px the trust list wraps one item per row, leaving dangling divider strokes. */
+@media(max-width:430px){
+  .hero-trust li{border-right:0;margin-right:0;padding-right:0;flex-basis:100%}
+  .hero-trust a{flex-wrap:wrap}
+}
+/* 10 — At 320 the hero kicker wrapped to two lines and stranded its corner brackets. */
+@media(max-width:360px){.kicker{font-size:10px;letter-spacing:.05em}}
+
+/* 14 — At ≤860 the collapsed stamp in #reviews sat inline against the kicker's brackets. */
+@media(max-width:860px){.daystamp{display:flex}.review-section .daystamp{margin-inline:auto 0}}
+
+/* 15 — The mobile menu's Close button scrolled away with the panel. */
+.mnav__top{position:sticky;top:0;z-index:2;background:#060A0F}
+
+/* 16 — Footer columns were too narrow at 1280–1440: link labels wrapped while the card had slack. */
+@media(min-width:1101px){.footer-top,.glow-footer__nav{gap:26px}}
+.glow-footer__nav{grid-template-columns:repeat(auto-fit,minmax(154px,1fr))}
+
+/* 17 — Footer column labels were <h2>, the same level as page section titles. Now <h3>; keep the look. */
+.glow-footer__nav h3{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--sun);
+  font-family:var(--fm);font-weight:500;margin-bottom:14px}
+
+/* 12/13 — Honeypot and the suggestion listbox are out of the tab order; they keep no focus ring. */
+.qf__hp,.qf__hp *{outline:0!important}
+.addr__list:focus{outline:0}
+.addr__list.is-above{top:auto;bottom:calc(100% + 6px)}

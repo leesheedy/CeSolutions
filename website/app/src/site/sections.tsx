@@ -20,11 +20,9 @@ export function Hero(){
   const {scrollYProgress}=useScroll({target:ref,offset:['start start','end start']});
   const bgY=useTransform(scrollYProgress,[0,1],['0%','22%']);
   const copyY=useTransform(scrollYProgress,[0,1],[0,-70]);
-  // Depth: the near plane (roofline down) travels further than the sky behind it. One image, two rates.
-  const fgY=useTransform(scrollYProgress,[0,1],['0%','44%']);
+
   return <section ref={ref} className="hero3" aria-label="Solar and batteries in Albury-Wodonga">
-    <motion.div className="hero3__bg" data-motion="" style={reduce?undefined:{y:bgY}}><img src="/assets/hero-backdrop.webp" alt="" width={2048} height={878} fetchPriority="high" decoding="async"/></motion.div>
-    <motion.div className="hero3__fg" aria-hidden="true" style={reduce?undefined:{y:fgY}}><img src="/assets/hero-backdrop.webp" alt="" width={2048} height={878} decoding="async"/></motion.div><div className="hero3__glow" aria-hidden="true"/>
+    <motion.div className="hero3__bg" data-motion="" style={reduce?undefined:{y:bgY}}><img src="/assets/hero-backdrop.webp" alt="" width={2048} height={878} fetchPriority="high" decoding="async"/></motion.div><div className="hero3__glow" aria-hidden="true"/>
     <div className="hero3__shade" aria-hidden="true"/>
     <motion.div className="hero3__copy wrap" data-motion="" style={reduce?undefined:{y:copyY}}>
       <Kicker light>Your local solar & battery installers</Kicker>
