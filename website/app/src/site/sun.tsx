@@ -140,3 +140,15 @@ export function DayStamp({at,label,light}:{at:'rise'|'noon'|'set'|string;label:s
   useEffect(()=>{if(solar)setT(todayTimes()[at as 'rise'|'noon'|'set']);},[solar,at]);
   return <span className={light?'daystamp daystamp--light':'daystamp'} aria-hidden="true">{t?<b>{t}</b>:null}<i>{label}</i></span>;
 }
+
+/** Solar geometry for an arbitrary minute of today, for anything that needs to draw the sun itself. */
+export function solarDay(){
+  const now=new Date(),tz=tzHours(now),p=parts(now),rs=riseSet(p,tz);
+  return {
+    nowMinutes:p.hh*60+p.mm,
+    riseMinutes:rs?rs.rise*60:6*60, setMinutes:rs?rs.set*60:18*60, noonMinutes:rs?rs.noon*60:12*60,
+    at:(minutes:number)=>position(p,tz,minutes),
+    label:(minutes:number)=>hhmm(minutes/60),
+    sky,
+  };
+}

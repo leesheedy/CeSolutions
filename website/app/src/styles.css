@@ -1136,3 +1136,10 @@ html[data-phase=night] .hero3__glow,html[data-phase=dusk] .hero3__glow{opacity:.
 /* The sky wash stops where the roofline starts, so the photograph itself is never tinted. */
 .hero3::after{-webkit-mask-image:linear-gradient(180deg,#000 38%,transparent 66%);
                       mask-image:linear-gradient(180deg,#000 38%,transparent 66%)}
+
+/* ── The roof: the site's one 3D object, drawn on canvas and lit by the same sun as the page ─────── */
+.roof{margin:26px 0 0;border:1px solid var(--rule-dark);background:var(--dusk);overflow:hidden}
+.roof__canvas{display:block;width:100%;height:auto}
+.roof__cap{display:block;padding:10px 14px;border-top:1px solid var(--rule-dark);
+  font-family:var(--fm);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--amber);
+  font-variant-numeric:tabular-nums;min-height:36px}
