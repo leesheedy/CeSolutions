@@ -1,6 +1,16 @@
 # CES website UI, content and technical audit
 Reviewed 14 September 2026. Scope: the six-page Higgsfield redesign, the supplied homepage copy, CES source imagery, and the ThrillX reference. This report distinguishes implemented fixes from hosting and operational work still required.
 
+## Update — 20 September 2026: typeface change and the day layer
+
+**Typeface.** Archivo was replaced after a side-by-side render of six candidates against the actual hero headline on the real ground colour. Archivo Expanded had volume but no voice — wide, blunt, sports-broadcast. Instrument Serif was too fashion-luxury for a company that climbs on roofs; Unbounded read crypto; Big Shoulders went cheap-newspaper at display size; Familjen Grotesk was clean but close to a stock grotesque. **Bricolage Grotesque** won: distinctive terminals, a tighter fit (the headline sets in three lines rather than sprawling), and an optical-size axis (12–96) that is the correct mechanism for the responsive display/body system — opsz 96 for the hero, 72 for section heads, 48 for figures, 14 for body, dropping to 48 on phones. It is also lighter than Archivo (75 KB vs 88 KB) because it carries one axis rather than two.
+
+**The day layer.** Eleven sections now carry a solar stamp marking the hour they belong to, running from first light at the enquiry band through to "running on stored sun" at the closing CTA. First light, solar noon and last light are the real computed times for today, filled after mount so the prerendered HTML stays stable and hydration is clean; the rest are fixed markers. Stamps align to the content column, stay clear of the sun rail, and collapse inline on phones. This is genuine sequence information rather than decoration — it is the concept's backbone made visible.
+
+**Hero depth.** The decorative 823 KB hero video is gone. In its place the same frame is cut into two planes — the sky and hills behind, the roofline and everything below it in front — travelling at different scroll rates, so the hero has real parallax depth from a real photograph rather than a loop. The computed sky wash is now masked to the sky region only, so the photograph itself is never tinted: the light changes, the picture doesn't. Net result is 823 KB lighter and more dimensional.
+
+**Still outstanding from the direction deck.** The one genuine 3D object — a modelled roof section with a panel array and a real directional sun, built in Spline — has not been built. It is the remaining Tier 2 item and needs a deliberate decision, because it adds a runtime dependency and a sync workflow to a site that is currently very light.
+
 ## Update — 19 September 2026: art direction pass — "One Day"
 
 Copy untouched at the user's direction ("the copy on the site right now is really good but the design needs to be improved"). This is purely how it looks.
