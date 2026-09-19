@@ -1,6 +1,7 @@
 /* GSAP-driven pieces. GSAP and ScrollTrigger are loaded on the client only, after mount; the markup is
  * complete and readable without them, and `prefers-reduced-motion` skips every hidden start state. */
 import {useEffect,useRef,useState,type ComponentType} from 'react';
+import {DayStamp} from './sun';
 import {BatteryCharging,Cable,Grid2x2,House,Sun,Zap,type LucideProps} from 'lucide-react';
 import {Kicker} from './sections';
 
@@ -59,7 +60,7 @@ export function SystemFlow(){
   },[]);
   const pick=(i:number)=>{setActive(i);pinned.current=true;};
   const node=nodes[active];
-  return <section ref={ref} className="flow-section" aria-labelledby="flow-heading"><div className="wrap">
+  return <section ref={ref} className="flow-section" aria-labelledby="flow-heading"><div className="wrap"><DayStamp at="noon" label="Solar noon"/>
     <div className="flow-head"><div><Kicker>How it works</Kicker><h2 id="flow-heading">Sun to switchboard,<br/>in six steps.</h2></div><p className="flow-intro">Every system we install does this. We size each part to your roof and your bills, and walk you through it again on install day.</p></div>
     <Diagram vertical={false} active={active} onPick={pick}/><Diagram vertical active={active} onPick={pick}/>
     <div className="flow-detail-panel"><span className="flow-detail-n">{String(active+1).padStart(2,'0')} / 06 · {node.time}</span><h3>{node.short}</h3><p>{node.detail}</p><div className="flow-dots" aria-label="Steps">{nodes.map((n,i)=><button key={n.id} type="button" aria-pressed={i===active} aria-label={n.label} className={i===active?'is-on':''} onClick={()=>pick(i)}/>)}</div></div>

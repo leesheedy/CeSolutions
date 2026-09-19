@@ -121,3 +121,22 @@ export function SunLayer(){
   const sun=useSun();
   return <><SunRail sun={sun}/><span className="sr-only" aria-live="off">{sun?`Sun elevation over Wodonga ${sun.el.toFixed(0)} degrees at ${sun.time}.`:''}</span></>;
 }
+
+/** Solar times for today, computed once per day and shared by every stamp on the page. */
+let cache:{day:string;rise:string;noon:string;set:string}|null=null;
+function todayTimes(){
+  const now=new Date(),tz=tzHours(now),p=parts(now),key=`${p.y}-${p.m}-${p.d}`;
+  if(cache&&cache.day===key)return cache;
+  const rs=riseSet(p,tz);
+  cache={day:key,rise:rs?hhmm(rs.rise):'',noon:rs?hhmm(rs.noon):'',set:rs?hhmm(rs.set):''};
+  return cache;
+}
+/** Marks a section with the hour of the day it belongs to. First light, solar noon and last light are
+ * the real times for today (filled after mount, so the prerendered HTML stays stable); the rest are
+ * fixed markers. Decorative — the page reads identically without them. */
+export function DayStamp({at,label,light}:{at:'rise'|'noon'|'set'|string;label:string;light?:boolean}){
+  const solar=at==='rise'||at==='noon'||at==='set';
+  const [t,setT]=useState(solar?'':at);
+  useEffect(()=>{if(solar)setT(todayTimes()[at as 'rise'|'noon'|'set']);},[solar,at]);
+  return <span className={light?'daystamp daystamp--light':'daystamp'} aria-hidden="true">{t?<b>{t}</b>:null}<i>{label}</i></span>;
+}

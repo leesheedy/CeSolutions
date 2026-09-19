@@ -13,9 +13,10 @@
  * on the site used them and they were ~85% of a 577 KB render-blocking stylesheet. Only the three shadcn
  * pieces the site composes are scanned for utilities. */
 
-/* Archivo — variable width (75–125) and weight (400–800). Display and body in one file. */
-@font-face{font-family:"Archivo";font-style:normal;font-weight:400 800;font-stretch:75% 125%;font-display:swap;src:url("/assets/fonts/archivo-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"Archivo";font-style:normal;font-weight:400 800;font-stretch:75% 125%;font-display:swap;src:url("/assets/fonts/archivo-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+/* Bricolage Grotesque — variable optical size (12–96) and weight (200–800). The opsz axis does the work:
+   display cuts are tight and energetic, text cuts open up. Display and body from one file. */
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:200 800;font-display:swap;src:url("/assets/fonts/bricolage-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:200 800;font-display:swap;src:url("/assets/fonts/bricolage-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 /* JetBrains Mono — the instrument voice: every number, time and coordinate. */
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400 600;font-display:swap;src:url("/assets/fonts/jetbrains-mono-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
@@ -611,8 +612,6 @@ body{padding-bottom:68px}.site-header{height:76px}.site-header .brand img{width:
 @media(max-width:600px){.hero3__copy{padding:96px 0 84px}.hero3 h1{font-size:clamp(38px,11.5vw,54px)}.hero3 .hero__caption{font-size:9px;bottom:10px}.quote-form2__grid{grid-template-columns:1fr}.process4__cards{grid-template-columns:1fr}.process4__cards li{min-height:0}.process4 h3{margin-top:26px}.why__list li{grid-template-columns:48px 1fr;gap:14px}.why__icon{width:48px;height:48px}}
 
 /* Hero video loop over the still (poster stays until the clip can play), plus a slow-moving light bloom. */
-.hero3__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 58%;opacity:0;transition:opacity 1.2s ease}
-.hero3__video.is-ready{opacity:1}
 .hero3__glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 50% at 78% 30%,#00e0b422 0%,#00adf014 35%,transparent 70%);animation:hero-glow 14s ease-in-out infinite alternate;mix-blend-mode:screen}
 @keyframes hero-glow{from{transform:translate3d(-3%,2%,0) scale(1)}to{transform:translate3d(3%,-2%,0) scale(1.12)}}
 /* Enquiry form: service chips, honeypot, uploads */
@@ -985,18 +984,19 @@ html:not(.js-form) .qf__progress,html:not(.js-form) .qf__back{display:none}
   --rule-mid:#2C4252;
   --muted-dark:#8098A8;
   /* Type */
-  --fd:Archivo,"Helvetica Neue",Arial,sans-serif;
+  --fd:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
   --fm:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 
 /* ── Typography: Archivo expanded carries the voice, JetBrains Mono carries the data ────────────── */
-h1,h2,h3{font-variation-settings:"wdth" 118;font-weight:750;letter-spacing:-.035em}
-h1{font-variation-settings:"wdth" 125;font-weight:800;letter-spacing:-.045em;line-height:.94}
-.hero3 h1,.hero2 h1,.detail-hero h1,.contact-intro h1,.loc-hero h1{font-variation-settings:"wdth" 125;font-weight:800}
-.work-intro__title{font-variation-settings:"wdth" 125;font-weight:800;letter-spacing:-.05em}
+body{font-variation-settings:"opsz" 14}
+h1,h2,h3{font-variation-settings:"opsz" 72;font-weight:750;letter-spacing:-.028em}
+h1{font-variation-settings:"opsz" 96;font-weight:800;letter-spacing:-.034em;line-height:.96}
+.hero3 h1,.hero2 h1,.detail-hero h1,.contact-intro h1,.loc-hero h1{font-variation-settings:"opsz" 96;font-weight:800}
+.work-intro__title{font-variation-settings:"opsz" 96;font-weight:800;letter-spacing:-.04em}
 .reveal__line,.reveal__inner{font-variation-settings:inherit}
 .service-copy h3,.cell h3,.why__list h3,.process4__cards h3,.work-card h3,.flow-detail-panel h3,
-.qf__q,.estimator__card h3,.loc-why h3{font-variation-settings:"wdth" 112;font-weight:700}
+.qf__q,.estimator__card h3,.loc-why h3{font-variation-settings:"opsz" 40;font-weight:700}
 body{letter-spacing:-.006em}
 
 /* Every number, time, coordinate and small-caps label speaks in the instrument voice. */
@@ -1008,7 +1008,7 @@ body{letter-spacing:-.006em}
 .trust-strip strong,.review-score>strong,.review-card__stars span,.hero-trust strong,
 .estimator__label output,.estimator__result strong,.estimator__facts strong,.detail-quote,
 .estimator__result small{font-variant-numeric:tabular-nums}
-.trust-strip strong,.estimator__result strong,.estimator__label output{font-variation-settings:"wdth" 112;font-weight:700}
+.trust-strip strong,.estimator__result strong,.estimator__label output{font-variation-settings:"opsz" 48;font-weight:700}
 .review-card footer span{font-size:12px;letter-spacing:.04em}
 .footer-bottom{letter-spacing:.04em}
 
@@ -1066,8 +1066,9 @@ body{letter-spacing:-.006em}
 .hero-trust strong{letter-spacing:.01em}
 .hero-trust__stars{color:var(--solar)}
 .estimator__result strong{color:#0FD3A0}
-.estimator__facts strong{color:var(--amber);font-variation-settings:"wdth" 108;font-weight:700}
+.estimator__facts strong{color:var(--amber);font-variation-settings:"opsz" 32;font-weight:700}
 .estimator__result small{color:#8FA3AE;font-size:13px;line-height:1.5}
+.estimator__ticks{color:#8FA3AE}
 .work-card__kind{font-size:11px}
 .flow-detail-n{color:var(--amber-ink);font-weight:500;letter-spacing:.06em}
 
@@ -1109,6 +1110,29 @@ html[data-phase=night] .hero3__glow,html[data-phase=dusk] .hero3__glow{opacity:.
 }
 
 /* Display width is a responsive axis: expanded has presence on desktop, but costs lines on a phone. */
-@media(max-width:860px){h1{font-variation-settings:"wdth" 110}h2,h3{font-variation-settings:"wdth" 105}
-.hero3 h1,.hero2 h1,.detail-hero h1,.contact-intro h1,.loc-hero h1,.work-intro__title{font-variation-settings:"wdth" 108}}
-@media(max-width:600px){h1,.hero3 h1,.work-intro__title{font-variation-settings:"wdth" 100;letter-spacing:-.035em}}
+@media(max-width:860px){h1,.hero3 h1,.hero2 h1,.detail-hero h1,.contact-intro h1,.loc-hero h1,.work-intro__title{font-variation-settings:"opsz" 60}h2,h3{font-variation-settings:"opsz" 44}}
+@media(max-width:600px){h1,.hero3 h1,.work-intro__title{font-variation-settings:"opsz" 48;letter-spacing:-.028em}}
+
+/* ── Day stamps: each section carries the hour of the day it belongs to ─────────────────────────── */
+.daystamp{position:absolute;top:22px;right:max(5%,calc((100% - 1320px) / 2));display:inline-flex;align-items:center;gap:9px;padding:9px 0 9px 14px;
+  font-family:var(--fm);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--amber-ink);
+  border-top:1px solid currentColor;white-space:nowrap;z-index:2;opacity:.85}
+.daystamp b{font-weight:500;font-variant-numeric:tabular-nums}
+.daystamp i{font-style:normal;color:var(--muted);letter-spacing:.11em}
+.daystamp--light{color:var(--amber)}
+.daystamp--light i{color:#7E94A2}
+.daystamp::after{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.9}
+@media(max-width:1180px){.daystamp{right:5%}}
+@media(max-width:860px){.daystamp{position:static;margin-bottom:18px;padding-left:0;width:max-content}}
+/* Sections that host a stamp need a positioning context */
+.quote-band,.services-section,.estimator,.flow-section,.why,.work-section,.process4,.review-section,
+.rebate-section,.cta-split,.band{position:relative}
+
+/* ── Hero depth: two planes cut from one frame ──────────────────────────────────────────────────── */
+.hero3__fg{position:absolute;inset:-4% 0 0;z-index:1;pointer-events:none;will-change:transform;
+  -webkit-mask-image:linear-gradient(180deg,transparent 50%,#000 72%);
+          mask-image:linear-gradient(180deg,transparent 50%,#000 72%)}
+.hero3__fg img{width:100%;height:100%;object-fit:cover;object-position:center 58%}
+/* The sky wash stops where the roofline starts, so the photograph itself is never tinted. */
+.hero3::after{-webkit-mask-image:linear-gradient(180deg,#000 38%,transparent 66%);
+                      mask-image:linear-gradient(180deg,#000 38%,transparent 66%)}
