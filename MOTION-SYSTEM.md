@@ -1,6 +1,11 @@
 # CES — A day of solar
 ## Cinematic motion system · 20 September 2026
 
+> **Note, 20 Sep 2026:** this specification was written against the tree before the five-commit
+> revert and before the Helios design pass. Its baseline no longer matches the site — in particular the
+> Canvas 2D roof (`roof.tsx`) no longer exists. Read it as the motion brief it is, not as a description
+> of what ships. See UI-AUDIT.md for the current state.
+
 **Deliverable:** a design and implementation specification for the current local CES website. This document defines the target behaviour; it does not claim these changes have been implemented or deployed.
 
 **Creative direction:** calm, precise, locally grounded. Energy moves through the experience as daylight becomes useful power. Photography establishes trust; motion explains relationships. Visitors should remember the team, the work and the next step.
