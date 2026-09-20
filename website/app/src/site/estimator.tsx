@@ -1,25 +1,20 @@
-/* Illustrates the annual value of a 50–100% bill reduction using CES's published FAQ range.
- * This is percentage arithmetic, not a system model or a property-specific forecast.
- * Equipment costs, finance and payback require a tailored quote. */
 import {useState,type CSSProperties} from 'react';
+import {ArrowUpRight,Sun,Moon,Info} from 'lucide-react';
 import {RoofScene} from './roof';
-import {DayStamp} from './sun';
-import {ArrowRight} from 'lucide-react';
-import {Kicker} from './sections';
-
-// CES FAQ: "Savings usually range between 50% and 100% ... If you add a battery, you can increase your savings further."
-const LO=.5,HI=1;
-const fmt=(n:number)=>'$'+Math.round(n).toLocaleString('en-AU');
-
+const money=(n:number)=>new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0}).format(n);
 export function Estimator(){
-  const [bill,setBill]=useState(600);
-  const yearly=bill*4;
-  const lo=yearly*LO,hi=yearly*HI;
-  return <section id="estimate" className="estimator" aria-labelledby="est-heading"><div className="wrap estimator__grid"><DayStamp at="11:00" label="Mid-morning" light/>
-    <div className="estimator__copy"><Kicker light>Bill savings illustration</Kicker><h2 id="est-heading">What could a lower bill mean?</h2><p>Start with your quarterly bill to explore the value of a reduction in grid costs. Then ask us for a property-specific assessment based on your roof, tariff and energy use.</p><ul className="estimator__facts"><li><strong>Your bills</strong> shape the recommendation</li><li><strong>Your roof</strong> determines the design</li><li><strong>Your plans</strong> guide future options</li></ul><RoofScene/></div>
-    <div className="estimator__card"><label className="estimator__label" htmlFor="est-bill">My last quarterly bill was about<output htmlFor="est-bill">{fmt(bill)}</output></label><input id="est-bill" type="range" min={200} max={2000} step={50} value={bill} onChange={e=>setBill(Number(e.target.value))} style={{'--p':((bill-200)/1800*100)+'%'} as CSSProperties} aria-valuetext={fmt(bill)+' per quarter'}/><div className="estimator__ticks" aria-hidden="true"><span>$200</span><span>$2,000</span></div>
-      <div className="estimator__result" aria-live="polite"><span>If your bill fell by 50–100%</span><strong>{fmt(lo)} – {fmt(hi)}</strong><em>would be the annual reduction</em><small>Based on {fmt(yearly)} a year at your selected quarterly bill. This is a percentage illustration, not a prediction for your property.</small></div>
-      <a href="#quote" className="estimator__cta">Get my free quote <ArrowRight size={18} aria-hidden="true"/></a>
-      <p className="estimator__note">The percentage range comes from the CES FAQ. Actual savings can fall outside it and depend on generation, usage, tariffs and system design. This illustration does not calculate system costs, finance or payback.</p></div>
-  </div></section>;
+ const [bill,setBill]=useState(600),[reduction,setReduction]=useState(50),[mode,setMode]=useState<'day'|'evening'>('day');
+ const annual=bill*4,saved=annual*reduction/100;
+ return <section id="estimate" className="energy-section" aria-labelledby="energy-title"><div className="home-wrap">
+ <div className="home-section-head"><div><p className="home-eyebrow">Explore the difference</p><h2 id="energy-title">More of your own power.<br/>Less of the power bill.</h2></div><p>See how solar and storage work together, then explore what a lower bill could mean for you.</p></div>
+ <div className="energy-studio">
+ <div className={'energy-scene energy-scene--'+mode}><div className="energy-scene__top"><span>Your home, reimagined</span><div className="energy-tabs" role="group" aria-label="Home illustration time of day"><button type="button" aria-pressed={mode==='day'} onClick={()=>setMode('day')}><Sun size={16}/>Day</button><button type="button" aria-pressed={mode==='evening'} onClick={()=>setMode('evening')}><Moon size={16}/>Evening</button></div></div>
+ <RoofScene mode={mode}/>
+ <div className="energy-scene__story" aria-live="polite"><span className="energy-status"/><div><h3>{mode==='day'?'Make it. Use it. Store the rest.':'Your sunshine, after sunset.'}</h3><p>{mode==='day'?'Solar supplies your home. Surplus can charge a battery, then export to the grid.':'A charged battery can supply evening demand. The grid covers any shortfall.'}</p></div></div><p className="energy-scene__note">Illustrative home with solar and a battery. No live generation data.</p>
+ </div>
+ <div className="energy-calculator"><div className="energy-calculator__heading"><span>What could you save?</span><span>Bill illustration</span></div><label className="energy-bill-label" htmlFor="energy-bill">Your quarterly electricity bill</label><div className="energy-bill-input"><span aria-hidden="true">$</span><input id="energy-bill" type="number" inputMode="numeric" min={100} max={3000} step={50} value={bill} onChange={e=>setBill(Math.min(3000,Math.max(0,Number(e.target.value))))} onBlur={()=>setBill(v=>Math.max(100,v))} aria-describedby="energy-bill-hint"/><span>/ quarter</span></div><input className="energy-range" type="range" aria-label="Adjust quarterly electricity bill" min={100} max={3000} step={50} value={bill} onChange={e=>setBill(Number(e.target.value))} style={{'--range':((bill-100)/2900*100)+'%'} as CSSProperties}/><div id="energy-bill-hint" className="energy-range-labels"><span>$100</span><span>$3,000</span></div>
+ <fieldset className="energy-scenarios"><legend>Explore a bill reduction of</legend><div>{[25,50,75].map(p=><button type="button" key={p} aria-pressed={p===reduction} onClick={()=>setReduction(p)}>{p}%</button>)}</div></fieldset>
+ <div className="energy-result" aria-live="polite" aria-atomic="true"><span>At a {reduction}% reduction, you would save</span><p><strong>{money(saved)}</strong><span>/ year</span></p><div className="energy-comparison"><div><span>Current annual bill</span><b>{money(annual)}</b></div><div className="energy-bar"><span/></div><div><span>With this reduction</span><b>{money(annual-saved)}</b></div><div className="energy-bar energy-bar--after"><span style={{width:(100-reduction)+'%'}}/></div></div></div>
+ <p className="energy-disclaimer"><Info size={15}/><span>You choose the percentage. This is simple bill arithmetic, not a savings forecast. Your actual result depends on your roof, usage, tariffs and system. Installation costs and payback are not included.</span></p><a className="energy-quote" href="#quote">Find out what suits my home <ArrowUpRight size={20}/></a>
+ </div></div></div></section>
 }

@@ -10,7 +10,7 @@ import {ArrowRight,BadgePercent,BatteryCharging,Building2,Car,Droplets,HelpCircl
 import type {ComponentType} from 'react';
 import {NavigationMenu,NavigationMenuContent,NavigationMenuItem,NavigationMenuLink,NavigationMenuList,NavigationMenuTrigger} from '@/components/ui/navigation-menu';
 import {useScrolled} from './motion';
-import {SunLayer} from './sun';
+
 import {lockScroll} from './scroll-lock';
 
 // Lucide no longer ships brand marks; these are the Simple Icons paths.
@@ -23,8 +23,7 @@ const SOLUTIONS:Item[]=[
 {href:'/batteries',Icon:BatteryCharging,title:'Home batteries',desc:'Run the evening on your own power'},
 {href:'/commercial-solar',Icon:Building2,title:'Business & farm solar',desc:'Sheds, shops, cool rooms, offices'},
 {href:'/#quote',Icon:Car,title:'EV charging',desc:'Charge the car from your roof'},
-{href:'/#quote',Icon:Droplets,title:'Hot water heat pumps',desc:'Replace the electric tank'},
-{href:'/#flow-heading',Icon:Workflow,title:'How it works',desc:'Sun to switchboard in six steps'}];
+{href:'/#estimate',Icon:Workflow,title:'Explore savings',desc:'Your bill, a clearer picture'}];
 const ABOUT:Item[]=[
 {href:'/about',Icon:Users,title:'Our team',desc:'Family-owned, our own electricians'},
 {href:'/#our-work',Icon:Images,title:'Our work',desc:'Real installs from our crews'},
@@ -58,8 +57,8 @@ function DesktopNav({current,quote}:{current:string;quote:string}){
 
 function MobileMenu({open,onClose,closeRef,quote}:{open:boolean;onClose:()=>void;closeRef:React.RefObject<HTMLButtonElement|null>;quote:string}){
   const reduce=useReducedMotion();
-  const primary=[['Solar','/solar',Sun],['Batteries','/batteries',BatteryCharging],['Business & farm','/commercial-solar',Building2],['EV charging','/#quote',Car],['Hot water heat pumps','/#quote',Droplets]] as const;
-  const secondary=[['How it works','/#flow-heading'],['Our work','/#our-work'],['Our team','/about'],['Reviews','/#reviews'],['Rebates','/#rebates'],['FAQ','/#faq']] as const;
+  const primary=[['Solar','/solar',Sun],['Batteries','/batteries',BatteryCharging],['Business & farm','/commercial-solar',Building2],['EV charging','/#quote',Car]] as const;
+  const secondary=[['Explore savings','/#estimate'],['Our work','/#our-work'],['Our team','/about'],['Reviews','/#reviews'],['Rebates','/#rebates'],['FAQ','/#faq']] as const;
   const t=(i:number)=>reduce?{duration:0}:{duration:.32,delay:.06+i*.035,ease:[.2,.65,.3,1] as const};
   return <AnimatePresence>{open&&<motion.div className="mnav" role="dialog" aria-modal="true" aria-label="Menu" id="mobile-menu" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:reduce?0:.22}}>
     <motion.div className="mnav__panel" initial={{y:reduce?0:28}} animate={{y:0}} exit={{y:reduce?0:20}} transition={reduce?{duration:0}:{type:'spring',stiffness:300,damping:32}} onClick={e=>{if((e.target as HTMLElement).closest('a'))onClose();}}>
@@ -105,7 +104,7 @@ export function Header(){
   },[open]);
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
-    <SunLayer/>
+
     <header className={scrolled?'site-header is-scrolled':'site-header'}>
       <a href="/" className="brand" aria-label="Clean Energy Solutions home"><img src="/assets/logo-wide-420.webp" width="420" height="120" alt="Clean Energy Solutions"/></a>
       <DesktopNav current={path} quote={quote}/>

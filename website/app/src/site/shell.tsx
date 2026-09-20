@@ -7,7 +7,7 @@ import {Reveal,Rise} from './motion';
 const MAPS_LINK='https://www.google.com/maps/search/?api=1&query=79%20Elgin%20Boulevard%20Wodonga%20Victoria%203690';
 export function Arrow(){return <span aria-hidden="true">↗</span>}
 const footerColumns=[
-{title:'Services',links:[['Residential solar','/solar'],['Home batteries','/batteries'],['Commercial solar','/commercial-solar'],['How it works','/#flow-heading']]},
+{title:'Services',links:[['Residential solar','/solar'],['Home batteries','/batteries'],['Commercial solar','/commercial-solar'],['Explore savings','/#estimate']]},
 {title:'Company',links:[['Our team','/about'],['Our work','/#our-work'],['Reviews','/#reviews'],['Get my free quote','/#quote']]},
 {title:'Areas',links:[['Albury-Wodonga','/'],['Wagga Wagga','/locations/wagga-wagga'],['Shepparton','/locations/shepparton'],['Yarrawonga','/locations/yarrawonga']]}];
 /** Glass-card footer on the black base with a soft brand glow (adapted from mvpblocks' FooterGlow). */

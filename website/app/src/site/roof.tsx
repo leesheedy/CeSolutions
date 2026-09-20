@@ -1,183 +1,67 @@
-/* The roof. One 3D object on the site, and it is the product: a section of gabled roof with a north-facing
- * panel array, lit by the same solar position that governs the rest of the page.
- *
- * Hand-drawn on a 2D canvas with real perspective projection and flat shading rather than a WebGL library —
- * a Spline or three.js runtime would have cost 300–600 KB for one moment, on a site where we just removed an
- * 823 KB hero video. Flat shading also suits the surveyor direction better than a photoreal render would.
- *
- * Geometry is in metres. +X east, +Y up, +Z north — so the panels face +Z, which is correct for 36°S. */
 import {useEffect,useRef,useState} from 'react';
-import {solarDay} from './sun';
-
-type V3=[number,number,number];
-const sub=(a:V3,b:V3):V3=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]];
-const cross=(a:V3,b:V3):V3=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
-const dot=(a:V3,b:V3)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
-const norm=(a:V3):V3=>{const l=Math.hypot(a[0],a[1],a[2])||1;return [a[0]/l,a[1]/l,a[2]/l];};
-const rad=(d:number)=>d*Math.PI/180;
-
-// House: 4 m wide, 3 m deep, 1.15 m to the eaves, 22.6° roof pitch (0.8 m rise over 1.5 m).
-const W=2,D=1.5,WALL=1.15,RIDGE=1.95;
-/** A point on the north slope: u across the ridge (−2…2), v from ridge (0) to eave (1). */
-const slope=(u:number,v:number):V3=>[u,RIDGE-(RIDGE-WALL)*v,D*v];
-const ROOF_N=norm([0,D,RIDGE-WALL]);      // north slope normal
-const WALL_N:V3=[0,0,1];                   // north wall
-const END_N:V3=[1,0,0];                    // east end
-
-// Camera sits north-east and a little above, so the lit slope faces the viewer.
-const CAM:V3=[4.6,2.4,7.0],TARGET:V3=[0,0.9,0];
-// Framing: view centre and focal length, kept in one place so the horizon maths can't drift from the projection.
-const CX=0.57,CY=0.50,FOCAL=1.5;
-const FWD=norm(sub(TARGET,CAM)),RIGHT=norm(cross(FWD,[0,1,0])),UP=cross(RIGHT,FWD);
-
-function makeProject(cx:number,cy:number,focal:number){
-  return (p:V3):[number,number]|null=>{
-    const d=sub(p,CAM),z=dot(d,FWD);
-    if(z<=0.05)return null;
-    return [cx+dot(d,RIGHT)*focal/z,cy-dot(d,UP)*focal/z];
+import {RotateCcw,ChevronLeft,ChevronRight} from 'lucide-react';
+type Point=[number,number,number];
+const sub=(a:Point,b:Point):Point=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]];
+const dot=(a:Point,b:Point)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+const cross=(a:Point,b:Point):Point=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const unit=(a:Point):Point=>{const d=Math.hypot(...a)||1;return a.map(n=>n/d) as Point;};
+/** Lightweight projected 3D geometry. Draws only on resize or explicit user input, never in a continuous loop. */
+export function RoofScene({mode='day'}:{mode?:'day'|'evening'}){
+ const canvas=useRef<HTMLCanvasElement>(null),box=useRef<HTMLElement>(null);
+ const [angle,setAngle]=useState(.65);
+ useEffect(()=>{
+  const cv=canvas.current,wrap=box.current;if(!cv||!wrap)return;
+  const ctx=cv.getContext('2d');if(!ctx)return;
+  const draw=()=>{
+   const width=wrap.clientWidth,height=Math.max(260,Math.min(460,width*.76));
+   const dpr=Math.min(devicePixelRatio||1,2);cv.width=Math.round(width*dpr);cv.height=Math.round(height*dpr);cv.style.height=height+'px';ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
+   const night=mode==='evening',cam:Point=[Math.sin(angle)*9,5.4,Math.cos(angle)*9],forward=unit(sub([0,1.1,0],cam)),right=unit(cross(forward,[0,1,0])),up=cross(right,forward);
+   const focal=width*1.28;
+   const project=(p:Point):[number,number]=>{const d=sub(p,cam),z=dot(d,forward);return [width*.47+dot(d,right)*focal/z,height*.46-dot(d,up)*focal/z];};
+   const face=(points:Point[],fill:string,stroke?:string)=>{ctx.beginPath();points.map(project).forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=.7;ctx.stroke();}};
+   const line=(points:Point[],color:string,w=1)=>{ctx.beginPath();points.map(project).forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.strokeStyle=color;ctx.lineWidth=w;ctx.stroke();};
+   const cube=(x:number,y:number,z:number,w:number,h:number,d:number,colors:string[])=>{
+    face([[x,y,z+d],[x+w,y,z+d],[x+w,y+h,z+d],[x,y+h,z+d]],colors[0]);
+    face([[x+w,y,z],[x+w,y,z+d],[x+w,y+h,z+d],[x+w,y+h,z]],colors[1]);
+    face([[x,y+h,z],[x+w,y+h,z],[x+w,y+h,z+d],[x,y+h,z+d]],colors[2]);
+   };
+   const ground=project([0,-.12,0]);ctx.save();ctx.translate(ground[0],ground[1]+height*.12);ctx.scale(1,.3);const shadow=ctx.createRadialGradient(0,0,0,0,0,width*.43);shadow.addColorStop(0,night?'#07171f66':'#174d3835');shadow.addColorStop(1,'#174d3800');ctx.fillStyle=shadow;ctx.beginPath();ctx.arc(0,0,width*.43,0,Math.PI*2);ctx.fill();ctx.restore();
+   cube(-2.9,-.22,-2.15,5.8,.22,4.5,night?['#243e42','#1c343b','#476462']:['#a2b7a6','#8ca997','#d0ddcf']);
+   face([[-2.2,.006,-1.7],[2.65,.006,-1.7],[2.65,.006,1.8],[-2.2,.006,1.8]],night?'#677579':'#dce3df');
+   face([[-.1,.015,1.6],[.75,.015,1.6],[.75,.015,2.34],[-.1,.015,2.34]],night?'#89918e':'#e9eeeb');
+   // A coherent architectural model: front, gable, roof, inset glazing and external storage.
+   cube(-2,0,-1.5,4,1.65,3,night?['#8c9c9f','#657b80','#9cabad']:['#f2f0e7','#c8d6d2','#f9faf4']);
+   face([[2,1.65,-1.5],[2,2.65,0],[2,1.65,1.5]],night?'#74888c':'#d3dfd8');
+   for(let x=-1.92;x<2;x+=.18)line([[x,.08,1.502],[x,1.58,1.502]],night?'#71878a66':'#cbd3cb70',.55);
+   const glass=night?'#f5d793':'#66959c',frame=night?'#c6cfc9':'#ffffff';
+   for(const [a,b] of [[-1.65,-.65],[.7,1.65]]){
+    face([[a,.52,1.51],[b,.52,1.51],[b,1.3,1.51],[a,1.3,1.51]],glass,frame);
+    line([[(a+b)/2,.52,1.515],[(a+b)/2,1.3,1.515]],frame,2);
+    line([[a,.91,1.515],[b,.91,1.515]],frame,2);
+   }
+   face([[-.35,.05,1.51],[.3,.05,1.51],[.3,1.35,1.51],[-.35,1.35,1.51]],night?'#617b80':'#41686b','#e3e9e4');
+   const knob=project([.18,.72,1.52]);ctx.fillStyle='#e4ddba';ctx.beginPath();ctx.arc(...knob,1.7,0,Math.PI*2);ctx.fill();
+   face([[2.01,.6,-1.08],[2.01,.6,-.32],[2.01,1.3,-.32],[2.01,1.3,-1.08]],glass,frame);
+   line([[2.02,.6,-.7],[2.02,1.3,-.7]],frame,2);
+   face([[-2.16,1.61,-1.66],[2.16,1.61,-1.66],[2.16,2.72,0],[-2.16,2.72,0]],night?'#243b48':'#425962');
+   face([[-2.16,2.72,0],[2.16,2.72,0],[2.16,1.61,1.66],[-2.16,1.61,1.66]],night?'#304955':'#58757b');
+   const slope=(u:number,v:number,lift=0):Point=>[u,2.72-1.11*v+lift,1.66*v];
+   for(let x=-2.08;x<2.15;x+=.13)line([slope(x,0,.005),slope(x,1,.005)],night?'#64808b50':'#93adb070',.7);
+   for(let r=0;r<2;r++)for(let c=0;c<5;c++){
+    const x=-1.83+c*.74,v=.1+r*.4,wide=.65,deep=.34;
+    face([slope(x,v,.035),slope(x+wide,v,.035),slope(x+wide,v+deep,.035),slope(x,v+deep,.035)],night?'#183542':'#163e51',night?'#5b8291':'#a2c1c6');
+    for(let cell=1;cell<4;cell++)line([slope(x+wide*cell/4,v,.041),slope(x+wide*cell/4,v+deep,.041)],night?'#42697a66':'#547d9166',.55);
+    line([slope(x,v+deep/2,.04),slope(x+wide,v+deep/2,.04)],'#7c9da555',.55);
+    face([slope(x,v,.043),slope(x+wide,v,.043),slope(x+wide,v+.075,.043),slope(x,v+.13,.043)],night?'#ffffff05':'#b7e8fa1a');
+   }
+   line([[-2.17,2.74,0],[2.17,2.74,0]],night?'#789197':'#b8c9c7',2);
+   line([[-2.17,1.6,1.67],[2.17,1.6,1.67]],night?'#9aaeb1':'#f0f1e9',3);
+   cube(2.035,.16,.06,.29,1.15,.71,night?['#afbabb','#889a9e','#c6d1d0']:['#f9faf5','#d4dfdd','#ffffff']);
+   line([[2.335,1.03,.18],[2.335,1.03,.63]],'#31ba95',3);
+   line([[2.1,.05,.85],[2.1,.3,.85],[2.1,.3,.79]],night?'#a6b9b8':'#9aadaa',2);
+   const light=project([-2.7,3.8,-2.5]);const glow=ctx.createRadialGradient(light[0],light[1],0,light[0],light[1],night?21:37);glow.addColorStop(0,night?'#d2e4ee70':'#fff7d8');glow.addColorStop(1,night?'#d2e4ee00':'#fff7d800');ctx.fillStyle=glow;ctx.beginPath();ctx.arc(...light,night?21:37,0,Math.PI*2);ctx.fill();
   };
-}
-/** Where a point lands on the ground when the sun is at S. */
-const shadowOf=(p:V3,S:V3):V3=>S[1]<=0.02?p:[p[0]-S[0]*(p[1]/S[1]),0,p[2]-S[2]*(p[1]/S[1])];
-
-const PANEL_COLS=5,PANEL_ROWS=2;
-
-export function RoofScene(){
-  const wrap=useRef<HTMLDivElement>(null);
-  const canvas=useRef<HTMLCanvasElement>(null);
-  const [caption,setCaption]=useState('');
-
-  useEffect(()=>{
-    const cv=canvas.current,box=wrap.current;
-    if(!cv||!box)return;
-    const ctx=cv.getContext('2d');
-    if(!ctx)return;
-    const day=solarDay();
-    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let minutes=day.nowMinutes,raf=0,sweep:number|null=null;
-
-    const draw=()=>{
-      const cssW=box.clientWidth||520,cssH=Math.round(Math.min(340,Math.max(220,cssW*0.62)));
-      const dpr=Math.min(window.devicePixelRatio||1,2);
-      if(cv.width!==Math.round(cssW*dpr)){cv.width=Math.round(cssW*dpr);cv.height=Math.round(cssH*dpr);}
-      cv.style.height=cssH+'px';
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      ctx.clearRect(0,0,cssW,cssH);
-
-      const {el,az}=day.at(minutes);
-      const lit=el>0;
-      // Unit vector from the scene toward the sun. az 0°=N, 90°=E.
-      const S=norm([Math.cos(rad(el))*Math.sin(rad(az)),Math.sin(rad(el)),Math.cos(rad(el))*Math.cos(rad(az))]);
-      const cx=cssW*CX,cy=cssH*CY,focal=cssH*FOCAL;
-      const project=makeProject(cx,cy,focal);
-
-      // Sky, sampled from the same table the page uses.
-      const [a,b]=day.sky(el,az<180);
-      const g=ctx.createLinearGradient(0,0,0,cssH);
-      g.addColorStop(0,a);g.addColorStop(1,b);
-      ctx.fillStyle=g;ctx.fillRect(0,0,cssW,cssH);
-
-      const face=(pts:(V3)[],fill:string,stroke?:string)=>{
-        const p=pts.map(project);
-        if(p.some(q=>!q))return;
-        ctx.beginPath();
-        p.forEach((q,i)=>i?ctx.lineTo(q![0],q![1]):ctx.moveTo(q![0],q![1]));
-        ctx.closePath();ctx.fillStyle=fill;ctx.fill();
-        if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke();}
-      };
-      /** Flat shading: a little ambient, plus diffuse from the sun. */
-      const shade=(n:V3,base:[number,number,number],amb=0.30)=>{
-        const k=amb+(lit?Math.max(0,dot(n,S))*0.78:0);
-        return `rgb(${base.map(c=>Math.round(Math.min(255,c*k))).join(',')})`;
-      };
-
-      // Ground to the true horizon: the screen row where a ray parallel to the ground plane lands.
-      const dH=norm([FWD[0],0,FWD[2]]);
-      const horizonY=cy-dot(dH,UP)*focal/dot(dH,FWD);
-      ctx.fillStyle=lit?'#16232B':'#0B141B';
-      ctx.fillRect(0,horizonY,cssW,cssH-horizonY);
-      ctx.beginPath();ctx.moveTo(0,horizonY+.5);ctx.lineTo(cssW,horizonY+.5);
-      ctx.strokeStyle=lit?'rgba(150,180,200,.20)':'rgba(120,150,175,.12)';ctx.lineWidth=1;ctx.stroke();
-      ctx.save();ctx.beginPath();ctx.rect(0,horizonY,cssW,cssH-horizonY);ctx.clip();
-      const cc=project([0,0.02,0]),ce=project([W*1.5,0.02,D*1.5]);
-      if(cc&&ce){const rx=Math.abs(ce[0]-cc[0]),ry=Math.max(6,Math.abs(ce[1]-cc[1])*0.9);
-        const ao=ctx.createRadialGradient(cc[0],cc[1],0,cc[0],cc[1],rx);
-        ao.addColorStop(0,'rgba(3,7,11,.55)');ao.addColorStop(1,'rgba(3,7,11,0)');
-        ctx.save();ctx.translate(cc[0],cc[1]);ctx.scale(1,ry/rx);ctx.translate(-cc[0],-cc[1]);
-        ctx.fillStyle=ao;ctx.beginPath();ctx.arc(cc[0],cc[1],rx,0,Math.PI*2);ctx.fill();ctx.restore();}
-      if(lit&&el>2){
-        const outline:V3[]=[[-W,RIDGE,0],[W,RIDGE,0],[W,WALL,D],[-W,WALL,D],[W,0,-D],[-W,0,-D]];
-        face(outline.map(p=>shadowOf(p,S)),'rgba(4,8,12,0.45)');
-      }
-      ctx.restore();
-
-      // Walls, then the gable end, then the lit slope and its panels.
-      face([[-W,WALL,D],[W,WALL,D],[W,0,D],[-W,0,D]],shade(WALL_N,[196,214,226],0.22));
-      face([[W,WALL,D],[W,WALL,-D],[W,0,-D],[W,0,D]],shade(END_N,[150,170,184],0.20));
-      face([[W,WALL,D],[W,RIDGE,0],[W,WALL,-D]],shade(END_N,[168,186,200],0.20));
-
-      // A lit window while the sun is down — the house running on stored sun.
-      if(!lit){
-        face([[-1.25,0.34,D+0.002],[-0.35,0.34,D+0.002],[-0.35,0.92,D+0.002],[-1.25,0.92,D+0.002]],'#FFB000');
-        face([[0.45,0.34,D+0.002],[1.25,0.34,D+0.002],[1.25,0.92,D+0.002],[0.45,0.92,D+0.002]],'rgba(255,176,0,.55)');
-      }
-
-      face([[-W,RIDGE,0],[W,RIDGE,0],[W,WALL,D],[-W,WALL,D]],shade(ROOF_N,[122,140,152],0.26));
-
-      // Panels: same normal as the slope, darker base, and a specular kick when the sun is square on.
-      const facing=lit?Math.max(0,dot(ROOF_N,S)):0;
-      // A narrow specular lobe: monocrystalline glass stays dark and only lifts when the sun is square on.
-      const spec=Math.pow(facing,6);
-      for(let r=0;r<PANEL_ROWS;r++)for(let c=0;c<PANEL_COLS;c++){
-        const u0=-1.78+c*0.72,u1=u0+0.64;
-        const v0=0.14+r*0.40,v1=v0+0.34;
-        const k=0.34+facing*0.30;
-        const fill=`rgb(${Math.round(18*k+spec*40)},${Math.round(26*k+spec*58)},${Math.round(38*k+spec*94)})`;
-        face([slope(u0,v0),slope(u1,v0),slope(u1,v1),slope(u0,v1)],fill,`rgba(150,176,196,${(0.16+facing*0.24).toFixed(2)})`);
-      }
-
-      // Ridge line, and the sun itself when it is up.
-      const r0=project([-W,RIDGE,0]),r1=project([W,RIDGE,0]);
-      if(r0&&r1){ctx.beginPath();ctx.moveTo(r0[0],r0[1]);ctx.lineTo(r1[0],r1[1]);ctx.strokeStyle='rgba(216,232,240,.5)';ctx.lineWidth=1.25;ctx.stroke();}
-      if(lit){
-        const sp=project([S[0]*14,S[1]*14,S[2]*14]);
-        if(sp){
-          const glow=ctx.createRadialGradient(sp[0],sp[1],0,sp[0],sp[1],30);
-          glow.addColorStop(0,'rgba(255,200,80,.85)');glow.addColorStop(1,'rgba(255,176,0,0)');
-          ctx.fillStyle=glow;ctx.beginPath();ctx.arc(sp[0],sp[1],30,0,Math.PI*2);ctx.fill();
-          ctx.fillStyle='#FFD98A';ctx.beginPath();ctx.arc(sp[0],sp[1],5,0,Math.PI*2);ctx.fill();
-        }
-      }
-
-      const pct=Math.round(facing*100);
-      setCaption(`${day.label(minutes)} · SUN ${el.toFixed(0)}° · ${lit?`ARRAY ${pct}% TO THE SUN`:'RUNNING ON STORED SUN'}`);
-    };
-
-    // One pass of the day when it first comes into view, then it settles on the real time now.
-    const io=new IntersectionObserver(entries=>{
-      if(!entries[0].isIntersecting||sweep!==null||reduce)return;
-      sweep=performance.now();
-      const step=(t:number)=>{
-        const p=Math.min(1,(t-(sweep as number))/4200);
-        minutes=day.riseMinutes+(day.setMinutes-day.riseMinutes)*p;
-        draw();
-        if(p<1)raf=requestAnimationFrame(step);
-        else{minutes=day.nowMinutes;draw();}
-      };
-      raf=requestAnimationFrame(step);
-    },{threshold:0.4});
-    io.observe(box);
-
-    draw();
-    let rt=0;
-    const onResize=()=>{window.clearTimeout(rt);rt=window.setTimeout(draw,160);};
-    window.addEventListener('resize',onResize);
-    return()=>{io.disconnect();cancelAnimationFrame(raf);window.clearTimeout(rt);window.removeEventListener('resize',onResize);};
-  },[]);
-
-  return <figure ref={wrap} className="roof">
-    <canvas ref={canvas} className="roof__canvas" role="img"
-      aria-label="A north-facing solar array on a gabled roof, drawn with the sun in its real position over Wodonga today."/>
-    <figcaption className="roof__cap">{caption||' '}</figcaption>
-  </figure>;
+  const observer=new ResizeObserver(draw);observer.observe(wrap);draw();return()=>observer.disconnect();
+ },[mode,angle]);
+ return <figure ref={box} className="home-model"><canvas ref={canvas} role="img" aria-label={mode==='day'?'Three-dimensional illustration of a home with rooftop solar panels and a wall-mounted battery in daylight.':'The same solar home in the evening, with illuminated windows and a battery.'}/><figcaption className="home-model__controls"><button type="button" aria-label="Rotate house left" disabled={angle<=.25} onClick={()=>setAngle(a=>Math.max(.25,a-.2))}><ChevronLeft size={17}/></button><button type="button" onClick={()=>setAngle(.65)} aria-label="Reset house view"><RotateCcw size={14}/>Rotate view</button><button type="button" aria-label="Rotate house right" disabled={angle>=1.05} onClick={()=>setAngle(a=>Math.min(1.05,a+.2))}><ChevronRight size={17}/></button></figcaption></figure>;
 }
