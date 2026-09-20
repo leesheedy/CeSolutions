@@ -67,5 +67,5 @@ export const locations:Location[]=[
  faqs:[
  {q:'Which rebates apply in Yarrawonga?',a:'On the Victorian side (Yarrawonga, Bundalong, Cobram, Rutherglen) eligible owner-occupiers get the Solar Victoria panel rebate plus the federal STC and Cheaper Home Batteries discounts. On the NSW side (Mulwala, Corowa, Barooga) the two federal discounts apply.'},
  {q:'Can you help with a holiday house we’re not always at?',a:'Yes. We size for the way the house is actually used, set up monitoring so you can see it from anywhere, and design battery backup around what needs to stay on when you’re away.'},
- {q:'How soon can someone come out?',a:'Yarrawonga is just over an hour from our Wodonga office. Contact our local team to discuss your property and arrange a suitable time. We’ll confirm availability and any site checks needed.'}]}];
+ {q:'How soon can someone come out?',a:'Yarrawonga is just over an hour from our Wodonga office. Our solar consultant replies within one business day to book a site visit, and the same team that quotes is the team that installs.'}]}];
 export const locationBySlug=Object.fromEntries(locations.map(l=>[l.slug,l]));

@@ -45,7 +45,6 @@ for (const [path, file] of Object.entries(files)) {
 const notFound = (await render("/this-page-does-not-exist", 404))
   // The 404 page is served for any unknown URL, so the router's embedded state would never match: ship it static.
   .replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "")
-  .replace(/<meta name="robots"[^>]*>/, '<meta name="robots" content="noindex, follow"/>')
-  .replace(/<title>[\s\S]*?<\/title>/, "<title>Page not found · Clean Energy Solutions</title>");
+  .replace("</head>", '<meta name="robots" content="noindex"></head>');
 await writeFile(join(out, "404.html"), notFound);
 console.log("prerendered 404.html");

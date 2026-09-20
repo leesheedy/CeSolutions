@@ -53,7 +53,6 @@ export function AddressField(){
   const [open,setOpen]=useState(false);
   const [hi,setHi]=useState(-1);
   const [pending,setPending]=useState(false);
-  const [flip,setFlip]=useState(false);
   const [busy,setBusy]=useState(false);
   const token=useRef<string>('');
   const abort=useRef<AbortController|null>(null);
@@ -88,19 +87,12 @@ export function AddressField(){
     else if(e.key==='Escape'){setOpen(false);}
   }
   const expanded=(open&&items.length>0)||busy;
-  useEffect(()=>{
-    if(!expanded)return;
-    const input=rootRef.current?.querySelector('input[name=address]');
-    if(!input)return;
-    const below=window.innerHeight-input.getBoundingClientRect().bottom-72; // 72px clears the mobile dock
-    setFlip(below<220);
-  },[expanded,items.length]);
   return <div ref={rootRef} className="addr">
     <label className="qf__field qf__field--wide"><span>Property address</span>
       <input name="address" value={value} onChange={e=>{setValue(e.target.value);if(e.target.value!==chosen.current)setParts({suburb:'',state:'',postcode:''});search(e.target.value);}} onFocus={()=>{if(items.length)setOpen(true);}} onKeyDown={onKey} autoComplete="street-address" required maxLength={200} placeholder="Start typing your street address" role="combobox" aria-autocomplete="list" aria-expanded={expanded} aria-controls={listId} aria-activedescendant={expanded&&hi>=0?`${listId}-${hi}`:undefined} data-busy={busy||undefined}/>
     </label>
     <input type="hidden" name="suburb" value={parts.suburb}/><input type="hidden" name="state" value={parts.state}/><input type="hidden" name="postcode" value={parts.postcode}/>
-    <ul id={listId} role="listbox" aria-label="Address suggestions" tabIndex={-1} className={flip?"addr__list is-above":"addr__list"} hidden={!expanded}>{busy&&items.length===0&&<li className="addr__busy" aria-live="polite">Searching…</li>}
+    <ul id={listId} role="listbox" aria-label="Address suggestions" className="addr__list" hidden={!expanded}>{busy&&items.length===0&&<li className="addr__busy" aria-live="polite">Searching…</li>}
       {items.map((s,i)=><li key={s.id} id={`${listId}-${i}`} role="option" aria-selected={i===hi} className={i===hi?'is-hi':''} onPointerDown={e=>e.preventDefault()} onClick={()=>void choose(s)} onPointerMove={()=>setHi(i)}><MapPin size={16} aria-hidden="true"/><span><strong>{s.main}</strong>{s.secondary&&<em>{s.secondary}</em>}</span></li>)}
       <li className="addr__credit" aria-hidden="true">{PROVIDER==='google'?'Suggestions by Google':'Suggestions © OpenStreetMap contributors'}</li>
     </ul>
