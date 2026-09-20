@@ -205,6 +205,22 @@ main:has(.hero3){padding-top:0}
 .glow-footer__social a{width:42px;height:42px;border-radius:var(--r-pill);display:grid;place-items:center;
   background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}
 
+/* ── 8b. The hero film ─────────────────────────────────────────────────────────────────────────
+   The drone loop sits directly over its own first frame and fades up once it is actually playing, so
+   a slow connection, a blocked autoplay or a narrow screen all just leave the still in place. */
+.hero3__film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity 1.4s ease;pointer-events:none}
+.hero3__film.is-lit{opacity:1}
+/* The old backdrop was a dark sunset roof; this aerial is bright green and gold, so the scrim that
+   carried white text over the old one is not nearly enough. Measured against the lit frame, not guessed. */
+.hero3__shade{background:
+  linear-gradient(90deg,rgba(6,11,16,.93) 0%,rgba(6,11,16,.87) 32%,rgba(6,11,16,.60) 58%,rgba(6,11,16,.26) 100%),
+  linear-gradient(180deg,rgba(6,11,16,.62) 0%,rgba(6,11,16,.10) 28%,rgba(6,11,16,.80) 100%)}
+@media(max-width:860px){
+  .hero3__shade{background:
+    linear-gradient(180deg,rgba(6,11,16,.78) 0%,rgba(6,11,16,.68) 42%,rgba(6,11,16,.90) 100%)}
+}
+
 /* ── 9. Hero: the copy clears the floating pill, the caption becomes a chip ────────────────────── */
 .hero3{border-radius:0 0 var(--r-slab) var(--r-slab);overflow:clip}
 .hero3__copy{padding-top:calc(var(--nav-h) + 26px)}

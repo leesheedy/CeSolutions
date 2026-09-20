@@ -1,0 +1,129 @@
+{
+  "name": "CES — A day of solar",
+  "version": "1.0",
+  "status": "design-specification-not-integrated",
+  "date": "2026-09-20",
+  "durationMs": {
+    "instant": 0,
+    "press": 90,
+    "response": 160,
+    "interface": 240,
+    "reveal": 560,
+    "cinema": 900
+  },
+  "easing": {
+    "settle": [
+      0.22,
+      1,
+      0.36,
+      1
+    ],
+    "interface": [
+      0.2,
+      0.7,
+      0.2,
+      1
+    ],
+    "exit": [
+      0.4,
+      0,
+      1,
+      1
+    ],
+    "camera": [
+      0.45,
+      0,
+      0.2,
+      1
+    ]
+  },
+  "distancePx": {
+    "control": 2,
+    "support": 8,
+    "heading": 16,
+    "parallaxMax": 24
+  },
+  "stagger": {
+    "defaultMs": 60,
+    "compactMs": 40,
+    "maxDelayedStarts": 3
+  },
+  "modes": {
+    "full": {
+      "minWidth": 1100,
+      "minHeight": 760,
+      "hover": true,
+      "pointer": "fine",
+      "parallax": true
+    },
+    "compact": {
+      "entranceMaxPx": 8,
+      "durationMaxMs": 400,
+      "parallax": false,
+      "cameraTravel": false
+    },
+    "reduced": {
+      "durationMs": 0,
+      "parallax": false,
+      "cameraTravel": false,
+      "smoothScroll": false,
+      "ambientLoops": false
+    }
+  },
+  "hero": {
+    "enhanceWithinMs": 150,
+    "titleStartMs": 0,
+    "titleDurationMs": 560,
+    "titleStaggerMs": 60,
+    "supportStartMs": 140,
+    "supportDurationMs": 400,
+    "imageStartMs": 200,
+    "imageDurationMs": 900,
+    "imageScale": [
+      1.018,
+      1
+    ],
+    "cancelOnInteraction": true
+  },
+  "roof": {
+    "target": [
+      0,
+      0.9,
+      0
+    ],
+    "cameraFrom": [
+      4.9,
+      2.6,
+      7.35
+    ],
+    "cameraTo": [
+      4.6,
+      2.4,
+      7
+    ],
+    "maxOrbitDeg": 6,
+    "maxDollyFraction": 0.05,
+    "durationMs": 900,
+    "trigger": "explicit-explore-activation",
+    "dayPlayMs": 2400,
+    "presetMs": 360,
+    "autoplay": false
+  },
+  "budgets": {
+    "activeMovingGroupsMax": 4,
+    "activeLargePaintScenesMax": 1,
+    "additionalControllerGzipBytesMax": 10240,
+    "canvasDprDefault": 1.5,
+    "canvasDprMax": 2,
+    "animationWorkP95MsTarget": 4
+  },
+  "policy": {
+    "nativeScroll": true,
+    "scrollProgress": "direct",
+    "textParallax": false,
+    "trustCounters": false,
+    "reviewAutoplay": false,
+    "immediateFocus": true,
+    "initialContentVisible": true
+  }
+}

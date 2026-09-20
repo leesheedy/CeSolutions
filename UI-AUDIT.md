@@ -266,3 +266,37 @@ Fixed while making the pass:
 Verified on the built output: 10 routes × 390/1440 — no horizontal overflow, one `h1` per page, no broken
 images, no console errors, nav and page top aligned on every route. Reduced motion leaves no text below
 25% opacity.
+
+## Hero film — 20 Sep 2026
+
+The hero background is now a drone pass over a real CES install (the rural property at
+`ces-drone-rural-court.webp`). The camera move is generated from that photograph with Higgsfield
+seedance_2_5; the property, the roof, the array and everything in frame are the real photograph.
+
+The caption changed as a consequence, and is the only copy edit. It read "Illustration · real CES
+installs are in our work", which stopped being true the moment the backdrop became a real install. It
+now reads "Our drone photo of a CES install, animated · more in our work", which states both what the
+subject is and that the motion is generated.
+
+Delivery:
+- 1280×720, 24fps, h264, **987 KB for a 16-second loop**. The clip is the 8s render followed by itself
+  reversed, so a slow push-in loops with no visible cut. VP9 was encoded too and discarded: at matching
+  quality it came out larger than the h264, so it would have served a bigger file to the browsers that
+  prefer it.
+- The `<video>` mounts client-side only, and only when all of these hold: no `prefers-reduced-motion`,
+  viewport ≥ 861px, and the connection is neither `saveData` nor 2G. Everywhere else the poster still
+  carries the hero. The prerendered HTML contains no `<video>` at all, so the static LCP is the image.
+- The poster is the video's own first frame at 760/1200/1920, so the fade-up crosses nothing.
+- An IntersectionObserver pauses the clip once the hero leaves the viewport.
+
+The scrim was rebuilt for it. The old backdrop was a dark sunset roof; this aerial is bright green and
+gold, and the gradient that carried white text over the old one was not close to enough. Measured
+against the lit frame rather than guessed: worst-case background behind the copy is rgb(33,39,45),
+giving 15.1:1 for the headline, 12.8:1 for the body, and 4.35:1 for the dimmed second headline line,
+which is display size and so clears the 3:1 large-text bar comfortably.
+
+`public/assets/hero-backdrop.webp` (196 KB) is now unreferenced and can be removed.
+
+Instagram and Facebook were both checked for further aerials and both are login-walled to anonymous
+fetches, so no new imagery could be taken from them. The four aerials already in the repo are
+`ces-drone-rural-court`, `ces-drone-pool-faces`, `ces-drone-pool-tile` and `instagram-roof-drone`.
