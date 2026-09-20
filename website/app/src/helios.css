@@ -3,31 +3,37 @@
    A design pass in the language of helios-template.webflow.io, applied over the existing CES markup.
    Nothing here changes a word of copy; it is purely surface, shape, rhythm and motion.
 
-   What is borrowed from Helios:
-     · a warm off-white ground with the dark sections floating on it as big rounded slabs
-     · one grotesque set light and very tight, leading at ~0.95, with the second headline line dimmed
+   What is borrowed from Helios is the STRUCTURE, not the palette:
+     · an off-white ground with the dark sections floating on it as big rounded slabs
+     · one face set tight, leading at ~1.0, with the second line of every headline dimmed
      · a floating pill navigation that overlays the hero and sticks clear of the top edge
      · a thin announcement strip above everything
      · full pills for every action, 28–40px radii on every card and slab, one arched portrait
      · circular icon buttons, mono micro-labels, generous vertical air
 
-   What stays CES: the copy, the cyan, the logo, the sun engine and its amber measurement voice.
-   The one idea that is ours rather than theirs — Helios is warm everywhere; here the DAY surfaces are
-   warm and the NIGHT surfaces stay blue-black, so the page's temperature tracks the same sun the
-   header clock is reading.
+   What stays CES: the copy, the cyan, the logo, Inter, the sun engine and its amber measurement voice.
+   The palette was the one thing that should never have been copied across. Helios is warm because its
+   brand is warm; CES is cyan and mint on near-black, and every neutral in the base sheet is blue-biased
+   to match. The surfaces are therefore the site's own cool off-whites, not Helios's cream.
    ═══════════════════════════════════════════════════════════════════════════════════════════════════ */
 
 :root{
-  /* Day surfaces — warm, off-white, never pure paper */
-  --paper:#F5F2EC;
-  --bone:#EFEBE2;
-  --bone-2:#E7E2D6;
-  --line:#DCD5C7;
-  --ink:#171512;                 /* warm near-black, so body text belongs to the warm ground */
-  --muted:#5D5850;
-  /* The old pale blue read as a cold patch once the page ground went warm. It keeps its job — the
-     second, tinted day surface — but in the same family as the paper it sits on. */
-  --sky:#ECE7DC;
+  /* Day surfaces.
+     These were warm bone in the first Helios pass, because Helios's own ground is warm. That was the
+     wrong import: Helios is warm because its brand is warm, and CES's brand is cyan and mint on
+     near-black — a cool identity. The base sheet agrees; every one of its fifteen neutral greys is
+     blue-biased. A warm cream ground under those was the single thing on the page that did not belong,
+     so the surfaces go back to the site's own blue-grey family. --line, --sky, --ink and --muted are
+     the original values; --paper is lifted off pure white only so the slabs and cards have something
+     to float on. What stays from Helios is the structure: the slabs, the radii, the pills, the air. */
+  --paper:#F4F8FA;
+  --bone:#EAF1F5;
+  --bone-2:#E1EBF0;
+  --card:#FFFFFF;                /* cards and panels sit above the ground, not tinted against it */
+  --line:#D5DDE3;
+  --ink:#101010;
+  --muted:#55595C;
+  --sky:#DBEDF3;
   /* Shape */
   --r-slab:40px;                 /* the big floating sections */
   --r-card:28px;                 /* cards and media */
@@ -37,17 +43,28 @@
   --slab-shadow:0 40px 90px -60px rgba(7,12,17,.85);
 }
 
-/* ── 1. Type: Helios posture. Lighter, tighter, tighter leading. ────────────────────────────────── */
-h1,h2,h3,.reveal__line,.reveal__inner{font-family:var(--fd)}
-h1,h2{font-variation-settings:"opsz" 96;font-weight:560;letter-spacing:-.035em;line-height:.95}
-h3{font-variation-settings:"opsz" 40;font-weight:560;letter-spacing:-.026em;line-height:1.08}
-main :is(section,.band) :is(h2,.cta-split__title):not(.work-intro__title){font-weight:560;letter-spacing:-.035em;line-height:.95}
-.hero3 h1,.hero2 h1,.detail-hero h1,.contact-intro h1,.loc-hero h1,.work-intro__title{font-weight:560}
+/* ── 1. Type: back to Inter, the site's original face and the one the Framer reference uses ────────
+   Inter was replaced by Archivo and then Bricolage Grotesque during the art-direction passes; these are
+   the same two woff2 files restored from the commit that first shipped them. Inter has no `opsz` axis,
+   so the optical-size settings the Bricolage layer set are cleared rather than left to be ignored, and
+   the weights go back to the reference: 600 display at -0.04em, 400 body at -0.02em. JetBrains Mono
+   stays on the small data labels — that is a separate device, not the site's typeface. */
+@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url("/assets/fonts/inter-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url("/assets/fonts/inter-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+
+:root{--fd:"Inter","Helvetica Neue",Arial,sans-serif}
+body,h1,h2,h3,.reveal__line,.reveal__inner{font-family:var(--fd);font-variation-settings:normal}
+h1,h2{font-weight:600;letter-spacing:-.04em;line-height:1}
+h3{font-weight:600;letter-spacing:-.03em;line-height:1.12}
+main :is(section,.band) :is(h2,.cta-split__title):not(.work-intro__title){
+  font-weight:600;letter-spacing:-.04em;line-height:1;font-variation-settings:normal}
+.hero3 h1,.hero2 h1,.detail-hero h1,.contact-intro h1,.loc-hero h1,.work-intro__title{
+  font-weight:600;font-variation-settings:normal}
 .service-copy h3,.cell h3,.why__list h3,.process4__cards h3,.work-card h3,.flow-detail-panel h3,
-.qf__q,.estimator__card h3,.loc-why h3{font-weight:560;letter-spacing:-.026em}
-.trust-strip strong,.estimator__result strong,.estimator__label output{font-weight:600}
-body{letter-spacing:-.008em;line-height:1.6}
-p{line-height:1.6}
+.qf__q,.estimator__card h3,.loc-why h3{font-weight:600;letter-spacing:-.03em;font-variation-settings:normal}
+.trust-strip strong,.estimator__result strong,.estimator__label output{font-weight:600;font-variation-settings:normal}
+body{letter-spacing:-.02em;line-height:1.6}
+p{line-height:1.6;letter-spacing:-.011em}
 
 /* The signature: the first headline line is fully lit, the rest sit back. Two voices, one sentence. */
 :is(h1,h2) .reveal__line:nth-child(n+2){color:color-mix(in srgb,currentColor 46%,transparent)}
@@ -61,35 +78,35 @@ p{line-height:1.6}
 .kicker,.eyebrow,.service-copy>span:first-child,.work-meta>span:first-child{
   font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
 
-/* ── 2. The ground: day is warm, night stays blue-black and floats on it as a slab ──────────────── */
+/* ── 2. The ground: cool off-white day, blue-black night floating on it as slabs ────────────────── */
 html,body{background:var(--paper);color:var(--ink)}
 .trust-strip,.review-section{background:var(--bone);border-color:var(--line)}
 .brand-section{background:transparent}
-/* The base sheet hard-codes a handful of cool greys for rules, field borders and the contact form.
-   On a warm ground each of them read as a grey smudge, so they move to the warm line colour. */
+/* The base sheet hard-codes several one-off greys for rules, field borders and the contact form.
+   They are close to, but not the same as, --line, so they read as smudges. They all move onto --line. */
 .trust-strip{border-top-color:var(--line)}
 .related a,.faq-list details,.faq-list>:last-child details,.process-list article,
 .flow-track,.service-destination,.rebate-links>a,.quote-expectations{border-color:var(--line)}
 .quote-form,.email-ready{background:var(--bone)}
-.stack-card{background:#FBF9F4;box-shadow:0 44px 80px -56px rgba(23,21,18,.55)}
+.stack-card{background:var(--card);box-shadow:0 44px 80px -56px rgba(23,21,18,.55)}
 /* The step detail sat in a 720px box under a 1300px rail, so the row ended in half a screen of nothing.
    It now spans the rail and keeps its own text at a readable measure. */
-.flow-detail-panel{background:#FBF9F4;border:1px solid var(--line);width:100%;max-width:none;padding:28px 32px}
+.flow-detail-panel{background:var(--card);border:1px solid var(--line);width:100%;max-width:none;padding:28px 32px}
 .flow-detail-panel p{max-width:62ch}
 .service-business{background:var(--night);color:#E7EFF5}
 .service-business p{color:#9FB2BF}
 .service-business .service-destination{border-color:var(--rule-dark)}
 .quote-form input:not([type=radio]),.quote-form select,.quote-form textarea,
-.service-options label{border-color:var(--line);background:#FBF9F4}
+.service-options label{border-color:var(--line);background:var(--card)}
 .service-options label.selected{background:#E4F4FC;border-color:var(--sun)}
 
-/* Every dark section becomes a floating slab with big radii and a shadow that lifts it off the bone. */
+/* Every dark section becomes a floating slab with big radii and a shadow that lifts it off the ground. */
 .quote-band,.estimator,.work-section,.process4{
   border-radius:var(--r-slab);
   margin-inline:var(--gutter);
   box-shadow:var(--slab-shadow);
   overflow:clip}
-/* Consecutive slabs keep a thin bone seam between them rather than fusing into one block. */
+/* Consecutive slabs keep a thin seam of ground between them rather than fusing into one block. */
 .work-section+.process4{margin-top:var(--gutter)}
 .site-footer,.glow-footer{border-radius:var(--r-slab) var(--r-slab) 0 0;margin-inline:var(--gutter);overflow:clip}
 main{padding-bottom:var(--gutter)}
@@ -116,7 +133,7 @@ main{padding-bottom:var(--gutter)}
   border:1px solid rgba(255,255,255,.10);
   border-radius:var(--r-pill);
   /* Opaque enough to stay a confident dark pill over the warm ground of the interior pages — at .66
-     the bone showed through and the whole bar read as grey. The blur still separates it from photos. */
+     the ground showed through and the whole bar read as grey. The blur still separates it from photos. */
   background:rgba(9,15,21,.90);
   backdrop-filter:saturate(150%) blur(18px);
   -webkit-backdrop-filter:saturate(150%) blur(18px);
@@ -205,12 +222,13 @@ main:has(.hero3){padding-top:0}
 .glow-footer__social a{width:42px;height:42px;border-radius:var(--r-pill);display:grid;place-items:center;
   background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}
 
-/* ── 8b. The hero film ─────────────────────────────────────────────────────────────────────────
-   The drone loop sits directly over its own first frame and fades up once it is actually playing, so
-   a slow connection, a blocked autoplay or a narrow screen all just leave the still in place. */
-.hero3__film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  opacity:0;transition:opacity 1.4s ease;pointer-events:none}
-.hero3__film.is-lit{opacity:1}
+/* ── 8b. The hero aerial ───────────────────────────────────────────────────────────────────────
+   At rest the backdrop sits at its full width: the base sheet overscanned the box by 12% to leave room
+   for the parallax drift, which cropped the sides off and started the shot already pushed in. The box
+   now fills the hero exactly, so the whole property is in frame, and the scroll scales it from there.
+   The origin is the roofline rather than the centre, so the zoom flies into the array, not a paddock. */
+.hero3__bg{inset:0;transform-origin:56% 58%;will-change:transform}
+.hero3__bg img{width:100%;height:100%;object-fit:cover}
 /* The old backdrop was a dark sunset roof; this aerial is bright green and gold, so the scrim that
    carried white text over the old one is not nearly enough. Measured against the lit frame, not guessed. */
 .hero3__shade{background:
@@ -219,6 +237,33 @@ main:has(.hero3){padding-top:0}
 @media(max-width:860px){
   .hero3__shade{background:
     linear-gradient(180deg,rgba(6,11,16,.78) 0%,rgba(6,11,16,.68) 42%,rgba(6,11,16,.90) 100%)}
+}
+
+/* ── 8c. The call to action ────────────────────────────────────────────────────────────────────
+   "Get my free quote" stays: it names the reward, uses the buyer's own word, and already beats the
+   plain "Get a quote" that eleven of fourteen Australian installers use. What was missing was
+   everything around it. */
+.hero-action-row{gap:14px;align-items:stretch}
+.hero-call-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 22px;border-radius:var(--r-pill);
+  border:1px solid rgba(255,255,255,.26);background:rgba(255,255,255,.07);
+  color:#fff;font-weight:600;font-size:16px;white-space:nowrap;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:background .22s,border-color .22s}
+.hero-call-cta:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.42)}
+.hero-note{
+  margin-top:16px;max-width:52ch;
+  font-size:13.5px;line-height:1.55;color:#B6C7D2;letter-spacing:-.005em}
+.hero-secondary{display:inline-flex;align-items:baseline;gap:10px;margin-top:14px}
+.hero-secondary span{
+  font-family:var(--fm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:#8FA6B4;text-decoration:none}
+.hero-trust{margin-top:26px}
+@media(max-width:600px){
+  .hero-action-row{flex-direction:column;align-items:stretch}
+  .hero-quote,.hero-call-cta{justify-content:center}
+  .hero-note{font-size:13px;max-width:none}
 }
 
 /* ── 9. Hero: the copy clears the floating pill, the caption becomes a chip ────────────────────── */

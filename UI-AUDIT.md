@@ -300,3 +300,61 @@ which is display size and so clears the 3:1 large-text bar comfortably.
 Instagram and Facebook were both checked for further aerials and both are login-walled to anonymous
 fetches, so no new imagery could be taken from them. The four aerials already in the repo are
 `ces-drone-rural-court`, `ces-drone-pool-faces`, `ces-drone-pool-tile` and `instagram-roof-drone`.
+
+## Font, palette, hero zoom and CTA — 20 Sep 2026
+
+**Back to Inter.** The site's original face, replaced by Archivo and then Bricolage Grotesque during the
+art-direction passes. The two woff2 files are restored byte-for-byte from `ff1a85b`, the commit that
+first shipped them, and it is also the face the Framer reference uses. Inter has no `opsz` axis, so the
+Bricolage layer's optical-size settings are cleared rather than left to be silently ignored, and the
+weights return to the reference: 600 display at -0.04em, 400 body at -0.02em. JetBrains Mono stays on
+the small data labels; that is a separate device, not the site's typeface. The preload in `__root.tsx`
+now points at Inter, and Bricolage is never fetched.
+
+**The palette goes back to the brand's own temperature.** The first Helios pass made the day surfaces
+warm bone, because Helios's ground is warm. That was the wrong thing to import. Helios is warm because
+its brand is warm; CES is cyan and mint on near-black, and a census of the base sheet found fifteen
+neutral greys, every one of them blue-biased. The warm ground was the single element on the page that
+did not belong, and it showed worst on the enquiry form, where cool blue-grey tiles sat on a cream
+card. `--line`, `--sky`, `--ink` and `--muted` are now the original values; `--paper` is lifted just
+off pure white so the slabs and cards have something to float on; a new `--card` carries white. A
+rendered census of every opaque, low-saturation surface on the homepage now returns cool or neutral for
+all twelve, with no warm outliers. Everything structural from the Helios pass is untouched.
+
+**The hero backdrop starts wide and zooms on scroll.** The base sheet overscanned the backdrop box by
+12% to leave room for the parallax drift, which cropped the sides and started the shot already pushed
+in. The box now fills the hero exactly, so the whole property is in frame at rest, and scroll scales it
+1 → 1.38 from an origin on the roofline, flying the camera into the array rather than a paddock. The
+transform is GPU-composited, so it is smooth on any device and costs nothing to download. The drone
+video is removed from the hero: scroll-scrubbing it needs every frame to be a keyframe, and the
+smallest usable encode was 3.18 MB against zero for a transform.
+
+**The call to action.** Researched against published CRO data and a scan of the literal button text on
+fourteen Australian and ten US/UK installer sites. The finding was that "Get my free quote" should
+stay — it names the reward, uses the buyer's own word, and already beats the plain "Get a quote" that
+eleven of the fourteen Australian sites use. Three things changed around it instead:
+
+1. The phone number left the trust row and became a button of equal weight beside the primary. Home
+   improvement pages offering a click, a form and a phone convert at 4.0% against a 2.6% median across
+   977,200 conversions (Unbounce Conversion Benchmark). CES's two nearest Albury rivals, KDEC and
+   Penrith Solar Centre, both lead on talking to a person.
+2. New microcopy under the button, where there was none: "Three questions, about two minutes. Your
+   details go only to CES in Wodonga, and our solar consultant replies within one business day." It
+   sets the real scope, answers the fear that actually stops an Australian clicking a solar "free
+   quote" — being sold to a panel of lead brokers — and states the reply time. Only two of the fourteen
+   Australian sites use effort or speed microcopy at all. It is framed positively on purpose: naming a
+   fear lost 18–24% across three of Aagaard's privacy tests, while the same promise stated positively
+   won 19.47%.
+3. The secondary now carries "no details needed", which is its actual difference from the primary and
+   was previously invisible.
+
+Contrast measured against the lit frame: microcopy 10.1:1, secondary qualifier 7.5:1.
+
+Not done, and worth saying: the button label itself was left alone deliberately. Across every
+well-documented test found, CTA wording produced single-digit to low-double-digit swings that reversed
+sign by context, while friction and anxiety reduction produced the large wins. "Start my free quote" is
+the one variant with a principled reason to beat the current label and is worth an A/B test, not an
+assumption.
+
+Two assets are now unreferenced and can be deleted: `hero-backdrop.webp` (196 KB) and
+`ces-drone-rural-court-hero.mp4` (987 KB, recoverable from commit 780722b).

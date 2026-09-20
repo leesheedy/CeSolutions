@@ -13,54 +13,38 @@ export function Kicker({children,light}:{children:string;light?:boolean}){return
 /* Copy rules: every figure below is one CES publishes (50–100% bill reduction, 3–6 yr payback, one-day
  * installs, 25–30 yr panels, 4.8/5 from 26 SolarQuotes ratings, Daniel's 15+ years). No staff are named
  * except Daniel; the consultant is "our solar consultant". */
-/** Hero background film: a drone pass over a real CES install on a rural property near the Border.
- *  The clip is the render forward and then reversed, so it loops with no visible cut on a slow move.
- *  It mounts only where it is wanted — never under reduced motion, never on a narrow screen where the
- *  copy covers the frame anyway, and never on a metered or 2G connection. The poster underneath is the
- *  video's own first frame, so there is nothing to cross when it fades up, and it pauses off-screen. */
-function HeroFilm(){
-  const [show,setShow]=useState(false);
-  const [lit,setLit]=useState(false);
-  const ref=useRef<HTMLVideoElement>(null);
-  useEffect(()=>{
-    const conn=(navigator as Navigator&{connection?:{saveData?:boolean;effectiveType?:string}}).connection;
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-    if(!window.matchMedia('(min-width: 861px)').matches)return;
-    if(conn?.saveData)return;
-    if(conn?.effectiveType&&/(^|-)2g$/.test(conn.effectiveType))return;
-    setShow(true);
-  },[]);
-  useEffect(()=>{
-    const el=ref.current;
-    if(!el||!show)return;
-    const io=new IntersectionObserver(([e])=>{if(e.isIntersecting)void el.play().catch(()=>{});else el.pause();},{threshold:0});
-    io.observe(el);
-    return()=>io.disconnect();
-  },[show]);
-  if(!show)return null;
-  return <video ref={ref} className={lit?'hero3__film is-lit':'hero3__film'} autoPlay muted loop playsInline
-    preload="auto" aria-hidden="true" tabIndex={-1} onPlaying={()=>setLit(true)}
-    src="/assets/ces-drone-rural-court-hero.mp4"/>;
-}
-/** Full-bleed hero on the drone pass: kicker, sentence-case headline, one line, two actions. */
+/** Full-bleed hero on the drone aerial: kicker, sentence-case headline, one line, two actions. */
 export function Hero(){
   const ref=useRef<HTMLElement>(null);
   const reduce=useReducedMotion();
   const {scrollYProgress}=useScroll({target:ref,offset:['start start','end start']});
-  const bgY=useTransform(scrollYProgress,[0,1],['0%','22%']);
+  // The aerial sits at its full width when the page is at rest — the whole property in frame — and the
+  // scroll flies the camera down into it. Scale rather than a scrubbed video: a transform is composited
+  // on the GPU so it stays smooth on any device, and it costs nothing to download.
+  const bgScale=useTransform(scrollYProgress,[0,1],[1,1.38]);
+  const bgY=useTransform(scrollYProgress,[0,1],['0%','14%']);
   const copyY=useTransform(scrollYProgress,[0,1],[0,-70]);
 
   return <section ref={ref} className="hero3" aria-label="Solar and batteries in Albury-Wodonga">
-    <motion.div className="hero3__bg" data-motion="" style={reduce?undefined:{y:bgY}}><img src="/assets/ces-drone-hero-1920.webp" srcSet="/assets/ces-drone-hero-760.webp 760w, /assets/ces-drone-hero-1200.webp 1200w, /assets/ces-drone-hero-1920.webp 1920w" sizes="100vw" alt="" width={1920} height={1080} fetchPriority="high" decoding="async"/><HeroFilm/></motion.div><div className="hero3__glow" aria-hidden="true"/>
+    <motion.div className="hero3__bg" data-motion="" style={reduce?undefined:{y:bgY,scale:bgScale}}><img src="/assets/ces-drone-hero-1920.webp" srcSet="/assets/ces-drone-hero-760.webp 760w, /assets/ces-drone-hero-1200.webp 1200w, /assets/ces-drone-hero-1920.webp 1920w" sizes="100vw" alt="" width={1920} height={1080} fetchPriority="high" decoding="async"/></motion.div><div className="hero3__glow" aria-hidden="true"/>
     <div className="hero3__shade" aria-hidden="true"/>
     <motion.div className="hero3__copy wrap" data-motion="" style={reduce?undefined:{y:copyY}}>
       <Kicker light>Your local solar & battery installers</Kicker>
       <Reveal as="h1" lines={['Cut your power bill in half.','Or wipe it out.']} stagger={.08}/>
-      <Rise delay={.22}><p className="hero3__body">Solar, batteries and EV charging, designed from your actual bills and installed by our own Albury-Wodonga electricians — usually in a day. Savings usually land between 50% and 100% of your bill.</p><div className="hero-action-row"><a href="#quote" className="hero-quote">Get my free quote <ArrowRight size={18} aria-hidden="true"/></a><a href="#estimate" className="hero-secondary">See what I’d save</a></div><ul className="hero-trust" aria-label="Why people choose CES"><li><a href="tel:+61260212000"><Phone size={15} aria-hidden="true"/><strong>(02) 6021 2000</strong></a></li><li><a href="https://www.solarquotes.com.au/installer-review/clean-energy-solutions/"><span className="hero-trust__stars" aria-hidden="true">{[0,1,2,3,4].map(i=><Star key={i} size={13} fill="currentColor"/>)}</span><strong>4.8/5</strong><span>26 SolarQuotes ratings ↗</span></a></li><li><ShieldCheck size={15} aria-hidden="true"/>Own local electricians</li><li><BadgeCheck size={15} aria-hidden="true"/>25–30 yr panel warranties</li></ul></Rise>
+      <Rise delay={.22}><p className="hero3__body">Solar, batteries and EV charging, designed from your actual bills and installed by our own Albury-Wodonga electricians — usually in a day. Savings usually land between 50% and 100% of your bill.</p>{/* Two equally weighted ways in, not one button and a phone number in small print. Home-improvement
+    pages that offer a click, a form and a phone convert at 4.0% against a 2.6% median across 977,200
+    conversions (Unbounce Conversion Benchmark), and CES's nearest Albury rivals both sell on talking
+    to a person. The phone therefore leaves the trust row and becomes a real action. */}
+<div className="hero-action-row"><a href="#quote" className="hero-quote">Get my free quote <ArrowRight size={18} aria-hidden="true"/></a><a href="tel:+61260212000" className="hero-call-cta"><Phone size={17} aria-hidden="true"/>(02) 6021 2000</a></div>
+{/* The label tested well as it is; the leverage is here. Scope first (the form is genuinely three
+    steps), then the fear that actually stops an Australian clicking a solar "free quote" — being sold
+    to a panel of brokers — answered positively rather than by naming it, then the reply time. */}
+<p className="hero-note">Three questions, about two minutes. Your details go only to CES in Wodonga, and our solar consultant replies within one business day.</p>
+<a href="#estimate" className="hero-secondary">See what I’d save<span>no details needed</span></a><ul className="hero-trust" aria-label="Why people choose CES"><li><a href="https://www.solarquotes.com.au/installer-review/clean-energy-solutions/"><span className="hero-trust__stars" aria-hidden="true">{[0,1,2,3,4].map(i=><Star key={i} size={13} fill="currentColor"/>)}</span><strong>4.8/5</strong><span>26 SolarQuotes ratings ↗</span></a></li><li><ShieldCheck size={15} aria-hidden="true"/>Own local electricians</li><li><BadgeCheck size={15} aria-hidden="true"/>25–30 yr panel warranties</li></ul></Rise>
     </motion.div>
-    {/* The backdrop is no longer an illustration, so the label cannot say it is. It is our own drone
-        photograph of a real install; only the camera move is generated, and the caption says so. */}
-    <span className="hero__caption">Our drone photo of a CES install, animated · more in <a href="#our-work">our work</a></span>
+    {/* The backdrop is no longer an illustration, so the label cannot say it is. It is now a plain,
+        unretouched drone photograph of a real install — nothing generated is left in the frame. */}
+    <span className="hero__caption">Our drone photo of a CES install · more in <a href="#our-work">our work</a></span>
   </section>;
 }
 /** Black band under the hero: pitch on the left, the three-step enquiry form on the right. */
