@@ -42,7 +42,9 @@ function HeroFilm(){
   if(!show)return null;
   return <video ref={ref} className={lit?'hero3__film is-lit':'hero3__film'} autoPlay muted loop playsInline
     preload="auto" aria-hidden="true" tabIndex={-1} onPlaying={()=>setLit(true)}
-    src="/assets/ces-drone-rural-court-hero.mp4"/>;
+    // The name is versioned on purpose: /assets/* is cached for a week, so replacing a clip in place
+    // leaves every returning visitor on the old one. A new filename is the only reliable cache bust.
+    src="/assets/ces-drone-hero-loop-2.mp4"/>;
 }
 /** Full-bleed hero on the drone shot: kicker, sentence-case headline, one line, two actions. */
 export function Hero(){
