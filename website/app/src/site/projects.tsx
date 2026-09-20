@@ -1,5 +1,4 @@
 import {useEffect,useRef,useState} from 'react';
-import {DayStamp} from './sun';
 import {createPortal} from 'react-dom';
 import {AnimatePresence,motion,useReducedMotion,useScroll} from 'motion/react';
 import {ChevronLeft,ChevronRight,X} from 'lucide-react';
@@ -84,7 +83,7 @@ export function ProjectGallery(){
   const visible=all||filter!=='All'?matching:matching.slice(0,CAP);
   const counts=Object.fromEntries(filters.map(f=>[f,f==='All'?work.length:work.filter(p=>p.category===f).length]));
   const move=(d:1|-1)=>setLit(i=>i===null?null:(i+d+visible.length)%visible.length);
-  return <section id="our-work" className="work-section"><WorkIntro/><div className="wrap"><DayStamp at="15:30" label="Afternoon" light/>
+  return <section id="our-work" className="work-section"><WorkIntro/><div className="wrap">
     <div className="work-controls" role="group" aria-label="Filter CES photos">{filters.map(v=><button key={v} type="button" aria-pressed={filter===v} onClick={()=>{setFilter(v);setLit(null);setAll(false);}}>{v}<span className="work-controls__n">{counts[v]}</span></button>)}</div>
     <div className="work-masonry" key={filter}>{visible.map((p,i)=><Rise key={p.id} delay={Math.min(i,4)*.06}><article className={'work-card'+(p.feature&&filter==='All'?' work-card--feature':'')} data-shape={p.shape}><a className="work-image" href={p.href} aria-label={'View larger: '+p.title} onClick={e=>{e.preventDefault();setLit(i);}}><Parallax intensity={p.feature?36:22}><img src={'/assets/'+medium(p.image)} srcSet={variants(p.image)} sizes={p.feature&&filter==='All'?'(max-width:1100px) 100vw, 66vw':'(max-width:600px) 100vw, (max-width:1100px) 50vw, 33vw'} alt={p.alt} width={p.width} height={p.height} loading="lazy" decoding="async"/></Parallax><span className="work-card__kind">{p.kind}</span><span className="work-card__open" aria-hidden="true"><Arrow/></span></a><div className="work-card__body"><h3><a href={p.href}>{p.title}</a></h3><p>{p.body}</p><span className="work-card__source">{p.source}</span></div></article></Rise>)}</div>
     {!all&&filter==='All'&&matching.length>CAP&&<div className="work-showall"><button type="button" onClick={()=>setAll(true)}>Show all {matching.length} photos</button></div>}

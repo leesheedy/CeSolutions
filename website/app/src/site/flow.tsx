@@ -1,7 +1,6 @@
 /* GSAP-driven pieces. GSAP and ScrollTrigger are loaded on the client only, after mount; the markup is
  * complete and readable without them, and `prefers-reduced-motion` skips every hidden start state. */
 import {useEffect,useRef,useState,type ComponentType} from 'react';
-import {DayStamp} from './sun';
 import {BatteryCharging,Cable,Grid2x2,House,Sun,Zap,type LucideProps} from 'lucide-react';
 import {Kicker} from './sections';
 import {Reveal} from './motion';
@@ -13,7 +12,7 @@ const nodes:Node[]=[
 {id:'inverter',label:'Inverter',short:'Inverter converts it',time:'Instantly',detail:'The inverter turns DC into the AC power your home runs on. It is the brain of the system and what your monitoring app reads.',Icon:Zap},
 {id:'home',label:'Your home',short:'Your home uses it first',time:'Daytime',detail:'Fridge, cooling, pool pump, the washing — anything running in daylight is powered by your roof before a cent comes from the grid.',Icon:House},
 {id:'battery',label:'Battery',short:'Spare power charges the battery',time:'Afternoon',detail:'Whatever your home doesn’t use goes into the battery, so you run the evening on your own power instead of buying it at peak rates.',Icon:BatteryCharging},
-{id:'grid',label:'The grid',short:'The rest is sold back',time:'Whenever there’s extra',detail:'Anything still left over is exported to the grid and credited on your bill. At night, or when the battery is empty, the grid picks up the slack.',Icon:Cable}];
+{id:'grid',label:'The grid',short:'The grid takes the rest',time:'Surplus, and after dark',detail:'Power you don’t use or store is exported, and your retailer credits it on your bill. After dark, or once the battery is flat, the grid takes over.',Icon:Cable}];
 
 function Diagram({vertical,active,onPick}:{vertical:boolean;active:number;onPick:(i:number)=>void}){
   const n=nodes.length,gap=vertical?110:200,r=34;
@@ -47,10 +46,30 @@ export function SystemFlow(){
           const pulses=[...svg.querySelectorAll<SVGPathElement>('.flow-pulse')];
           const nodesEls=[...svg.querySelectorAll<SVGGElement>('.flow-node')];
           for(const l of links){const len=l.getTotalLength();l.style.strokeDasharray=String(len);l.style.strokeDashoffset=String(len);}
-          gsap.set(nodesEls.slice(1),{opacity:.3});
+          // Each pulse is a short dash chasing the length of its own segment. Sizing it from the real
+          // path length is what makes the charge travel at one speed whether the rail is laid out
+          // horizontally or stacked, instead of the single hard-coded dash the old version used.
+          pulses.forEach((p,i)=>{
+            const len=p.getTotalLength();
+            p.style.strokeDasharray=`${Math.max(10,len*.12)} ${len}`;
+            p.style.animationDuration=`${(len/95).toFixed(2)}s`;
+            p.style.animationDelay=`${(i*.22).toFixed(2)}s`;
+          });
+          // Nodes arrive by growing into place, not just fading: a flat opacity ramp reads as a list
+          // loading, a scale reads as the system switching on one stage at a time.
+          gsap.set(nodesEls.slice(1),{opacity:.22,scale:.82,transformOrigin:'50% 50%'});
+          gsap.set(nodesEls[0],{transformOrigin:'50% 50%'});
           // The detail panel reads the *scrubbed* timeline progress so it never runs ahead of the line being drawn.
-          const tl=gsap.timeline({scrollTrigger:{trigger:svg,start:'top 78%',end:'bottom 40%',scrub:.6},onUpdate:()=>{if(!pinned.current)setActive(Math.min(nodes.length-1,Math.round(tl.progress()*(nodes.length-1))));}});
-          links.forEach((l,i)=>{tl.to(l,{strokeDashoffset:0,ease:'none',duration:1},i).to(nodesEls[i+1],{opacity:1,duration:.4,ease:'none'},i+.6).call(()=>pulses[i]?.classList.toggle('is-live',tl.progress()>(i+.95)/links.length),[],i+.95);});
+          // Six stages need room. The old range put all six inside about 550px of scroll, roughly 90px
+          // each, so the copy flicked past before it could be read. Triggering earlier and ending later
+          // roughly triples that without pinning the section.
+          const tl=gsap.timeline({scrollTrigger:{trigger:svg,start:'top 92%',end:'bottom -30%',scrub:.9},
+            onUpdate:()=>{if(!pinned.current)setActive(Math.min(nodes.length-1,Math.round(tl.progress()*(nodes.length-1))));}});
+          links.forEach((l,i)=>{
+            tl.to(l,{strokeDashoffset:0,ease:'none',duration:1},i)
+              .to(nodesEls[i+1],{opacity:1,scale:1,duration:.55,ease:'back.out(2)'},i+.55)
+              .call(()=>pulses[i]?.classList.toggle('is-live',tl.progress()>(i+.9)/links.length),[],i+.9);
+          });
         }
       },root);
       root.classList.add('gsap-ready');
@@ -61,10 +80,12 @@ export function SystemFlow(){
   },[]);
   const pick=(i:number)=>{setActive(i);pinned.current=true;};
   const node=nodes[active];
-  return <section ref={ref} className="flow-section" aria-labelledby="flow-heading"><div className="wrap"><DayStamp at="noon" label="Solar noon"/>
+  return <section ref={ref} className="flow-section" aria-labelledby="flow-heading"><div className="wrap">
     <div className="flow-head"><div><Kicker>How it works</Kicker><Reveal id="flow-heading" lines={['Sun to switchboard,','in six steps.']}/></div><p className="flow-intro">Every system we install does this. We size each part to your roof and your bills, and walk you through it again on install day.</p></div>
     <Diagram vertical={false} active={active} onPick={pick}/><Diagram vertical active={active} onPick={pick}/>
-    <div className="flow-detail-panel"><span className="flow-detail-n">{String(active+1).padStart(2,'0')} / 06 · {node.time}</span><h3>{node.short}</h3><p>{node.detail}</p><div className="flow-dots" aria-label="Steps">{nodes.map((n,i)=><button key={n.id} type="button" aria-pressed={i===active} aria-label={n.label} className={i===active?'is-on':''} onClick={()=>pick(i)}/>)}</div></div>
+    {/* The step text is keyed on the active index, so React swaps the node and the CSS entrance
+        animation restarts. Without the key it re-used the same element and the copy simply snapped. */}
+    <div className="flow-detail-panel"><div className="flow-detail-body" key={active}><span className="flow-detail-n">Step {String(active+1).padStart(2,'0')} of 06 · {node.time}</span><h3>{node.short}</h3><p>{node.detail}</p></div><div className="flow-dots" aria-label="Steps">{nodes.map((n,i)=><button key={n.id} type="button" aria-pressed={i===active} aria-label={n.label} className={i===active?'is-on':''} onClick={()=>pick(i)}/>)}</div></div>
     <ol className="flow-steps sr-only">{nodes.map((n,i)=><li key={n.id}>{i+1}. {n.short} — {n.detail}</li>)}</ol>
   </div></section>;
 }

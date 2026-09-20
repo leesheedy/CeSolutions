@@ -93,6 +93,33 @@ html,body{background:var(--paper);color:var(--ink)}
    It now spans the rail and keeps its own text at a readable measure. */
 .flow-detail-panel{background:var(--card);border:1px solid var(--line);width:100%;max-width:none;padding:28px 32px}
 .flow-detail-panel p{max-width:62ch}
+
+/* ── The six-step rail ─────────────────────────────────────────────────────────────────────────
+   The old version moved one property, opacity, and swapped the caption underneath with no
+   transition, so the whole thing read as a list loading rather than a system switching on. */
+.flow-node{transform-box:fill-box;transform-origin:50% 50%}
+.flow-node circle{transition:fill .35s ease,stroke .35s ease,filter .35s ease}
+.flow-node.is-active circle{filter:drop-shadow(0 0 18px color-mix(in srgb,var(--sun) 55%,transparent))}
+/* A second ring sits under the active node and breathes, so the eye lands on the live stage. */
+.flow-node.is-active circle:first-of-type{stroke-width:3}
+.flow-label{transition:fill .3s ease}
+.flow-link{stroke:color-mix(in srgb,var(--sun) 70%,transparent)}
+.flow-pulse{animation-name:flow-charge;animation-timing-function:linear;animation-iteration-count:infinite;
+  stroke:#00E0B4;stroke-width:4;stroke-linecap:round;opacity:0;transition:opacity .4s ease}
+.gsap-ready .flow-pulse.is-live{opacity:.95}
+@keyframes flow-charge{from{stroke-dashoffset:0}to{stroke-dashoffset:-1000}}
+
+/* The step copy fades and lifts on every change instead of snapping. */
+.flow-detail-body{display:grid;gap:8px;animation:flow-step .42s cubic-bezier(.19,1,.22,1) both}
+@keyframes flow-step{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.flow-detail-n{font-family:var(--fm);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase}
+.flow-dots button{transition:background .25s ease,width .25s cubic-bezier(.19,1,.22,1)}
+.flow-dots button.is-on{width:56px;background:var(--sun)}
+
+@media(prefers-reduced-motion:reduce){
+  .flow-detail-body{animation:none}
+  .flow-pulse{animation:none;opacity:0}
+}
 .service-business{background:var(--night);color:#E7EFF5}
 .service-business p{color:#9FB2BF}
 .service-business .service-destination{border-color:var(--rule-dark)}

@@ -103,40 +103,14 @@ export function useSun():Sun|null{
   return sun;
 }
 
-/** The sun line: a hairline on the right margin carrying the day's arc and the sun's real position.
- * Desktop only, decorative, no layout cost — the site's persistent signature. */
-export function SunRail({sun}:{sun:Sun|null}){
-  if(!sun)return null;
-  const top=8+sun.progress*84;
-  const out=sun.el<0;
-  return <div className="sunrail" aria-hidden="true">
-    <span className="sunrail__line"/>
-    <span className={out?'sunrail__dot is-down':'sunrail__dot'} style={{top:`${Math.max(4,Math.min(92,top))}%`}}/>
-    <span className="sunrail__cap">{sun.time}</span>
-  </div>;
-}
-
-/** Mounts the light engine and the rail. One instance, in the header, on every page. */
+/** Mounts the light engine. Nothing is drawn any more: the clock rail on the right margin and the
+ * per-section day stamps came off on 21 Sep 2026. `useSun` still runs, because it is what writes
+ * --solar, --sky-a/b, --daylight and the shadow offsets onto <html> — the page's colour still tracks
+ * the real sun over Wodonga, it just no longer says so in numbers. One instance, in the header. */
 export function SunLayer(){
-  const sun=useSun();
-  return <><SunRail sun={sun}/><span className="sr-only" aria-live="off">{sun?`Sun elevation over Wodonga ${sun.el.toFixed(0)} degrees at ${sun.time}.`:''}</span></>;
+  useSun();
+  return null;
 }
 
-/** Solar times for today, computed once per day and shared by every stamp on the page. */
-let cache:{day:string;rise:string;noon:string;set:string}|null=null;
-function todayTimes(){
-  const now=new Date(),tz=tzHours(now),p=parts(now),key=`${p.y}-${p.m}-${p.d}`;
-  if(cache&&cache.day===key)return cache;
-  const rs=riseSet(p,tz);
-  cache={day:key,rise:rs?hhmm(rs.rise):'',noon:rs?hhmm(rs.noon):'',set:rs?hhmm(rs.set):''};
-  return cache;
-}
-/** Marks a section with the hour of the day it belongs to. First light, solar noon and last light are
- * the real times for today (filled after mount, so the prerendered HTML stays stable); the rest are
- * fixed markers. Decorative — the page reads identically without them. */
-export function DayStamp({at,label,light}:{at:'rise'|'noon'|'set'|string;label:string;light?:boolean}){
-  const solar=at==='rise'||at==='noon'||at==='set';
-  const [t,setT]=useState(solar?'':at);
-  useEffect(()=>{if(solar)setT(todayTimes()[at as 'rise'|'noon'|'set']);},[solar,at]);
-  return <span className={light?'daystamp daystamp--light':'daystamp'} aria-hidden="true">{t?<b>{t}</b>:null}<i>{label}</i></span>;
-}
+/* DayStamp lived here: the per-section "06:04 / First light" markers, plus a once-a-day cache of
+ * today's rise, noon and set times that only those markers read. Both removed 21 Sep 2026. */

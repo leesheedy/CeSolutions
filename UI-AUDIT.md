@@ -387,3 +387,36 @@ The CTA microcopy tightened from 22 words to 21 and from two sentences to three,
 "Three questions, about two minutes. Your details go to CES in Wodonga and nowhere else. We reply
 within one business day." — "go to CES and nowhere else" is blunter than "go only to CES", and "we
 reply" is more direct than "our solar consultant replies" while still naming nobody.
+
+## Day stamps removed, six-step rail reworked — 21 Sep 2026
+
+**The time markers are gone.** All ten per-section day stamps ("06:04 / First light", "14:00 / Full
+sun", and the rest) and the clock rail on the right margin are removed. `useSun` still runs, because it
+is what writes `--solar`, `--sky-a/b`, `--daylight` and the shadow offsets onto `<html>`: the page's
+colour still tracks the real sun over Wodonga, it just no longer states it in numbers. `SunLayer` now
+mounts the engine and renders nothing. `SunRail` and `DayStamp`, plus the once-a-day time cache only
+they read, are deleted. The `.daystamp` and `.sunrail` rules in `styles.css` are now dead and can be
+cleared whenever that file is next touched.
+
+**Step six was rewritten.** "The rest is sold back" implied a sale at retail rates; what actually
+happens is a feed-in credit from the retailer. It now reads "The grid takes the rest", labelled
+"Surplus, and after dark", with the detail: "Power you don't use or store is exported, and your
+retailer credits it on your bill. After dark, or once the battery is flat, the grid takes over."
+
+**The scroll animation was reworked.** Three things were wrong with it:
+
+1. **It moved one property.** Nodes only faded from 0.3 opacity to 1, which reads as a list loading.
+   They now grow into place as well, on a slight overshoot, so each stage reads as switching on.
+2. **The energy pulse was hard-coded.** A single `stroke-dasharray: 14 186` was applied to every
+   connector regardless of its real length, so the charge travelled at different speeds on the
+   horizontal and vertical layouts. Each pulse is now sized and timed from its own path length, and
+   staggered along the chain.
+3. **The copy snapped.** The detail panel swapped text with no transition. The step body is now keyed
+   on the active index, so React replaces the node and a short fade-and-lift restarts on every change.
+
+The scrub range was also too tight: all six stages fitted inside about 550px of scroll, roughly 90px
+each, so the copy flicked past before it could be read. Triggering earlier and ending later gives
+**1020px across the six stages**, about 200px each, measured rather than estimated. No pinning, so
+nothing changes about how the section behaves on a phone, where the rail stacks vertically.
+
+Reduced motion skips the pulse and the step animation entirely.
