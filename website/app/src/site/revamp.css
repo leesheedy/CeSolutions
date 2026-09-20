@@ -1,0 +1,117 @@
+
+/* ═══ CES UI/UX revamp — 20 Sep 2026 ═══════════════════════════════════════════════════════════════
+   Informed by a live study of UK/US/EU energy sites (Octopus, Heatable, BOXT, Sunsave, Sunrun,
+   Palmetto, Enpal, 1KOMMA5°). Built on top of the simplified editorial base, keeping its direction:
+   restrained motion, real photography, one-page enquiry, no invented figures.
+   ═════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* ── A spacing scale. The page was running 88/84/80/64/56/54/46/44/35/23/21/19px with no system,
+   which is what made the rhythm read loose and the gaps arbitrary. ─────────────────────────────── */
+:root{
+  --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px;
+  --sec:clamp(56px,6.4vw,88px);      /* section padding-block */
+  --sec-tight:clamp(40px,4.4vw,60px); /* where two related blocks sit together */
+  --ces-sand:#f7f4ee;
+}
+.home-services,.home-work,.home-local,.home-faq{padding-block:var(--sec)}
+.energy-section{padding-block:var(--sec)}
+.home-section-head{margin-bottom:var(--s4)}
+/* Consecutive sections on the same ground shouldn't stack two full pads. */
+.home-services+.energy-section{padding-top:var(--sec-tight)}
+.home-work+.home-local{padding-top:var(--sec-tight)}
+
+/* ── Proof bar: five specifics, not three unlabelled ticks. Octopus and Sunrun both spend their
+   first inch of page on credentials rather than adjectives. ────────────────────────────────────── */
+.home-proof{display:grid;grid-template-columns:repeat(5,auto);justify-content:space-between;
+  gap:var(--s2) var(--s3);padding-block:var(--s3);border-block:1px solid var(--ces-line);
+  font-size:13px;color:var(--ces-muted);align-items:center}
+.home-proof span{display:flex;align-items:baseline;gap:9px;line-height:1.35}
+.home-proof span:before{content:"";flex:none;width:6px;height:6px;border-radius:50%;
+  background:var(--ces-blue);transform:translateY(-2px);margin:0}
+.home-proof b{color:var(--ces-ink);font-weight:650}
+@media(max-width:1000px){.home-proof{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.home-proof{grid-template-columns:1fr;gap:10px}}
+
+/* ── The CES Promise: the guarantee, boxed and named. Every strong site in the study turns its
+   warranty terms into one named product rather than scattering them through the copy. ──────────── */
+.promise{background:var(--ces-ink);color:#eef4f2;padding-block:var(--sec)}
+.promise__grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:6%;align-items:center}
+.promise h2{color:#fff}
+.promise__lede{color:#b9cbc9;font-size:17px;max-width:34ch;margin-top:var(--s2)}
+.promise__list{list-style:none;margin:0;padding:0;display:grid;gap:1px;background:#2b4448;
+  border:1px solid #2b4448;border-radius:8px;overflow:hidden}
+.promise__list li{background:var(--ces-ink);padding:20px 22px;display:grid;
+  grid-template-columns:22px 1fr;gap:var(--s2);align-items:start}
+.promise__list svg{color:#4fd6a0;margin-top:3px}
+.promise__list h3{font-size:17px;font-weight:650;color:#fff;letter-spacing:-.02em;line-height:1.25}
+.promise__list p{font-size:14.5px;color:#a9bfbd;margin-top:5px;line-height:1.55}
+@media(max-width:860px){.promise__grid{grid-template-columns:1fr;gap:var(--s4)}}
+
+/* ── What can change a quote. Octopus itemises its estimate and warns that the scaffolding figure
+   is an assumption; Heatable states plainly that scaffolding is excluded. Naming the thing that
+   usually blows a quote out is the cheapest trust you can buy. ─────────────────────────────────── */
+.checks{background:var(--ces-sand);padding-block:var(--sec)}
+.checks__grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:6%;align-items:start}
+.checks__intro p{color:var(--ces-muted);font-size:17px;max-width:34ch;margin-top:var(--s2)}
+.checks__list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;
+  gap:var(--s2) var(--s4)}
+.checks__list li{border-top:1px solid #e1dbcd;padding-top:14px}
+.checks__list b{display:block;font-size:15.5px;font-weight:650;color:var(--ces-ink);letter-spacing:-.015em}
+.checks__list span{display:block;font-size:14px;color:var(--ces-muted);margin-top:4px;line-height:1.55}
+.checks__note{margin-top:var(--s4);font-size:14px;color:var(--ces-muted);display:flex;gap:10px;
+  align-items:flex-start;max-width:62ch}
+.checks__note svg{flex:none;color:var(--ces-blue);margin-top:2px}
+@media(max-width:860px){.checks__grid{grid-template-columns:1fr;gap:var(--s4)}}
+@media(max-width:560px){.checks__list{grid-template-columns:1fr}}
+
+/* ── Work grid: the feature figure spanned two rows, so its caption overflowed its grid area and
+   collided with the Instagram link below. A plain 3x2 grid of equal frames removes the failure mode
+   and shows six real jobs instead of two. ─────────────────────────────────────────────────────── */
+.home-work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4) var(--s3)}
+.home-work-grid figure{margin:0;display:flex;flex-direction:column}
+.home-work-grid img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:7px;display:block}
+.home-work-grid figcaption{font-size:13.5px;color:var(--ces-muted);margin-top:11px;line-height:1.5}
+.home-work>.home-text-link{margin-top:var(--s4)}
+@media(max-width:860px){.home-work-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.home-work-grid{grid-template-columns:1fr}}
+
+/* ── The enquiry column: the space beside the form was empty. Give it the reasons to fill it in. ── */
+.quote-aside{display:grid;gap:var(--s3);align-content:start}
+.quote-aside__points{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.quote-aside__points li{display:grid;grid-template-columns:20px 1fr;gap:12px;font-size:15px;
+  color:#cfe0de;line-height:1.5}
+.quote-aside__points svg{color:#4fd6a0;margin-top:3px}
+.quote-aside__crew{padding-top:var(--s3);border-top:1px solid #2b4448;margin-top:var(--s1)}
+.quote-aside__crew p{font-size:14px;color:#b9cbc9;line-height:1.55;max-width:38ch}
+.quote-aside__crew b{color:#fff;font-weight:650}
+
+/* ── Form: a stated time cost up front (Sunsave), and the callback promise where it reassures. ─── */
+.simple-enquiry__meta{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;
+  font-size:12.5px;color:var(--ces-muted);margin-bottom:var(--s3)}
+.simple-enquiry__meta span{display:inline-flex;align-items:center;gap:7px}
+.simple-enquiry__meta svg{color:var(--ces-blue)}
+.simple-enquiry fieldset{border:0;padding:0;margin:0 0 var(--s2)}
+.simple-enquiry legend{font-size:14px;font-weight:600;color:var(--ces-ink);margin-bottom:10px;padding:0}
+.enquiry-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.enquiry-choices label{position:relative;display:flex;align-items:center;justify-content:center;
+  text-align:center;min-height:46px;padding:8px 10px;border:1px solid var(--ces-line);border-radius:6px;
+  font-size:13.5px;cursor:pointer;transition:border-color .15s,background .15s;line-height:1.25}
+.enquiry-choices input{position:absolute;opacity:0;width:1px;height:1px}
+.enquiry-choices label:hover{border-color:#9cc3ce}
+.enquiry-choices input:checked+span{font-weight:650;color:var(--ces-blue)}
+.enquiry-choices label:has(input:checked){border-color:var(--ces-blue);background:#eef7fa}
+.enquiry-choices input:focus-visible+span{outline:3px solid var(--ces-blue);outline-offset:6px}
+@media(max-width:480px){.enquiry-choices{grid-template-columns:1fr 1fr}}
+
+/* ── Hero: the phone is a co-equal action for a 35–65 regional audience, not a header afterthought. */
+.home-actions .home-phone{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:650;
+  color:var(--ces-ink);padding:16px 20px;border:1px solid var(--ces-line);border-radius:5px;
+  transition:border-color .2s,background .2s}
+.home-actions .home-phone:hover{border-color:var(--ces-blue);background:#f4fafc}
+.home-actions .home-phone svg{color:var(--ces-blue)}
+@media(max-width:420px){.home-actions{gap:12px}.home-actions .home-button,.home-actions .home-phone{width:100%;justify-content:center}}
+
+/* The enquiry aside sits on the dark teal ground; its intro paragraph was inheriting the light-ground
+   muted colour and rendering close to black on dark. */
+.home-quote .quote-aside>div>p{color:#b9cbc9}
+.home-quote .quote-aside h2{color:#fff}
