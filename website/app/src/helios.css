@@ -1,0 +1,272 @@
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════════
+   HELIOS LAYER — 20 Sep 2026
+   A design pass in the language of helios-template.webflow.io, applied over the existing CES markup.
+   Nothing here changes a word of copy; it is purely surface, shape, rhythm and motion.
+
+   What is borrowed from Helios:
+     · a warm off-white ground with the dark sections floating on it as big rounded slabs
+     · one grotesque set light and very tight, leading at ~0.95, with the second headline line dimmed
+     · a floating pill navigation that overlays the hero and sticks clear of the top edge
+     · a thin announcement strip above everything
+     · full pills for every action, 28–40px radii on every card and slab, one arched portrait
+     · circular icon buttons, mono micro-labels, generous vertical air
+
+   What stays CES: the copy, the cyan, the logo, the sun engine and its amber measurement voice.
+   The one idea that is ours rather than theirs — Helios is warm everywhere; here the DAY surfaces are
+   warm and the NIGHT surfaces stay blue-black, so the page's temperature tracks the same sun the
+   header clock is reading.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* Day surfaces — warm, off-white, never pure paper */
+  --paper:#F5F2EC;
+  --bone:#EFEBE2;
+  --bone-2:#E7E2D6;
+  --line:#DCD5C7;
+  --ink:#171512;                 /* warm near-black, so body text belongs to the warm ground */
+  --muted:#5D5850;
+  /* The old pale blue read as a cold patch once the page ground went warm. It keeps its job — the
+     second, tinted day surface — but in the same family as the paper it sits on. */
+  --sky:#ECE7DC;
+  /* Shape */
+  --r-slab:40px;                 /* the big floating sections */
+  --r-card:28px;                 /* cards and media */
+  --r-pill:999px;
+  --nav-h:66px;
+  --gutter:clamp(12px,1.4vw,20px);
+  --slab-shadow:0 40px 90px -60px rgba(7,12,17,.85);
+}
+
+/* ── 1. Type: Helios posture. Lighter, tighter, tighter leading. ────────────────────────────────── */
+h1,h2,h3,.reveal__line,.reveal__inner{font-family:var(--fd)}
+h1,h2{font-variation-settings:"opsz" 96;font-weight:560;letter-spacing:-.035em;line-height:.95}
+h3{font-variation-settings:"opsz" 40;font-weight:560;letter-spacing:-.026em;line-height:1.08}
+main :is(section,.band) :is(h2,.cta-split__title):not(.work-intro__title){font-weight:560;letter-spacing:-.035em;line-height:.95}
+.hero3 h1,.hero2 h1,.detail-hero h1,.contact-intro h1,.loc-hero h1,.work-intro__title{font-weight:560}
+.service-copy h3,.cell h3,.why__list h3,.process4__cards h3,.work-card h3,.flow-detail-panel h3,
+.qf__q,.estimator__card h3,.loc-why h3{font-weight:560;letter-spacing:-.026em}
+.trust-strip strong,.estimator__result strong,.estimator__label output{font-weight:600}
+body{letter-spacing:-.008em;line-height:1.6}
+p{line-height:1.6}
+
+/* The signature: the first headline line is fully lit, the rest sit back. Two voices, one sentence. */
+:is(h1,h2) .reveal__line:nth-child(n+2){color:color-mix(in srgb,currentColor 46%,transparent)}
+.quote-band :is(h1,h2) .reveal__line:nth-child(n+2),
+.process4 :is(h1,h2) .reveal__line:nth-child(n+2),
+.work-section :is(h1,h2) .reveal__line:nth-child(n+2),
+.band :is(h1,h2) .reveal__line:nth-child(n+2),
+.hero3 h1 .reveal__line:nth-child(n+2){color:rgba(226,237,244,.44)}
+
+/* Micro-labels keep the instrument voice but lose weight, the way Geist Mono sits on Helios. */
+.kicker,.eyebrow,.service-copy>span:first-child,.work-meta>span:first-child{
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+
+/* ── 2. The ground: day is warm, night stays blue-black and floats on it as a slab ──────────────── */
+html,body{background:var(--paper);color:var(--ink)}
+.trust-strip,.review-section{background:var(--bone);border-color:var(--line)}
+.brand-section{background:transparent}
+/* The base sheet hard-codes a handful of cool greys for rules, field borders and the contact form.
+   On a warm ground each of them read as a grey smudge, so they move to the warm line colour. */
+.trust-strip{border-top-color:var(--line)}
+.related a,.faq-list details,.faq-list>:last-child details,.process-list article,
+.flow-track,.service-destination,.rebate-links>a,.quote-expectations{border-color:var(--line)}
+.quote-form,.email-ready{background:var(--bone)}
+.stack-card{background:#FBF9F4;box-shadow:0 44px 80px -56px rgba(23,21,18,.55)}
+/* The step detail sat in a 720px box under a 1300px rail, so the row ended in half a screen of nothing.
+   It now spans the rail and keeps its own text at a readable measure. */
+.flow-detail-panel{background:#FBF9F4;border:1px solid var(--line);width:100%;max-width:none;padding:28px 32px}
+.flow-detail-panel p{max-width:62ch}
+.service-business{background:var(--night);color:#E7EFF5}
+.service-business p{color:#9FB2BF}
+.service-business .service-destination{border-color:var(--rule-dark)}
+.quote-form input:not([type=radio]),.quote-form select,.quote-form textarea,
+.service-options label{border-color:var(--line);background:#FBF9F4}
+.service-options label.selected{background:#E4F4FC;border-color:var(--sun)}
+
+/* Every dark section becomes a floating slab with big radii and a shadow that lifts it off the bone. */
+.quote-band,.estimator,.work-section,.process4{
+  border-radius:var(--r-slab);
+  margin-inline:var(--gutter);
+  box-shadow:var(--slab-shadow);
+  overflow:clip}
+/* Consecutive slabs keep a thin bone seam between them rather than fusing into one block. */
+.work-section+.process4{margin-top:var(--gutter)}
+.site-footer,.glow-footer{border-radius:var(--r-slab) var(--r-slab) 0 0;margin-inline:var(--gutter);overflow:clip}
+main{padding-bottom:var(--gutter)}
+
+/* ── 3. The announcement strip ─────────────────────────────────────────────────────────────────── */
+.ribbon{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  min-height:38px;padding:9px 18px;
+  background:var(--sun);color:#06151C;
+  font-family:var(--fm);font-size:10.5px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;
+  text-align:center;line-height:1.35}
+.ribbon:hover{background:#2FC0F7}
+.ribbon svg{flex:none}
+
+/* ── 4. The floating pill navigation ───────────────────────────────────────────────────────────── */
+.site-header{
+  position:sticky;top:var(--gutter);z-index:40;
+  width:min(1420px,calc(100% - var(--gutter)*2));
+  /* The pill consumes no layout height, so the page below starts under the ribbon and the nav floats. */
+  margin:0 auto calc(var(--nav-h) * -1);
+  height:var(--nav-h);
+  padding:0 8px 0 20px;
+  gap:22px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:var(--r-pill);
+  /* Opaque enough to stay a confident dark pill over the warm ground of the interior pages — at .66
+     the bone showed through and the whole bar read as grey. The blur still separates it from photos. */
+  background:rgba(9,15,21,.90);
+  backdrop-filter:saturate(150%) blur(18px);
+  -webkit-backdrop-filter:saturate(150%) blur(18px);
+  box-shadow:0 26px 50px -34px rgba(4,8,12,.9)}
+/* The base sheet declares the header height four times (94 → 78 → 76, and 70 once scrolled). The pill
+   has to stay exactly --nav-h in both states: it is pulled out of flow by that number, and a height that
+   changed on scroll would shunt the whole page up by the difference. */
+header.site-header,header.site-header.is-scrolled{height:var(--nav-h)}
+.site-header.is-scrolled{background:rgba(9,15,21,.95);box-shadow:0 26px 50px -30px rgba(4,8,12,.95)}
+/* The nav overlays the homepage hero; every other page gets the height back as clearance. */
+main{padding-top:calc(var(--nav-h) + var(--gutter) * 2)}
+main:has(.hero3){padding-top:0}
+.site-header .brand img{width:158px}
+.desk-nav__list{gap:4px}
+.nm-trigger{border-radius:var(--r-pill);padding:9px 14px;font-size:14.5px;font-weight:500;color:#E7EFF5}
+.nm-trigger:hover{background:rgba(255,255,255,.07)}
+.nav-phone{border-radius:var(--r-pill);padding:9px 14px;font-size:14px;color:#E7EFF5}
+.nav-phone:hover{background:rgba(255,255,255,.07)}
+.nav-quote{border-radius:var(--r-pill);padding:12px 20px;font-size:14.5px;font-weight:500;
+  background:var(--sun);color:#06151C;transition:background .22s,transform .22s}
+.nav-quote:hover{background:#2FC0F7;transform:none}
+.menu-toggle{border-radius:var(--r-pill);padding:9px 14px;color:#E7EFF5;background:rgba(255,255,255,.07)}
+.nm-panel{border-radius:24px}
+.skip-link{border-radius:var(--r-pill)}
+
+/* ── 5. Pills and circular controls everywhere an action lives ─────────────────────────────────── */
+.hero-quote,.btn-pill,.contact-band-link,.quote-band__call,.faq-phone,.hero-secondary,
+.prepare-button,.qf__send,.qf__next,.error-page a,.error-page button,.detail-quote,.work-more a{
+  border-radius:var(--r-pill)}
+.hero-quote,.btn-pill{padding:15px 24px;font-weight:500}
+.hero-quote svg,.btn-pill svg,.contact-band-link svg{transition:transform .28s cubic-bezier(.19,1,.22,1)}
+.hero-quote:hover svg,.btn-pill:hover svg,.contact-band-link:hover svg{transform:translateX(5px)}
+.work-controls button,.work-controls__prev,.work-controls__next{
+  width:52px;height:52px;border-radius:var(--r-pill);display:grid;place-items:center}
+
+/* ── 6. Cards: one radius, one lift, one image scale ───────────────────────────────────────────── */
+.stack-card,.work-masonry .work-card,.process4__cards li,.review-card,.estimator__card,
+.why__photo,.service-image,.quote-form,.related,.nm-feature,.flow-detail-panel,.email-ready,
+.team-visual,.loc-why li,.work-card__media{border-radius:var(--r-card);overflow:clip}
+.stack-card,.work-masonry .work-card,.review-card{transition:transform .5s cubic-bezier(.19,1,.22,1),box-shadow .5s}
+.stack-card:hover,.work-masonry .work-card:hover{transform:translateY(-6px)}
+.service-image img,.work-card__media img{transition:transform .8s cubic-bezier(.19,1,.22,1)}
+.work-masonry .work-card:hover .work-card__media img{transform:scale(1.05)}
+.process4__cards li{border-radius:var(--r-card)}
+
+/* The one arch on the site: the crew portrait, cut like a window. */
+.why__photo{border-radius:min(24vw,340px) min(24vw,340px) var(--r-card) var(--r-card)}
+
+/* Interior pages: the hero photograph and the section media carry the same radius as the cards, and the
+   standfirst keeps a readable measure instead of running the full 1300px of the wrap. */
+.detail-hero .parallax,.detail-hero img,.detail-media,.detail-content img,.loc-hero img,
+.manifesto img,.about-hero img,.band__media{border-radius:var(--r-card);overflow:clip}
+/* The standfirst sits inside the entrance wrapper, so the base sheet's `.detail-hero>p` measure never
+   reached it and the line ran the full 1300px of the wrap. */
+.detail-hero p:not(.breadcrumb),.loc-hero p:not(.breadcrumb),.contact-intro>p{max-width:58ch;font-size:19px}
+/* Small thumbnails keep a smaller radius — the card radius on a 190px tile reads as a blob. */
+.work-fan img,.work-fan figure,.work-image,.lightbox__img{border-radius:14px;overflow:clip}
+
+/* ── 7. Forms read as one soft object rather than a stack of boxes ─────────────────────────────── */
+.quote-form,.qf{border-radius:32px}
+.qf input,.qf select,.qf textarea,.quote-form input:not([type=radio]),.quote-form select,
+.quote-form textarea,.addr__input,.qf__field input,.qf__field select,.qf__field textarea{border-radius:14px}
+/* Choice tiles carry two lines of copy, so they take the card radius, not a pill. */
+.qf__services label,.service-options label,.qf__files label,.qf__tick{border-radius:16px}
+.qf__progress li,.qf__back,.qf__alt a{border-radius:var(--r-pill)}
+.addr__list{border-radius:18px}
+.qf__step,.qf__q{letter-spacing:-.02em}
+
+/* Work section controls: circular, the way Helios paginates its draggable card rail. */
+.work-controls{display:flex;align-items:center;gap:12px}
+.work-controls button{width:50px;height:50px;border-radius:var(--r-pill);display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);transition:background .22s}
+.work-controls button:hover:not(:disabled){background:rgba(255,255,255,.14)}
+.work-controls__n{font-size:11px;letter-spacing:.12em}
+.lightbox__btn{border-radius:var(--r-pill)}
+.work-showall,.work-more a,.instagram-link{border-radius:var(--r-pill)}
+
+/* ── 8. Footer: contact lines become pills, the way Helios sets its address block ──────────────── */
+.glow-footer__contact a{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:10px 16px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  transition:background .22s}
+.glow-footer__contact a:hover{background:rgba(255,255,255,.12)}
+.glow-footer__contact{gap:10px;display:flex;flex-direction:column;align-items:flex-start}
+.glow-footer__social a{width:42px;height:42px;border-radius:var(--r-pill);display:grid;place-items:center;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}
+
+/* ── 9. Hero: the copy clears the floating pill, the caption becomes a chip ────────────────────── */
+.hero3{border-radius:0 0 var(--r-slab) var(--r-slab);overflow:clip}
+.hero3__copy{padding-top:calc(var(--nav-h) + 26px)}
+.hero__caption{border-radius:var(--r-pill);padding:8px 14px;background:rgba(8,14,20,.6);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.hero-trust li{border-right-color:rgba(255,255,255,.14)}
+
+/* ── 10. Motion ────────────────────────────────────────────────────────────────────────────────
+   The statement paragraph lights up word by word on scroll (ScrollWords, in JS — it needs per-word
+   interpolation). Everything else below is scroll-driven in CSS through a view timeline, so it costs
+   no main-thread work and degrades to a still frame wherever the timeline is unsupported. */
+@media(prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+  .stack-card,.work-card,.review-card,.process4__cards li,.nm-link,.glow-footer__contact a{
+    will-change:transform}
+
+  @supports (animation-timeline:view()){
+    /* Photography settles from slightly over-scale as it crosses the viewport — the same easing the
+       entrance masks use, so the page has one movement vocabulary. */
+    .work-card__media img,.why__photo img,.service-image img,.team-visual img{
+      animation:helios-settle-media linear both;
+      animation-timeline:view();
+      animation-range:entry 0% cover 62%}
+    /* Section rules draw themselves in rather than appearing. */
+    .flow-track,.work-more{
+      animation:helios-draw linear both;animation-timeline:view();animation-range:entry 10% entry 92%}
+  }
+}
+@keyframes helios-settle-media{from{transform:scale(1.07)}to{transform:scale(1)}}
+@keyframes helios-draw{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+/* ScrollWords holds each word at 16% until the scrub reaches it. That is a motion effect written as an
+   inline opacity, so the global reduced-motion reset cannot undo it: the words are pinned lit instead. */
+@media(prefers-reduced-motion:reduce){
+  .why__intro span{opacity:1!important}
+}
+
+/* The header tightens once the page has moved, the way a floating bar earns its place. */
+.site-header{transition:background .3s ease,box-shadow .3s ease}
+
+/* ── 10b. The estimator's scenario switch becomes one segmented pill ───────────────────────────── */
+.energy-scenarios{display:inline-flex;gap:4px;padding:4px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10)}
+.energy-scenarios button{border-radius:var(--r-pill);padding:9px 18px;border:0;background:transparent;
+  color:#B9CBD7;font-size:14px;font-weight:500;transition:background .22s,color .22s}
+.energy-scenarios button:hover{color:#E7EFF5}
+.energy-scenarios button[aria-pressed=true],.energy-scenarios button.is-on{
+  background:var(--sun);color:#06151C}
+.estimator__ticks{letter-spacing:.1em}
+.estimator__card{border:1px solid var(--rule-dark)}
+
+/* ── 11. Narrow widths: the slabs keep their radius, the gutter tightens ───────────────────────── */
+@media(max-width:860px){
+  :root{--r-slab:28px;--r-card:22px;--nav-h:58px;--gutter:10px}
+  .site-header{padding:0 8px 0 14px;gap:12px}
+  .site-header .brand img{width:132px}
+  .nav-quote{padding:10px 15px;font-size:13.5px}
+  .ribbon{font-size:9.5px;letter-spacing:.1em;padding:8px 14px}
+  .why__photo{border-radius:min(34vw,240px) min(34vw,240px) var(--r-card) var(--r-card)}
+  h1,h2{line-height:.98}
+}
+@media(max-width:600px){
+  :root{--r-slab:22px;--gutter:8px}
+  .hero3__copy{padding-top:calc(var(--nav-h) + 18px)}
+  .glow-footer__contact a{padding:9px 13px}
+}

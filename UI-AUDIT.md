@@ -234,3 +234,35 @@ Automated accessibility results are not a complete accessibility certification. 
 
 The website remains outside Higgsfield's community gallery, as requested. Source code, original test JSON and screenshots are saved in the Higgsfield cloud repository under app/audit.
 
+
+## Design pass — Helios language, 20 Sep 2026
+
+Applied over the existing markup as one appended stylesheet (`website/app/src/helios.css`, linked after
+`styles.css` in `__root.tsx`). Reference: helios-template.webflow.io. **No copy changed.**
+
+Borrowed from Helios: a warm off-white ground with the dark sections floating on it as 40px slabs; one
+grotesque set light and very tight with the second headline line dimmed to ~46%; a floating pill
+navigation that overlays the hero; a thin announcement strip; full pills on every action, 28px radii on
+cards, one arched portrait; circular controls and mono micro-labels.
+
+Kept from CES: the copy, the cyan, the logo, the sun engine and its amber measurement voice. Helios is
+warm everywhere — here the day surfaces are warm and the night surfaces stay blue-black, so the page's
+temperature tracks the same sun the header clock reads.
+
+Fixed while making the pass:
+1. The base sheet declares the header height four times (94 → 78 → 76, and 70 once scrolled). The pill is
+   pulled out of flow by `--nav-h`, so a height that changed on scroll shunted the page by the difference.
+   Height is now pinned in both states at `header.site-header` specificity.
+2. `.detail-hero>p` never matched the standfirst — it sits inside the entrance wrapper — so the line ran
+   the full 1300px of the wrap. Now capped at 58ch.
+3. The flow step detail sat in a 720px box under a 1300px rail, ending the row in half a screen of
+   nothing. It now spans the rail with its own text at 62ch.
+4. `ScrollWords` holds each word at 16% opacity until the scrub reaches it. That is a motion effect
+   written as an inline opacity, so the global reduced-motion reset could not undo it; the words are now
+   pinned lit under `prefers-reduced-motion: reduce`.
+5. The pale-blue tinted surfaces read as cold patches once the ground went warm, as did the hard-coded
+   cool greys on rules, field borders and the contact form. Both moved into the warm family.
+
+Verified on the built output: 10 routes × 390/1440 — no horizontal overflow, one `h1` per page, no broken
+images, no console errors, nav and page top aligned on every route. Reduced motion leaves no text below
+25% opacity.

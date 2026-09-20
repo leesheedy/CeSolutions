@@ -106,6 +106,8 @@ export function Header(){
   return <>
     <a className="skip-link" href="#main">Skip to content</a>
     <SunLayer/>
+    {/* Announcement strip above the floating nav — same claim the batteries card already makes. */}
+    <a className="ribbon" href={quote}>The federal battery discount is open now<ArrowRight size={13} aria-hidden="true"/></a>
     <header className={scrolled?'site-header is-scrolled':'site-header'}>
       <a href="/" className="brand" aria-label="Clean Energy Solutions home"><img src="/assets/logo-wide-420.webp" width="420" height="120" alt="Clean Energy Solutions"/></a>
       <DesktopNav current={path} quote={quote}/>
