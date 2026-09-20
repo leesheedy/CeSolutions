@@ -358,3 +358,32 @@ assumption.
 
 Two assets are now unreferenced and can be deleted: `hero-backdrop.webp` (196 KB) and
 `ces-drone-rural-court-hero.mp4` (987 KB, recoverable from commit 780722b).
+
+## The hero drone shot, and a copy pass — 20 Sep 2026
+
+**The backdrop is drone footage again, slowed to read as flying.** Scaling a still on scroll reads as a
+zoom, not as a drone. The clip is back and plays on its own; scroll now only adds a little parallax
+behind it (scale 1 → 1.1, down from 1.38, which fought a moving camera).
+
+Getting it slow took some care and no extra credits. Playing the existing render back slowly would hold
+each frame and judder on a pan, so the frames were interpolated up to 54fps first and the result
+stretched 2.25×, landing back at a true 24fps and 18 seconds. The `reverse` filter then ran out of
+memory on 434 frames of 720p, so the reverse pass is built in four 4.5-second chunks and concatenated
+back-to-front. **36-second seamless loop, 1.51 MB** — slow aerial footage barely changes between frames,
+so it compresses to 349 kb/s.
+
+Gating is unchanged and verified: the video mounts on desktop only, never under
+`prefers-reduced-motion`, never on a metered or 2G connection, and the prerendered HTML still contains
+no `<video>` at all. The caption goes back to naming the generated camera move, because there is one
+again.
+
+**Copy pass (stop-slop).** Every em dash is gone from the homepage copy, along with the adverbs and the
+passive constructions. The hero standfirst, the enquiry pitch, the why-us statement, the three service
+cards, the four process steps and the shopfront band were all tightened. Two rules held throughout:
+every published figure keeps its hedge (50–100% of a bill, usually in a day, 3–6 year payback, 25–30
+year warranties, 4.8/5 from 26 ratings), and no staff are named except Daniel.
+
+The CTA microcopy tightened from 22 words to 21 and from two sentences to three, all active:
+"Three questions, about two minutes. Your details go to CES in Wodonga and nowhere else. We reply
+within one business day." — "go to CES and nowhere else" is blunter than "go only to CES", and "we
+reply" is more direct than "our solar consultant replies" while still naming nobody.

@@ -229,6 +229,11 @@ main:has(.hero3){padding-top:0}
    The origin is the roofline rather than the centre, so the zoom flies into the array, not a paddock. */
 .hero3__bg{inset:0;transform-origin:56% 58%;will-change:transform}
 .hero3__bg img{width:100%;height:100%;object-fit:cover}
+/* The drone clip lies directly over its own first frame and fades up once it is genuinely playing, so
+   a slow connection, a blocked autoplay or a narrow screen all just leave the still sitting there. */
+.hero3__film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity 1.6s ease;pointer-events:none}
+.hero3__film.is-lit{opacity:1}
 /* The old backdrop was a dark sunset roof; this aerial is bright green and gold, so the scrim that
    carried white text over the old one is not nearly enough. Measured against the lit frame, not guessed. */
 .hero3__shade{background:
