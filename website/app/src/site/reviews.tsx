@@ -1,5 +1,4 @@
 import {Star} from 'lucide-react';
-import {Marquee} from '@/components/ui/marquee';
 export const SOLARQUOTES='https://www.solarquotes.com.au/installer-review/clean-energy-solutions/';
 // Contiguous excerpts from the public SolarQuotes listing (4.8/5 from 26 ratings, checked 15 September 2026).
 // First names and postcode areas as published there; nothing is paraphrased or joined across omissions.
@@ -14,5 +13,5 @@ const reviews=[
 {name:'Peter',area:'Wodonga, VIC',date:'July 2024',rating:5,text:'Prompt, efficient, no nonsense. Didnt have to worry about anything.'},
 {name:'Maree',area:'Albury, NSW',date:'April 2024',rating:4.5,text:'On time, very tidy and respectful.'},
 {name:'Steve',area:'Wodonga, VIC',date:'August 2024',rating:5,text:'The quoting process was great straight forward professional and a Fair Price Quoted.'}];
-/** Scrolling row of short review excerpts; pauses on hover, static under reduced motion. */
-export function ReviewMarquee(){return <div className="review-marquee"><Marquee pauseOnHover speed="slow" repeat={3} aria-label="Customer review excerpts from SolarQuotes">{reviews.map(r=><article className="review-card" key={r.name+r.date}><div className="review-card__stars" role="img" aria-label={`${r.rating} out of 5`}>{Array.from({length:5},(_,i)=><Star key={i} size={16} aria-hidden="true" className={i<Math.floor(r.rating)?'is-on':i<r.rating?'is-half':''}/>)}<span>{r.rating.toFixed(1)}</span></div><p>“{r.text}”</p><footer><strong>{r.name}</strong><span>{r.area} · {r.date}</span></footer></article>)}</Marquee><p className="review-marquee__source">Excerpts from the 26 reviews on <a href={SOLARQUOTES}>SolarQuotes ↗</a>. Sub-ratings there: installation 5.0, customer service 4.9, value 4.7, system quality 4.7.</p></div>}
+/** A still grid of the six most recent review excerpts, each dated and attributed as SolarQuotes lists it. */
+export function ReviewGrid(){return <div className="review-grid wrap"><ul className="review-grid__list" aria-label="Customer review excerpts from SolarQuotes">{reviews.slice(0,6).map(r=><li key={r.name+r.date}><article className="review-card"><div className="review-card__stars" role="img" aria-label={`${r.rating} out of 5`}>{Array.from({length:5},(_,i)=><Star key={i} size={16} aria-hidden="true" className={i<Math.floor(r.rating)?'is-on':i<r.rating?'is-half':''}/>)}<span>{r.rating.toFixed(1)}</span></div><p>“{r.text}”</p><footer><strong>{r.name}</strong><span>{r.area} · {r.date}</span></footer></article></li>)}</ul><p className="review-grid__source">Excerpts from the 26 reviews on <a href={SOLARQUOTES}>SolarQuotes ↗</a>. Sub-ratings there: installation 5.0, customer service 4.9, value 4.7, system quality 4.7.</p></div>}

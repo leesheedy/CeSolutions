@@ -1,10 +1,9 @@
 import {useEffect,useRef,useState} from 'react';
 import {createPortal} from 'react-dom';
-import {AnimatePresence,motion,useReducedMotion,useScroll} from 'motion/react';
+import {AnimatePresence,motion,useReducedMotion} from 'motion/react';
 import {ChevronLeft,ChevronRight,X} from 'lucide-react';
-import {ScrollChars,ScrollPhotos} from '@/components/ui/text-scroll-animation';
 import {Arrow} from './shell';
-import {MAPS,Kicker} from './sections';
+import {MAPS} from './sections';
 import {Parallax,Rise} from './motion';
 import {lockScroll} from './scroll-lock';
 /** Responsive variants exist for the CES job photos (600/900/1200 px); Instagram/site photos ship one size. */
@@ -35,12 +34,9 @@ const work:Work[]=[
 {id:'people-close',category:'Our team',shape:'portrait',image:'instagram-team.webp',width:1200,height:1500,kind:'Our team · your first call',title:'The people you’ll actually talk to.',body:'Ask us about your bills, your roof or the system you already have. We answer in plain language.',href:'https://www.instagram.com/cesolutions1/p/DdISbZLDSY9/',source:'@cesolutions1 · Sep 2026',alt:'Two CES team members in company uniforms'},
 {id:'shop',category:'Our team',shape:'landscape',image:'team.webp',width:1800,height:992,kind:'Our office · Wodonga',title:'79 Elgin Boulevard.',body:'Drop in with a bill and we’ll talk it through in person.',href:MAPS,source:'cesolutions.com.au',alt:'The Clean Energy Solutions shopfront on a red-brick corner building'}];
 const filters=['All','Solar','Batteries','Our team'] as const;
-/** Pinned intro: the words "Our work" converge and the photos fan in as the section scrolls. */
+/** Plain section head: what the grid below is, and where the photos come from. */
 function WorkIntro(){
-  const ref=useRef<HTMLDivElement>(null);
-  const {scrollYProgress}=useScroll({target:ref,offset:['start end','end start']});
-  const photos=work.slice(0,6).map(p=>({src:'/assets/'+small(p.image),alt:p.alt,width:p.width,height:p.height,href:p.href}));
-  return <div ref={ref} className="work-intro"><div className="work-intro__pin"><Kicker light>Real installs, real people</Kicker><h2 className="work-intro__title"><ScrollChars text="Our work" progress={scrollYProgress}/></h2><ScrollPhotos photos={photos} progress={scrollYProgress} className="work-fan" itemClassName="work-fan__item" spread={120} tilt={10} drop={28}/><p className="work-intro__caption">Photography from our crews and <a href="https://www.instagram.com/cesolutions1/">@cesolutions1</a>. Nothing staged, nothing stock.</p></div></div>;
+  return <div className="work-head wrap"><h2 id="work-heading">Recent installs across the Border</h2><p>Every photo here is a CES job, taken by our crews or posted on <a href="https://www.instagram.com/cesolutions1/">@cesolutions1</a>. No stock photography.</p></div>;
 }
 /** Full-screen viewer: tap a photo to see it large, arrows/swipe between them, Esc or × to close. Rendered in a
  * portal on <body>; the rest of the page is made inert while it is open, Tab cycles inside, and focus returns
@@ -83,7 +79,7 @@ export function ProjectGallery(){
   const visible=all||filter!=='All'?matching:matching.slice(0,CAP);
   const counts=Object.fromEntries(filters.map(f=>[f,f==='All'?work.length:work.filter(p=>p.category===f).length]));
   const move=(d:1|-1)=>setLit(i=>i===null?null:(i+d+visible.length)%visible.length);
-  return <section id="our-work" className="work-section"><WorkIntro/><div className="wrap">
+  return <section id="our-work" className="work-section" aria-labelledby="work-heading"><WorkIntro/><div className="wrap">
     <div className="work-controls" role="group" aria-label="Filter CES photos">{filters.map(v=><button key={v} type="button" aria-pressed={filter===v} onClick={()=>{setFilter(v);setLit(null);setAll(false);}}>{v}<span className="work-controls__n">{counts[v]}</span></button>)}</div>
     <div className="work-masonry" key={filter}>{visible.map((p,i)=><Rise key={p.id} delay={Math.min(i,4)*.06}><article className={'work-card'+(p.feature&&filter==='All'?' work-card--feature':'')} data-shape={p.shape}><a className="work-image" href={p.href} aria-label={'View larger: '+p.title} onClick={e=>{e.preventDefault();setLit(i);}}><Parallax intensity={p.feature?36:22}><img src={'/assets/'+medium(p.image)} srcSet={variants(p.image)} sizes={p.feature&&filter==='All'?'(max-width:1100px) 100vw, 66vw':'(max-width:600px) 100vw, (max-width:1100px) 50vw, 33vw'} alt={p.alt} width={p.width} height={p.height} loading="lazy" decoding="async"/></Parallax><span className="work-card__kind">{p.kind}</span><span className="work-card__open" aria-hidden="true"><Arrow/></span></a><div className="work-card__body"><h3><a href={p.href}>{p.title}</a></h3><p>{p.body}</p><span className="work-card__source">{p.source}</span></div></article></Rise>)}</div>
     {!all&&filter==='All'&&matching.length>CAP&&<div className="work-showall"><button type="button" onClick={()=>setAll(true)}>Show all {matching.length} photos</button></div>}

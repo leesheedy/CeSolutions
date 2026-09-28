@@ -2,7 +2,6 @@
  * complete and readable without them, and `prefers-reduced-motion` skips every hidden start state. */
 import {useEffect,useRef,useState,type ComponentType} from 'react';
 import {BatteryCharging,Cable,Grid2x2,House,Sun,Zap,type LucideProps} from 'lucide-react';
-import {Kicker} from './sections';
 import {Reveal} from './motion';
 
 type Node={id:string;label:string;short:string;detail:string;time:string;Icon:ComponentType<LucideProps>};
@@ -81,7 +80,7 @@ export function SystemFlow(){
   const pick=(i:number)=>{setActive(i);pinned.current=true;};
   const node=nodes[active];
   return <section ref={ref} className="flow-section" aria-labelledby="flow-heading"><div className="wrap">
-    <div className="flow-head"><div><Kicker>How it works</Kicker><Reveal id="flow-heading" lines={['Sun to switchboard,','in six steps.']}/></div><p className="flow-intro">Every system we install does this. We size each part to your roof and your bills, and walk you through it again on install day.</p></div>
+    <div className="flow-head"><div><Reveal id="flow-heading" lines={['Sun to switchboard,','in six steps.']}/></div><p className="flow-intro">Every system we install does this. We size each part to your roof and your bills, and walk you through it again on install day.</p></div>
     <Diagram vertical={false} active={active} onPick={pick}/><Diagram vertical active={active} onPick={pick}/>
     {/* The step text is keyed on the active index, so React swaps the node and the CSS entrance
         animation restarts. Without the key it re-used the same element and the copy simply snapped. */}
