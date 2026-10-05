@@ -79,13 +79,15 @@ export function SystemFlow(){
   },[]);
   const pick=(i:number)=>{setActive(i);pinned.current=true;};
   const node=nodes[active];
-  return <section ref={ref} className="flow-section" aria-labelledby="flow-heading"><div className="wrap">
-    <div className="flow-head"><div><Reveal id="flow-heading" lines={['Sun to switchboard,','in six steps.']}/></div><p className="flow-intro">Every system we install does this. We size each part to your roof and your bills, and walk you through it again on install day.</p></div>
+  return <section ref={ref} id="how-it-works" className="bg-stone py-20 md:py-28" aria-labelledby="flow-heading"><div className="wrap">
+    <div className="grid items-end gap-6 lg:grid-cols-[1.05fr_.95fr] lg:gap-16"><div><p className="eyebrow">How solar works</p><Reveal id="flow-heading" lines={['Sun to switchboard,','in six steps.']} className="h-sec"/></div><p className="lede">Every system we install does this. We size each part to your roof and your bills, and walk you through it again on install day.</p></div>
     <Diagram vertical={false} active={active} onPick={pick}/><Diagram vertical active={active} onPick={pick}/>
     {/* The step text is keyed on the active index, so React swaps the node and the CSS entrance
         animation restarts. Without the key it re-used the same element and the copy simply snapped. */}
     <div className="flow-detail-panel"><div className="flow-detail-body" key={active}><span className="flow-detail-n">Step {String(active+1).padStart(2,'0')} of 06 · {node.time}</span><h3>{node.short}</h3><p>{node.detail}</p></div><div className="flow-dots" aria-label="Steps">{nodes.map((n,i)=><button key={n.id} type="button" aria-pressed={i===active} aria-label={n.label} className={i===active?'is-on':''} onClick={()=>pick(i)}/>)}</div></div>
-    <ol className="flow-steps sr-only">{nodes.map((n,i)=><li key={n.id}>{i+1}. {n.short} — {n.detail}</li>)}</ol>
+    {/* Screen-reader text on desktop, where the diagram and panel carry it. On phones this list is the
+        section: six steps read top to bottom, instead of a tall diagram with its explanation a screen below. */}
+    <ol className="flow-steps">{nodes.map(n=><li key={n.id}><span className="flow-steps__icon"><n.Icon size={22} strokeWidth={1.75} aria-hidden="true"/></span><div><h3>{n.short}</h3><p>{n.detail}</p></div></li>)}</ol>
   </div></section>;
 }
 

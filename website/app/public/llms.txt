@@ -1,0 +1,52 @@
+# Clean Energy Solutions (CES)
+
+> Family-owned solar and battery installer based in Wodonga, Victoria, serving homes, farms and businesses across Albury-Wodonga and nearby towns. Systems are designed from the customer's actual electricity bills and installed by the company's own licensed electricians, not subcontractors.
+
+This file is a plain-text summary of the website for AI assistants and answer engines. Every figure here is one the business publishes on its own site. Keep it in step with `atAGlance` in src/site/content.ts.
+
+## Key facts
+
+- Business name: Clean Energy Solutions (also written CES)
+- Address: 79 Elgin Boulevard, Wodonga VIC 3690, Australia (walk-in shopfront)
+- Phone: (02) 6021 2000
+- Email: info@cesolutions.com.au
+- Website: https://cesolutions.com.au
+- Service area: Albury and Wodonga, plus Wagga Wagga (NSW), Shepparton (VIC) and Yarrawonga (VIC)
+- Services: residential solar panels, home batteries, commercial and farm solar, EV chargers, hot water heat pumps
+- Installers: the company's own licensed electricians, led by Daniel Grubisa, who has more than 15 years installing solar on the Border
+- Equipment brands installed: Tesla, Sungrow, Sigenergy, BYD, Fronius, Enphase, Jinko
+- Independent reviews: 4.8 out of 5 from 26 reviews on SolarQuotes (https://www.solarquotes.com.au/installer-review/clean-energy-solutions/)
+
+## Typical outcomes (ranges, not guarantees)
+
+- Bill savings: usually between 50% and 100% of electricity costs, depending on system size and when power is used. A battery pushes the figure higher.
+- Payback: most households see payback within 3 to 6 years on panels. Battery systems can take longer.
+- Installation time: most home systems are installed in a single day.
+- Panel warranties: 25 to 30 years on the brands installed.
+- Pricing: CES does not publish a price list. Each quote is calculated from the customer's bills and is free with no obligation. Enquiries get a reply within one business day.
+
+## Rebates CES applies for on the customer's behalf
+
+- Federal Small-scale Technology Certificates (STCs): a point-of-sale discount on every eligible solar install.
+- Federal Cheaper Home Batteries Program: a discount on eligible home batteries that steps down on a fixed schedule.
+- Solar Victoria panel rebate: for eligible Victorian owner-occupiers only. NSW customers (Albury, Wagga Wagga) receive the two federal programs.
+
+## Pages
+
+- [Home](https://cesolutions.com.au/): overview, savings estimator, reviews, install photos, rebates and FAQ
+- [Residential solar](https://cesolutions.com.au/solar): how CES designs and installs home solar
+- [Home batteries](https://cesolutions.com.au/batteries): battery options, retrofits, blackout backup and the federal battery discount
+- [Commercial and farm solar](https://cesolutions.com.au/commercial-solar): solar for sheds, shops, cool rooms, dairies and offices
+- [Our team](https://cesolutions.com.au/about): who does the work
+- [Contact and free quote](https://cesolutions.com.au/contact): enquiry form, phone, email and address
+- [Solar in Wagga Wagga](https://cesolutions.com.au/locations/wagga-wagga)
+- [Solar in Shepparton](https://cesolutions.com.au/locations/shepparton)
+- [Solar in Yarrawonga](https://cesolutions.com.au/locations/yarrawonga)
+- [Privacy policy](https://cesolutions.com.au/privacy)
+
+## Common questions
+
+- How much does solar cost in Albury-Wodonga? It depends on system size, the panels and inverter chosen, and whether a battery is added, so CES quotes each home from a recent bill rather than publishing a price list.
+- Does solar work on cloudy days? Yes, at reduced output. Panels do not generate at night, which is what a battery is for.
+- Can a battery be added later? Yes. CES can choose an inverter and switchboard layout that makes adding one later straightforward.
+- Will a battery keep the power on in a blackout? Only if the system is designed for backup. It is a specific design requirement, not an automatic feature.

@@ -282,3 +282,176 @@ html main .brand-section h2{font-size:clamp(24px,2.2vw,30px)}
 .energy-scenarios button[aria-pressed=true],.energy-scenarios button.is-on{background:var(--brand);color:#fff}
 .mobile-dock{background:var(--paper);border-top-color:var(--line)}
 .mobile-dock a:first-child{color:var(--ink)}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════════
+   REVIEW PASS — 5 Oct 2026
+   Fixes found by reading the rendered page at 1440 and 390, top to bottom, on five routes.
+   ═══════════════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Header: a flush bar, not a floating pill. The pill sat 20px below the top of the window, so
+   page text scrolled through the strip above it and past its rounded corners. ───────────────────── */
+.site-header,.site-header.is-scrolled{top:0;width:100%;border:0;border-bottom:1px solid rgba(255,255,255,.08);
+  border-radius:0;padding-inline:max(5%,calc((100% - 1320px)/2));box-shadow:none}
+.site-header.is-scrolled{box-shadow:0 8px 22px -14px rgba(12,26,38,.6)}
+main{padding-top:calc(var(--nav-h) + 44px)}
+/* The contact page set its own block padding, which dropped the header clearance: the h1 touched the bar. */
+main.contact-page{padding-top:calc(var(--nav-h) + 64px)}
+:where(section,div,h2,h3)[id]{scroll-margin-top:calc(var(--nav-h) + 20px)}
+:where(a,button,summary,[tabindex]):focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+:where(.quote-band__pitch,.work-section,.process4,.site-footer,.site-header,.hero3,.band,.loc-rebates) :where(a,button):focus-visible{outline-color:var(--mint-soft)}
+
+/* ── Hero ───────────────────────────────────────────────────────────────────────────────────────── */
+.hero3{min-height:min(86vh,780px)}
+.hero3__copy{padding-bottom:84px}
+html .hero3 .hero__caption{left:auto;right:5%;bottom:16px;padding:6px 12px}
+@media(max-width:860px){.hero3__copy{padding-bottom:72px}html .hero3 .hero__caption{right:auto;left:5%;bottom:10px}}
+
+/* ── One heading weight. Card and list headings were 500–600 beside 700 section titles. ─────────── */
+html .why__list h3,html .service-copy h3,html .work-masonry .work-card h3,html .loc-why h3,
+html .flow-detail-panel h3,html .process4 h3,html .estimator__card h3,html .qf__q,html .flow-steps h3{
+  font-weight:700;letter-spacing:-.012em}
+
+/* ── Services: three cards in a row. The pinned stack showed slivers of the card behind above and
+   below the one in front, and left a quarter-screen of empty page once it released. ─────────────── */
+.services-section{padding-bottom:96px}
+.service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.service-grid>*{display:flex;min-width:0}
+html .service-grid .stack-card{display:flex;flex-direction:column;width:100%;min-height:0;overflow:hidden;
+  background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-card);
+  transition:border-color .18s,box-shadow .18s}
+html .service-grid .stack-card:hover{border-color:#9CCDB3;box-shadow:0 14px 32px -20px rgba(18,40,58,.4)}
+html .service-grid .service-image{order:0;height:auto;min-height:0;aspect-ratio:3/2;border-radius:0;flex:none}
+html .service-grid .service-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+html .service-grid .stack-card:hover .service-image img{transform:scale(1.03)}
+html .service-grid .service-copy{flex:1;display:flex;flex-direction:column;justify-content:flex-start;padding:26px 26px 22px}
+html .service-grid .service-copy h3{margin:0 0 10px;font-size:24px;line-height:1.2;color:var(--ink)}
+html .service-grid .service-copy p{max-width:none;font-size:16px;line-height:1.6;color:var(--muted)}
+html .service-grid .stack-card .service-destination{display:inline-flex;justify-content:flex-start;align-items:center;gap:8px;
+  max-width:none;margin-top:auto;padding-top:22px;border:0;color:var(--brand)}
+html .service-grid .service-destination svg{transition:transform .2s ease}
+html .service-grid .stack-card:hover .service-destination svg{transform:translateX(4px)}
+@media(max-width:1000px){
+  .service-grid{grid-template-columns:1fr;gap:16px}
+  html .service-grid .stack-card{flex-direction:row}
+  html .service-grid .service-image{flex:0 0 40%;aspect-ratio:auto}
+  .services-section{padding-bottom:64px}
+}
+@media(max-width:640px){
+  html .service-grid .stack-card{flex-direction:column}
+  html .service-grid .service-image{flex:none;aspect-ratio:16/9}
+  html .service-grid .service-copy{padding:22px 20px 20px}
+  html .service-grid .service-copy h3{font-size:22px}
+}
+
+/* ── Why CES ────────────────────────────────────────────────────────────────────────────────────── */
+.why{padding:24px 0 100px}
+@media(max-width:860px){.why{padding:8px 0 64px}}
+
+/* ── Reviews ────────────────────────────────────────────────────────────────────────────────────── */
+.review-section__head{align-items:center}
+/* Six cards stacked one per row ran to three phone screens; on a phone they are a swipeable row. */
+@media(max-width:640px){
+  .review-grid__list{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;
+    margin-inline:calc(50% - 50vw);padding:2px 5vw 8px;scroll-padding-inline:5vw}
+  .review-grid__list::-webkit-scrollbar{display:none}
+  .review-grid__list>li{flex:0 0 84%;scroll-snap-align:start}
+}
+
+/* ── Our work ───────────────────────────────────────────────────────────────────────────────────── */
+/* One tile shape per row. Square and 4:3 tiles shared a row, so the shorter ones carried blank card
+   below their caption; and the tile beside the feature was stretched to twice its content. Any slack
+   left now goes to the photograph, not to empty card. */
+html .work-masonry .work-card:not(.work-card--feature) .work-image img{aspect-ratio:4/3}
+@media(min-width:601px){
+  .work-masonry>:has(>.work-card--feature)+* .work-image{flex:1 1 auto;display:grid}
+  .work-masonry>:has(>.work-card--feature)+* .work-image :is(.parallax,.parallax__layer,img){height:100%}
+  .work-masonry>:has(>.work-card--feature)+* .work-card__body{flex:0 0 auto}
+}
+.work-card__source{margin-top:auto;padding-top:12px}
+/* Collapsed, the grid shows eight: 2 + 7 fills three columns exactly. At two columns that leaves one
+   tile alone on the last row, and on a phone eight full cards is five screens — trim until expanded. */
+@media(min-width:601px) and (max-width:1100px){.work-masonry.is-capped>:nth-child(n+8){display:none}}
+@media(max-width:600px){.work-masonry.is-capped>:nth-child(n+5){display:none}}
+.work-showall{margin-top:32px}
+
+/* ── Process: a light section. It sat directly under the gallery as a second navy slab, 20px apart,
+   which read as one long dark block with a crack in it. ───────────────────────────────────────── */
+.process4{background:var(--paper);color:var(--ink);border-radius:0;padding-block:96px}
+.process4 h2,.process4 h3,.process4__cards li{color:var(--ink)}
+.process4__head p,.process4 .rise-copy,.process4 p{color:var(--muted)!important}
+.process4__cards li{border-top-color:var(--line)}
+.process4__cards>*:first-child li{border-top-color:var(--brand)}
+.process4__icon{background:var(--brand-tint);color:var(--brand)}
+.process4__n{color:var(--muted)}
+@media(max-width:860px){.process4{padding-block:64px}}
+.nav-phone svg{color:var(--mint-soft)}
+
+/* ── Leftovers from the palette change: brand green is for white grounds. On navy it was 2.6:1, so
+   anything green that sits on a dark surface takes the light tint instead. ────────────────────── */
+html .desk-nav .nm-trigger:hover,html .desk-nav .nm-trigger[data-state=open],html .desk-nav .nm-trigger:focus-visible{color:#fff}
+html .desk-nav .nm-feature,html .desk-nav .nm-feature:hover{background:var(--night)}
+.nm-feature__kicker,.nm-feature__cta,.loc-rebates__list svg{color:var(--mint-soft)}
+.loc-rebates__list a{border-color:var(--rule-dark)}
+.loc-rebates__list a:hover{border-color:var(--mint-soft)}
+.loc-rebates__list strong{font-weight:700}
+.mnav,.mnav__top{background:var(--night)}
+.mnav__label{font-size:13px;letter-spacing:0;text-transform:none;color:var(--muted-dark)}
+.mnav__quote{background:var(--brand);color:#fff;border-radius:10px}
+/* The form's focus ring was still the old blue. */
+html .qf input:not([type=checkbox]):not([type=file]):focus-visible,html .qf textarea:focus-visible,
+html .qf__file:has(input:focus-visible){outline-color:var(--brand);border-color:var(--brand)}
+
+/* ── How it works: brand colour throughout (the rail, nodes and dots were still the old cyan) ───── */
+.flow-node circle{fill:var(--brand-tint);stroke:#A9D3BD}
+.flow-node.is-active circle{fill:var(--brand);stroke:var(--brand)}
+.flow-node.is-active svg{color:#fff}
+.flow-link{stroke:var(--brand)}
+.flow-dots button{background:var(--line)}
+.flow-dots button.is-on{background:var(--brand)}
+.flow-detail-panel{background:var(--card);border-color:var(--line)}
+html .flow-detail-n{color:var(--muted);font-weight:600;font-size:14px!important}
+/* Desktop: the diagram and its panel carry the steps, so the list is for screen readers only.
+   Phone: the list is the section. The stacked diagram was 760px tall with its text a screen below. */
+.flow-steps{list-style:none;margin:0;padding:0}
+@media(min-width:861px){.flow-steps{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}}
+@media(max-width:860px){
+  html .flow-section .flow-svg--v,.flow-section .flow-detail-panel{display:none}
+  .flow-steps{margin-top:28px}
+  .flow-steps li{position:relative;display:grid;grid-template-columns:48px 1fr;gap:16px;padding:0 0 26px;border:0}
+  .flow-steps li:last-child{padding-bottom:0}
+  /* The rail joining one step to the next. */
+  .flow-steps li:not(:last-child)::before{content:"";position:absolute;left:23px;top:52px;bottom:4px;width:2px;background:#A9D3BD}
+  .flow-steps__icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--brand-tint);color:var(--brand)}
+  .flow-steps li:first-child .flow-steps__icon{background:var(--brand);color:#fff}
+  .flow-steps h3{font-size:19px;line-height:1.25;margin-top:2px}
+  .flow-steps p{font-size:16px;line-height:1.6;color:var(--muted);margin-top:6px}
+  .flow-section{padding-bottom:56px}
+}
+
+/* ── FAQ: the heading keeps you company down the list instead of leaving half a screen empty ────── */
+.faq-phone{display:inline-flex;align-items:center;gap:8px;margin-top:22px}
+@media(min-width:861px){.faq-section>div:first-child{position:sticky;top:calc(var(--nav-h) + 36px);align-self:start}}
+
+/* ── Enquiry form steps on a phone: "What you need" broke over two lines inside its tab ─────────── */
+@media(max-width:560px){
+  .qf__progress{grid-template-columns:1.45fr 1.15fr .8fr;gap:6px}
+  .qf__progress li{font-size:13px;gap:6px;white-space:nowrap;justify-content:flex-start}
+}
+
+/* ── Interior pages ─────────────────────────────────────────────────────────────────────────────── */
+html .breadcrumb{color:var(--muted);font-weight:500;font-size:14px}
+html .loc-why__n{color:var(--muted)}
+.loc-rebates{background:var(--night)}
+.detail-hero{padding-top:8px}
+
+/* ── Footer: contact lines were pills wider than their column — they ran past the footer edge on
+   desktop and were cut off mid-address on a phone. Plain lines, and a column wide enough for them. ─ */
+.glow-footer__nav{grid-template-columns:repeat(3,1fr) 1.5fr}
+.glow-footer__nav>div{min-width:0}
+html .glow-footer__contact a,html .glow-footer__contact a:hover{padding:0;background:none;border:0;border-radius:0;align-items:flex-start;min-height:0}
+.glow-footer__contact{gap:14px}
+@media(max-width:1000px){
+  .glow-footer__nav{grid-template-columns:repeat(3,1fr)}
+  .glow-footer__nav>div:last-child{grid-column:1/-1}
+}
+@media(max-width:560px){.glow-footer__nav{grid-template-columns:1fr 1fr}}

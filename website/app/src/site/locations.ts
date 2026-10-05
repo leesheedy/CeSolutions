@@ -41,7 +41,7 @@ export const locations:Location[]=[
  description:'Solar, home batteries and EV charging in Shepparton and the Goulburn Valley. Solar Victoria and federal rebates handled. Free quote: (02) 6021 2000.',
  heading:['Solar for Shepparton','and the Goulburn Valley.'],
  intro:'Shepparton households and businesses get the full set of Victorian and federal rebates. We design around your bills, install with our own electricians and handle every application.',
- image:'instagram-shed.webp',alt:'Black solar panels across a new shed roof, installed by CES',imageWidth:1600,imageHeight:1600,
+ image:'ces-roof-sunset-hills.webp',alt:'Rows of solar panels on a farm shed roof at sunset with paddocks behind, installed by CES',imageWidth:1600,imageHeight:1200,
  suburbs:['Shepparton','Mooroopna','Kialla','Shepparton North','Tatura','Kialla Lakes','Grahamvale','Shepparton East','Toolamba','Murchison'],
  why:[
  {title:'Farms, sheds and cool rooms run on daytime power.',body:'The Goulburn Valley’s orchards, dairies and packing sheds draw heavily through daylight hours. Solar on a shed roof offsets that load directly, and a battery can carry pumps and cool rooms into the evening.'},
