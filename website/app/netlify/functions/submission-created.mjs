@@ -78,8 +78,10 @@ async function send(key,body){
 export const handler=async(event)=>{
   let payload;try{payload=JSON.parse(event.body||'{}').payload;}catch{return {statusCode:400,body:'bad payload'};}
   if(!payload||payload.form_name!=='enquiry')return {statusCode:200,body:'ignored'};
-  const key=process.env.RESEND_API_KEY,from=process.env.ENQUIRY_FROM||process.env.CHECKLIST_FROM;
-  if(!key||!from)return {statusCode:200,body:'unconfigured'};
+  const key=process.env.RESEND_API_KEY,sender=process.env.ENQUIRY_FROM||process.env.CHECKLIST_FROM;
+  if(!key||!sender)return {statusCode:200,body:'unconfigured'};
+  // A bare address shows in inboxes as "info"; give it the business name.
+  const from=sender.includes('<')?sender:`Clean Energy Solutions <${sender.trim()}>`;
   const to=(process.env.ENQUIRY_TO||'it@cesolutions.com.au').split(',').map(s=>s.trim()).filter(Boolean);
   const d=payload.data||{};
   const m=renderEnquiry(d,{created_at:payload.created_at});
