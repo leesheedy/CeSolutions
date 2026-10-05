@@ -46,6 +46,15 @@
     "note": "Public profile image (640x427 original) upscaled with Higgsfield's ByteDance upscaler on 2026-09-15 and re-encoded to WebP; replace with the CES original when available. No invented project specifications or location"
   },
   "team.webp (shopfront)": "https://cesolutions.com.au/wp-content/uploads/2025/02/qw2.jpg, 1024x562 original upscaled to 1800x992 with Higgsfield's ByteDance upscaler on 2026-09-15",
+  "shopfront-elgin.jpg": {
+    "source": "Instagram CDN image supplied by Lee (CES shopfront, 79 Elgin Boulevard, with the CES ute)",
+    "retrieved": "2026-10-05",
+    "dimensions": [
+      1080,
+      1354
+    ],
+    "note": "Used in the Visit us band in place of team.webp. Original JPEG as served, not upscaled or re-encoded; replace with the CES original when available"
+  },
   "instagram-shed.webp": {
     "source": "https://www.instagram.com/cesolutions1/p/DciM1ayIAv3/",
     "retrieved": "2026-09-15",

@@ -60,7 +60,7 @@ function Lightbox({items,index,onClose,onMove}:{items:Work[];index:number;onClos
     return()=>{unlock();for(const el of others)el.removeAttribute('inert');document.removeEventListener('keydown',onKey);window.clearTimeout(id);opener?.focus({preventScroll:true});};
   },[]);
   const p=items[index];
-  return createPortal(<motion.div ref={rootRef} className="lightbox" role="dialog" aria-modal="true" aria-label={p.title} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:reduce?0:.2}} onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+  return createPortal(<motion.div ref={rootRef} className="lightbox" data-lenis-prevent="" role="dialog" aria-modal="true" aria-label={p.title} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:reduce?0:.2}} onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
     <span className="lightbox__count">{index+1} / {items.length}</span>
     <button ref={closeRef} type="button" className="lightbox__btn lightbox__close" onClick={onClose} aria-label="Close"><X size={22} aria-hidden="true"/></button>
     {items.length>1&&<><button type="button" className="lightbox__btn lightbox__prev" onClick={()=>onMove(-1)} aria-label="Previous photo"><ChevronLeft size={24} aria-hidden="true"/></button><button type="button" className="lightbox__btn lightbox__next" onClick={()=>onMove(1)} aria-label="Next photo"><ChevronRight size={24} aria-hidden="true"/></button></>}

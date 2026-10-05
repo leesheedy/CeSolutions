@@ -11,7 +11,7 @@ This file is a plain-text summary of the website for AI assistants and answer en
 - Phone: (02) 6021 2000
 - Email: info@cesolutions.com.au
 - Website: https://cesolutions.com.au
-- Service area: Albury and Wodonga, plus Wagga Wagga (NSW), Shepparton (VIC) and Yarrawonga (VIC)
+- Service area: Wodonga (VIC) and Albury (NSW), plus Yarrawonga (VIC), Wagga Wagga (NSW) and Shepparton (VIC)
 - Services: residential solar panels, home batteries, commercial and farm solar, EV chargers, hot water heat pumps
 - Installers: the company's own licensed electricians, led by Daniel Grubisa, who has more than 15 years installing solar on the Border
 - Equipment brands installed: Tesla, Sungrow, Sigenergy, BYD, Fronius, Enphase, Jinko
@@ -39,10 +39,18 @@ This file is a plain-text summary of the website for AI assistants and answer en
 - [Commercial and farm solar](https://cesolutions.com.au/commercial-solar): solar for sheds, shops, cool rooms, dairies and offices
 - [Our team](https://cesolutions.com.au/about): who does the work
 - [Contact and free quote](https://cesolutions.com.au/contact): enquiry form, phone, email and address
-- [Solar in Wagga Wagga](https://cesolutions.com.au/locations/wagga-wagga)
-- [Solar in Shepparton](https://cesolutions.com.au/locations/shepparton)
-- [Solar in Yarrawonga](https://cesolutions.com.au/locations/yarrawonga)
+- [Areas we serve](https://cesolutions.com.au/locations): every town and the rebates that apply there
 - [Privacy policy](https://cesolutions.com.au/privacy)
+
+## Town pages
+
+Rebates depend on the state. Victorian addresses (Wodonga, Yarrawonga, Shepparton) can get the Solar Victoria panel rebate plus the two federal programs. New South Wales addresses (Albury, Wagga Wagga, and Mulwala or Corowa near Yarrawonga) get the two federal programs.
+
+- Wodonga, VIC: [solar and batteries](https://cesolutions.com.au/locations/wodonga), [solar panels](https://cesolutions.com.au/locations/wodonga/solar-panels), [home batteries](https://cesolutions.com.au/locations/wodonga/home-batteries)
+- Albury, NSW: [solar and batteries](https://cesolutions.com.au/locations/albury), [solar panels](https://cesolutions.com.au/locations/albury/solar-panels), [home batteries](https://cesolutions.com.au/locations/albury/home-batteries)
+- Yarrawonga, VIC: [solar and batteries](https://cesolutions.com.au/locations/yarrawonga), [solar panels](https://cesolutions.com.au/locations/yarrawonga/solar-panels), [home batteries](https://cesolutions.com.au/locations/yarrawonga/home-batteries)
+- Wagga Wagga, NSW: [solar and batteries](https://cesolutions.com.au/locations/wagga-wagga), [solar panels](https://cesolutions.com.au/locations/wagga-wagga/solar-panels), [home batteries](https://cesolutions.com.au/locations/wagga-wagga/home-batteries)
+- Shepparton, VIC: [solar and batteries](https://cesolutions.com.au/locations/shepparton), [solar panels](https://cesolutions.com.au/locations/shepparton/solar-panels), [home batteries](https://cesolutions.com.au/locations/shepparton/home-batteries)
 
 ## Common questions
 

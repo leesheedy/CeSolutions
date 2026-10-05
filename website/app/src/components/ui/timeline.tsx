@@ -3,14 +3,15 @@
  * removed (the section supplies its own), it renders an ordered list, re-measures on resize, takes a tone,
  * and the rail is fully drawn under reduced motion. */
 import {useEffect,useRef,useState,type ReactNode} from 'react';
-import {motion,useReducedMotion,useScroll,useTransform} from 'motion/react';
+import {motion,useScroll,useTransform} from 'motion/react';
+import {useCalm} from '@/site/a11y';
 
 export interface TimelineEntry{title:string;kicker?:string;content:ReactNode}
 
 export function Timeline({data}:{data:TimelineEntry[]}){
   const ref=useRef<HTMLOListElement>(null);
   const [height,setHeight]=useState(0);
-  const reduce=useReducedMotion();
+  const reduce=useCalm();
   useEffect(()=>{
     const el=ref.current;if(!el)return;
     const measure=()=>setHeight(el.getBoundingClientRect().height);

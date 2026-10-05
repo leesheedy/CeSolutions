@@ -9,7 +9,7 @@ export function Arrow(){return <ArrowUpRight size={17} aria-hidden="true"/>}
 const footerColumns=[
 {title:'Services',links:[['Residential solar','/solar'],['Home batteries','/batteries'],['Commercial solar','/commercial-solar'],['How solar works','/solar#how-it-works'],['Rebates','/#rebates']]},
 {title:'Company',links:[['Our team','/about'],['Our work','/#our-work'],['Reviews','/#reviews'],['FAQ','/#faq'],['Contact','/contact']]},
-{title:'Areas',links:[['Albury-Wodonga','/'],['Wagga Wagga','/locations/wagga-wagga'],['Shepparton','/locations/shepparton'],['Yarrawonga','/locations/yarrawonga']]}];
+{title:'Areas',links:[['Wodonga','/locations/wodonga'],['Albury','/locations/albury'],['Yarrawonga','/locations/yarrawonga'],['Wagga Wagga','/locations/wagga-wagga'],['Shepparton','/locations/shepparton'],['All areas','/locations']]}];
 /** Footer: brand and contact details, three link columns, then the legal line. */
 export function Footer(){
   return <footer className="on-dark bg-night text-white">

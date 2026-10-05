@@ -21,6 +21,7 @@ const SERVICES:Service[]=[
 const STEPS=['What you need','About you','Send'] as const;
 const FILES:[string,string,string][]=[['bill','Recent power bill','.pdf,image/*'],['roof_photo','Photo of your roof','image/*'],['meter_photo','Your meter box','image/*'],['battery_photo','Where a battery could go','image/*']];
 const MAX_BYTES=10*1024*1024;
+const DRAFT='ces-enquiry-draft',DRAFT_FIELDS=['name','phone','email','message'] as const;
 const fmtSize=(n:number)=>n>=1024*1024?(n/1024/1024).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
 
 /** Downscale a photo to ≤1800px JPEG. Returns the original when it is already small or cannot be decoded (e.g. HEIC on desktop). */
@@ -47,9 +48,29 @@ export function QuoteForm(){
   const formRef=useRef<HTMLFormElement>(null);
   const stepRef=useRef<HTMLDivElement>(null);
   useEffect(()=>{document.documentElement.classList.add('js-form');if(location.search.includes('enquiry=sent'))setState('sent');},[]);
+  // A draft is kept for the visit (sessionStorage, this tab only): a refresh or a stray back-swipe no longer
+  // wipes the form. Files and the address lookup are not stored. Cleared once the enquiry is sent.
+  useEffect(()=>{
+    try{
+      const d=JSON.parse(sessionStorage.getItem(DRAFT)||'null') as {chosen?:string[];fields?:Record<string,string>}|null;
+      if(!d)return;
+      if(Array.isArray(d.chosen))setChosen(d.chosen.filter(v=>SERVICES.some(s=>s.value===v)));
+      const form=formRef.current;if(!form)return;
+      for(const n of DRAFT_FIELDS){const el=form.elements.namedItem(n) as HTMLInputElement|HTMLTextAreaElement|null;if(el&&d.fields?.[n])el.value=d.fields[n];}
+    }catch{/* storage blocked or malformed: start empty */}
+  },[]);
+  const saveDraft=(nextChosen=chosen)=>{
+    const form=formRef.current;if(!form)return;
+    const fields:Record<string,string>={};
+    for(const n of DRAFT_FIELDS){const el=form.elements.namedItem(n) as HTMLInputElement|HTMLTextAreaElement|null;if(el?.value)fields[n]=el.value;}
+    try{sessionStorage.setItem(DRAFT,JSON.stringify({chosen:nextChosen,fields}));}catch{/* ignore */}
+  };
+  const doneRef=useRef<HTMLDivElement>(null);
+  // When it sends, bring the confirmation into view and put focus on it so it is read out.
+  useEffect(()=>{if(state!=='sent')return;try{sessionStorage.removeItem(DRAFT);}catch{/* ignore */}const el=doneRef.current;if(!el)return;el.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});el.focus({preventScroll:true});},[state]);
   const firstStep=useRef(true);
   useEffect(()=>{if(firstStep.current){firstStep.current=false;return;}const fs=stepRef.current?.querySelector<HTMLElement>(`[data-step="${step}"]`);fs?.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});const target=step===2?fs?.querySelector<HTMLElement>('.qf__q'):fs?.querySelector<HTMLElement>('input:not([type=hidden]),select,textarea');window.setTimeout(()=>target?.focus({preventScroll:true}),350);},[step]);
-  const toggle=(v:string)=>setChosen(c=>c.includes(v)?c.filter(x=>x!==v):[...c,v]);
+  const toggle=(v:string)=>setChosen(c=>{const n=c.includes(v)?c.filter(x=>x!==v):[...c,v];saveDraft(n);return n;});
   const tooBig=Object.entries(files).filter(([,f])=>!f.busy&&f.size>MAX_BYTES);
   const preparing=Object.values(files).some(f=>f.busy);
   function next(){
@@ -82,14 +103,15 @@ export function QuoteForm(){
     const [n,e]=await Promise.all([noted,emailed]);
     setChecklist(e?'emailed':n?'noted':'failed');
   }
-  if(state==='sent')return <div className="qf qf--done" role="status"><span className="qf__tick"><Check size={28} aria-hidden="true"/></span><h3>Thanks — it’s with the team.</h3><p>Our solar consultant will call or email within one business day with the next step. If it’s urgent, ring <a href="tel:+61260212000">(02) 6021 2000</a>.</p></div>;
-  return <form ref={formRef} className="qf" name="enquiry" method="POST" action="/?enquiry=sent" encType="multipart/form-data" data-netlify="true" data-netlify-honeypot="company" onSubmit={submit} onKeyDown={e=>{if(e.key==='Enter'&&step<2&&(e.target as HTMLElement).tagName==='INPUT'){e.preventDefault();next();}}} noValidate={false}>
+  if(state==='sent')return <div ref={doneRef} tabIndex={-1} className="qf qf--done" role="status"><span className="qf__tick"><Check size={28} aria-hidden="true"/></span><h3>Thanks — it’s with the team.</h3><p>Our solar consultant will call or email within one business day with the next step. If it’s urgent, ring <a href="tel:+61260212000">(02) 6021 2000</a>.</p></div>;
+  return <form ref={formRef} className="qf" name="enquiry" method="POST" action="/?enquiry=sent" encType="multipart/form-data" data-netlify="true" data-netlify-honeypot="company" onSubmit={submit} onInput={()=>saveDraft()} aria-busy={state==='sending'} onKeyDown={e=>{if(e.key==='Enter'&&step<2&&(e.target as HTMLElement).tagName==='INPUT'){e.preventDefault();next();}}} noValidate={false}>
     <input type="hidden" name="form-name" value="enquiry"/>
     <p className="qf__hp" aria-hidden="true" inert><label>Company<input name="company" tabIndex={-1} autoComplete="off"/></label></p>
     <ol className="qf__progress" aria-label="Progress">{STEPS.map((s,i)=><li key={s} aria-current={i===step?'step':undefined} className={i<step?'is-done':i===step?'is-active':''}><span>{i<step?<Check size={12} aria-hidden="true"/>:i+1}</span>{s}</li>)}</ol>
+    <p className="sr-only" role="status" aria-live="polite">Step {step+1} of 3: {STEPS[step]}</p>
     <div ref={stepRef} className="qf__steps">
       <fieldset className="qf__step" data-step="0" data-active={step===0}><legend className="qf__q">What are you looking at?<small>Pick one or more</small></legend><div className="qf__services">{SERVICES.map(s=>{const on=chosen.includes(s.value);return <label key={s.value} className={on?'svc is-on':'svc'}><input type="checkbox" name="services" value={s.value} checked={on} onChange={()=>toggle(s.value)}/><span className="svc__icon"><s.Icon size={22} strokeWidth={1.75} aria-hidden="true"/></span><span className="svc__text"><strong>{s.label}</strong><em>{s.hint}</em></span><span className="svc__check" aria-hidden="true"><Check size={14}/></span></label>;})}</div>{state==='error'&&step===0&&<p className="qf__err" role="alert">Pick at least one so we send the right person.</p>}</fieldset>
-      <fieldset className="qf__step" data-step="1" data-active={step===1}><legend className="qf__q">Where do we send the quote?<small>So our solar consultant can reach you</small></legend><div className="qf__grid"><label className="qf__field"><span>Your name</span><input name="name" autoComplete="name" required maxLength={100} placeholder="Full name"/></label><label className="qf__field"><span>Mobile</span><input name="phone" type="tel" inputMode="tel" autoComplete="tel" required maxLength={30} placeholder="04…"/></label><label className="qf__field qf__field--wide"><span>Email</span><input name="email" type="email" inputMode="email" autoComplete="email" required maxLength={254} placeholder="name@example.com"/></label><AddressField/></div>{state==='error'&&step===1&&<p className="qf__err" role="alert">We need a valid email to send the checklist to.</p>}</fieldset>
+      <fieldset className="qf__step" data-step="1" data-active={step===1}><legend className="qf__q">Where do we send the quote?<small>So our solar consultant can reach you</small></legend><div className="qf__grid"><label className="qf__field"><span>Your name</span><input name="name" autoComplete="name" required maxLength={100} enterKeyHint="next" placeholder="Full name"/></label><label className="qf__field"><span>Mobile</span><input name="phone" type="tel" inputMode="tel" autoComplete="tel" required maxLength={30} minLength={8} pattern="[0-9+() \-]{8,}" title="A phone number we can call you on, digits only" enterKeyHint="next" placeholder="04…"/></label><label className="qf__field qf__field--wide"><span>Email</span><input name="email" type="email" inputMode="email" autoComplete="email" required maxLength={254} enterKeyHint="next" spellCheck={false} autoCapitalize="none" placeholder="name@example.com"/></label><AddressField/></div>{state==='error'&&step===1&&<p className="qf__err" role="alert">We need a valid email to send the checklist to.</p>}</fieldset>
       <fieldset className="qf__step" data-step="2" data-active={step===2}><legend className="qf__q" tabIndex={-1}>Anything that helps us quote?<small>All optional — add it now, or we can email you a list to send later</small></legend>
         <div className="qf__files">{FILES.map(([name,label,accept])=>{const f=files[name];const big=!!f&&f.size>MAX_BYTES;return <label key={name} className={big?'qf__file is-bad':f?'qf__file is-on':'qf__file'}><input type="file" name={name} accept={accept} onChange={e=>{const file=e.target.files?.[0];if(!file){setFiles(prev=>{const n={...prev};delete n[name];return n;});return;}setFiles(prev=>({...prev,[name]:{name:file.name,size:file.size,file,busy:true}}));void shrink(file).then(small=>setFiles(prev=>prev[name]?.file===file?{...prev,[name]:{name:small.name,size:small.size,file:small}}:prev));}}/><span className="qf__file-icon">{f&&!big&&!f.busy?<Check size={18} aria-hidden="true"/>:'+'}</span><span className="qf__file-text"><strong>{label}</strong><em>{f?(f.busy?'Preparing photo…':big?`Too big (${fmtSize(f.size)}) — max 10 MB`:`${f.name} · ${fmtSize(f.size)}`):'Tap to add a photo or file'}</em></span></label>;})}</div>
         <label className="qf__field qf__field--wide"><span>Anything else? <em>(optional)</em></span><textarea name="message" rows={3} maxLength={1500} placeholder="Roof type, how much your last bill was, when you’d like it done…"/></label>

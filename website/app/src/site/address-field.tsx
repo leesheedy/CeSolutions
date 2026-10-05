@@ -55,6 +55,10 @@ export function AddressField(){
   const [pending,setPending]=useState(false);
   const [flip,setFlip]=useState(false);
   const [busy,setBusy]=useState(false);
+  // Suggestions only show while the field has focus: left open after tabbing away, the list sat over the
+  // Continue button and a tap on it picked an address instead.
+  const [focused,setFocused]=useState(false);
+  const cancel=()=>{abort.current?.abort();window.clearTimeout(timer.current);setBusy(false);setPending(false);setOpen(false);};
   const token=useRef<string>('');
   const abort=useRef<AbortController|null>(null);
   const timer=useRef<number|undefined>(undefined);
@@ -80,14 +84,14 @@ export function AddressField(){
     setParts({suburb:p.suburb??'',state:p.state??'',postcode:p.postcode??''});
   }
   function onKey(e:React.KeyboardEvent<HTMLInputElement>){
+    if(e.key==='Escape'&&(pending||open)){e.stopPropagation();cancel();return;}
     if(e.key==='Enter'&&pending){e.preventDefault();e.stopPropagation();return;}
     if(!open||items.length===0)return;
     if(e.key==='ArrowDown'){e.preventDefault();setHi(h=>(h+1)%items.length);}
     else if(e.key==='ArrowUp'){e.preventDefault();setHi(h=>(h-1+items.length)%items.length);}
     else if(e.key==='Enter'){if(hi>=0){e.preventDefault();e.stopPropagation();void choose(items[hi]);}}
-    else if(e.key==='Escape'){setOpen(false);}
   }
-  const expanded=(open&&items.length>0)||busy;
+  const expanded=focused&&((open&&items.length>0)||busy);
   useEffect(()=>{
     if(!expanded)return;
     const input=rootRef.current?.querySelector('input[name=address]');
@@ -97,7 +101,7 @@ export function AddressField(){
   },[expanded,items.length]);
   return <div ref={rootRef} className="addr">
     <label className="qf__field qf__field--wide"><span>Property address</span>
-      <input name="address" value={value} onChange={e=>{setValue(e.target.value);if(e.target.value!==chosen.current)setParts({suburb:'',state:'',postcode:''});search(e.target.value);}} onFocus={()=>{if(items.length)setOpen(true);}} onKeyDown={onKey} autoComplete="street-address" required maxLength={200} placeholder="Start typing your street address" role="combobox" aria-autocomplete="list" aria-expanded={expanded} aria-controls={listId} aria-activedescendant={expanded&&hi>=0?`${listId}-${hi}`:undefined} data-busy={busy||undefined}/>
+      <input name="address" value={value} onChange={e=>{setValue(e.target.value);if(e.target.value!==chosen.current)setParts({suburb:'',state:'',postcode:''});search(e.target.value);}} onFocus={()=>{setFocused(true);if(items.length)setOpen(true);}} onBlur={()=>{setFocused(false);setOpen(false);}} onKeyDown={onKey} autoComplete="street-address" required maxLength={200} placeholder="Start typing your street address" role="combobox" aria-autocomplete="list" aria-expanded={expanded} aria-controls={listId} aria-activedescendant={expanded&&hi>=0?`${listId}-${hi}`:undefined} data-busy={busy||undefined}/>
     </label>
     <input type="hidden" name="suburb" value={parts.suburb}/><input type="hidden" name="state" value={parts.state}/><input type="hidden" name="postcode" value={parts.postcode}/>
     <ul id={listId} role="listbox" aria-label="Address suggestions" tabIndex={-1} className={flip?"addr__list is-above":"addr__list"} hidden={!expanded}>{busy&&items.length===0&&<li className="addr__busy" aria-live="polite">Searching…</li>}

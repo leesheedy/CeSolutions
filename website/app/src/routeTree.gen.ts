@@ -16,7 +16,9 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as PageRouteImport } from './routes/$page'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as LocationsSlugServiceRouteImport } from './routes/locations.$slug_.$service'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -53,9 +55,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LocationsIndexRoute = LocationsIndexRouteImport.update({
+  id: '/locations/',
+  path: '/locations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LocationsSlugRoute = LocationsSlugRouteImport.update({
   id: '/locations/$slug',
   path: '/locations/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsSlugServiceRoute = LocationsSlugServiceRouteImport.update({
+  id: '/locations/$slug_/$service',
+  path: '/locations/$slug/$service',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -68,6 +80,8 @@ export interface FileRoutesByFullPath {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/locations/': typeof LocationsIndexRoute
+  '/locations/$slug/$service': typeof LocationsSlugServiceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +92,8 @@ export interface FileRoutesByTo {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/locations': typeof LocationsIndexRoute
+  '/locations/$slug/$service': typeof LocationsSlugServiceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +105,8 @@ export interface FileRoutesById {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/locations/': typeof LocationsIndexRoute
+  '/locations/$slug_/$service': typeof LocationsSlugServiceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +119,8 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/locations/$slug'
+    | '/locations/'
+    | '/locations/$slug/$service'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +131,8 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/locations/$slug'
+    | '/locations'
+    | '/locations/$slug/$service'
   id:
     | '__root__'
     | '/'
@@ -121,6 +143,8 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/locations/$slug'
+    | '/locations/'
+    | '/locations/$slug_/$service'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +156,8 @@ export interface RootRouteChildren {
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
+  LocationsIndexRoute: typeof LocationsIndexRoute
+  LocationsSlugServiceRoute: typeof LocationsSlugServiceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -185,11 +211,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/locations/': {
+      id: '/locations/'
+      path: '/locations'
+      fullPath: '/locations/'
+      preLoaderRoute: typeof LocationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/locations/$slug': {
       id: '/locations/$slug'
       path: '/locations/$slug'
       fullPath: '/locations/$slug'
       preLoaderRoute: typeof LocationsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations/$slug_/$service': {
+      id: '/locations/$slug_/$service'
+      path: '/locations/$slug/$service'
+      fullPath: '/locations/$slug/$service'
+      preLoaderRoute: typeof LocationsSlugServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -204,6 +244,8 @@ const rootRouteChildren: RootRouteChildren = {
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   LocationsSlugRoute: LocationsSlugRoute,
+  LocationsIndexRoute: LocationsIndexRoute,
+  LocationsSlugServiceRoute: LocationsSlugServiceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

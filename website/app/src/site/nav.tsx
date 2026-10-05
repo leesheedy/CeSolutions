@@ -31,10 +31,12 @@ const ABOUT:Item[]=[
 {href:'/#rebates',Icon:BadgePercent,title:'Rebates',desc:'What’s open now and how we apply'},
 {href:'/#faq',Icon:HelpCircle,title:'FAQ',desc:'Costs, savings, payback, cloudy days'}];
 const AREAS:Item[]=[
-{href:'/',title:'Albury-Wodonga',desc:'Home base · 79 Elgin Boulevard'},
+{href:'/locations/wodonga',title:'Wodonga',desc:'Home base · 79 Elgin Boulevard'},
+{href:'/locations/albury',title:'Albury',desc:'Ten minutes away · NSW rebates'},
+{href:'/locations/yarrawonga',title:'Yarrawonga',desc:'Both sides of the border'},
 {href:'/locations/wagga-wagga',title:'Wagga Wagga',desc:'Riverina · NSW rebates'},
 {href:'/locations/shepparton',title:'Shepparton',desc:'Goulburn Valley · VIC rebates'},
-{href:'/locations/yarrawonga',title:'Yarrawonga',desc:'Both sides of the border'}];
+{href:'/locations',title:'All areas',desc:'Every town and its rebates'}];
 const PHONE='tel:+61260212000';
 
 function PanelLink({item,current}:{item:Item;current:string}){
@@ -61,7 +63,7 @@ function MobileMenu({open,onClose,closeRef,quote}:{open:boolean;onClose:()=>void
   const secondary=[['How it works','/solar#how-it-works'],['Our work','/#our-work'],['Our team','/about'],['Reviews','/#reviews'],['Rebates','/#rebates'],['FAQ','/#faq']] as const;
   const t=(i:number)=>reduce?{duration:0}:{duration:.32,delay:.06+i*.035,ease:[.2,.65,.3,1] as const};
   return <AnimatePresence>{open&&<motion.div className="mnav" role="dialog" aria-modal="true" aria-label="Menu" id="mobile-menu" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:reduce?0:.22}}>
-    <motion.div className="mnav__panel" initial={{y:reduce?0:28}} animate={{y:0}} exit={{y:reduce?0:20}} transition={reduce?{duration:0}:{type:'spring',stiffness:300,damping:32}} onClick={e=>{if((e.target as HTMLElement).closest('a'))onClose();}}>
+    <motion.div className="mnav__panel" data-lenis-prevent="" initial={{y:reduce?0:28}} animate={{y:0}} exit={{y:reduce?0:20}} transition={reduce?{duration:0}:{type:'spring',stiffness:300,damping:32}} onClick={e=>{if((e.target as HTMLElement).closest('a'))onClose();}}>
       <div className="mnav__top"><a href="/" className="brand" aria-label="Clean Energy Solutions home"><img src="/assets/logo-wide-420.webp" width="420" height="120" alt="Clean Energy Solutions"/></a><button ref={closeRef} type="button" className="mnav__close" onClick={onClose}><X size={20} aria-hidden="true"/>Close</button></div>
       <nav className="mnav__body" aria-label="Menu">
         <p className="mnav__label">What we do</p>

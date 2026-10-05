@@ -436,3 +436,62 @@ html:not(.js-form) .qf__step+.qf__step{margin-top:30px}
 .parallax{overflow:hidden}
 .parallax__layer{width:100%;height:100%}
 .grain{background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:22px 22px}
+
+/* ── 9. Accessibility preferences (src/site/a11y.tsx) ─────────────────────────────────────────── */
+/* Smooth scrolling (Lenis) drives the scroll position itself; native smooth scrolling would fight it. */
+html.lenis,html.lenis body{height:auto}
+html.lenis{scroll-behavior:auto}
+.lenis.lenis-stopped{overflow:clip}
+
+.a11y{position:fixed;left:16px;bottom:16px;z-index:46}
+@media(max-width:860px){.a11y{bottom:calc(84px + env(safe-area-inset-bottom))}}
+.a11y__toggle{position:relative;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);
+  background:var(--night);color:#fff;box-shadow:0 10px 26px -12px rgba(4,12,18,.8);transition:transform .2s var(--ease),background .2s}
+.a11y__toggle:hover{background:var(--night-3)}
+.a11y__toggle:focus-visible{outline:3px solid var(--mint);outline-offset:3px;border-radius:50%}
+.a11y__dot{position:absolute;top:-2px;right:-2px;width:14px;height:14px;border-radius:50%;background:var(--mint);border:2px solid #fff}
+.a11y__panel{position:absolute;left:0;bottom:60px;width:min(340px,calc(100vw - 32px));padding:18px;border-radius:22px;background:#fff;color:var(--ink);
+  border:1px solid var(--line);box-shadow:0 30px 60px -24px rgba(4,12,18,.55);animation:flow-in .25s var(--ease)}
+.a11y__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.a11y__head h2{font-size:18px;letter-spacing:-.01em}
+.a11y__close{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:0;background:var(--stone);color:var(--ink)}
+.a11y__panel ul{list-style:none;margin:0;padding:0}
+.a11y__switch{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:60px;padding:10px 0;border:0;border-top:1px solid var(--line);background:none;color:inherit;text-align:left}
+.a11y__switch strong{display:block;font-size:16px;font-weight:600}
+.a11y__switch em{display:block;font-style:normal;font-size:14px;color:var(--muted);line-height:1.35}
+.a11y__track{flex:none;position:relative;width:46px;height:28px;border-radius:999px;background:#C2CBC6;transition:background .2s}
+.a11y__track span{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s var(--ease)}
+.a11y__switch[aria-checked=true] .a11y__track{background:var(--brand)}
+.a11y__switch[aria-checked=true] .a11y__track span{transform:translateX(18px)}
+.a11y__reset{margin-top:12px;min-height:44px;width:100%;border-radius:999px;border:1.5px solid #C7D0CB;background:#fff;color:var(--ink);font-weight:600;font-size:15px}
+.a11y__reset:disabled{opacity:.5;cursor:default}
+
+/* Pause animations: everything that moves holds still, including entrance motion and the video. */
+html[data-calm]{scroll-behavior:auto}
+html[data-calm] [data-motion]{opacity:1!important;transform:none!important}
+html[data-calm] *,html[data-calm] *::before,html[data-calm] *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+html[data-calm] .hero-film{display:none}
+
+/* Higher contrast: the secondary greys go close to black (or white on dark), rules and field borders
+   darken, and the soft tints are dropped. Every colour utility reads these variables, so this is the whole job. */
+html[data-contrast]{--color-muted:#27343D;--color-line:#6F7D76;--color-haze:#F1F5F8;--color-brand:#075C3A;--color-brand-dark:#054A2E;--color-stone:#FFFFFF;--color-tint:#FFFFFF;--color-night:#04121C;--color-night-2:#0A2233}
+html[data-contrast] .qf input:not([type=checkbox]):not([type=file]),html[data-contrast] .qf textarea,html[data-contrast] .svc,html[data-contrast] .qf__file{border-color:#4B5A53}
+html[data-contrast] .btn--outline,html[data-contrast] .mobile-dock a:first-child{border-color:var(--ink)}
+html[data-contrast] ::placeholder{color:#4B5A53}
+html[data-contrast] .on-dark .text-white\/75,html[data-contrast] .on-dark .text-white\/80,html[data-contrast] .on-dark .text-white\/85,html[data-contrast] .on-dark .text-white\/90{color:#fff}
+html[data-contrast] .text-ink\/45{color:var(--ink)}
+
+/* Larger text: scale the whole page, so spacing and line lengths keep their proportions. */
+html[data-large] body{zoom:1.14}
+
+/* Underline links: every text link is marked, not just the ones in running copy. */
+html[data-underline] main a:not(.btn):not(.nav-quote),html[data-underline] footer a{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}
+
+/* Windows High Contrast / forced colours: keep the things that are drawn with backgrounds visible. */
+@media(forced-colors:active){
+  .btn,.nav-quote,.qf__next,.svc,.qf__file,.a11y__toggle,.work-controls button{border:1.5px solid ButtonText}
+  .svc.is-on,.qf__file.is-on{outline:3px solid Highlight}
+  .a11y__track{border:1.5px solid ButtonText}
+  .hero-film{display:none}
+}
+@media(prefers-contrast:more){:root{--color-muted:#27343D;--color-line:#6F7D76;--color-haze:#F1F5F8}}

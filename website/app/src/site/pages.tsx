@@ -1,10 +1,11 @@
 /* Page bodies for the interior routes. They live here rather than in src/routes because the route files are
  * linted against arbitrary Tailwind values (scripts/check-ui.mjs); the routes keep the loader, head and wiring. */
-import {ArrowRight,ArrowUpRight,Car,Mail,MapPin,Phone} from 'lucide-react';
+import {ArrowRight,ArrowUpRight,BatteryCharging,Building2,Car,Mail,MapPin,Phone,Sun} from 'lucide-react';
 import {Header,Footer,Faq} from './shell';
 import {QuoteForm,ChecklistFormRegistration} from './quote-form';
 import {jsonLd,pageFaqs,pageSchema,SITE,type PageContent} from './content';
-import {locations,type Location} from './locations';
+import {locationOrder,townServiceDescription,townServiceFaqs,townServices,townServiceSections,type Location,type TownService} from './locations';
+import {Estimator} from './estimator';
 import {CtaBand,MAPS,PageHero,PHONE,PHONE_HREF,QuoteBand,SectionHead,VisitBand} from './sections';
 import {Rise} from './motion';
 import {WorkStrip} from './projects';
@@ -55,35 +56,102 @@ export function ContactPage(){return <><Header/><main id="main">
   </div></section>
 </main><Footer/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(contactSchema)}}/></>}
 
+const provider={'@id':SITE+'/#business','@type':'LocalBusiness',name:'Clean Energy Solutions',url:SITE,telephone:'+61260212000',address:{'@type':'PostalAddress',streetAddress:'79 Elgin Boulevard',addressLocality:'Wodonga',addressRegion:'VIC',postalCode:'3690',addressCountry:'AU'}};
+const city=(l:Location)=>({'@type':'City',name:l.name,address:{'@type':'PostalAddress',addressLocality:l.name,addressRegion:l.state,postalCode:l.postcode,addressCountry:'AU'}});
+const qa=(items:{q:string;a:string}[])=>items.map(f=>({'@type':'Question',name:f.q,acceptedAnswer:{'@type':'Answer',text:f.a}}));
+const crumbSchema=(items:[string,string][])=>({'@type':'BreadcrumbList',itemListElement:items.map(([name,item],i)=>({'@type':'ListItem',position:i+1,name,item}))});
+const officeLine=(l:Location)=>l.officeLine??(l.fromWodonga.charAt(0).toUpperCase()+l.fromWodonga.slice(1)+' from our Wodonga office');
+function HeroActions(){return <div className="mt-8 flex flex-wrap gap-3"><a href="#quote" className="btn btn--mint">Get my free quote <ArrowRight size={18} aria-hidden="true"/></a><a href={PHONE_HREF} className="btn btn--ghost"><Phone size={17} aria-hidden="true"/>{PHONE}</a></div>}
+function RebateList({l,only}:{l:Location;only?:(name:string)=>boolean}){
+  const items=only?l.rebates.filter(r=>only(r.name)):l.rebates;
+  return <ul className="m-0 grid list-none gap-3 self-start p-0">{items.map((r,i)=><li key={r.name}><Rise delay={.1+i*.08}><a href={r.href} className="group flex items-center justify-between gap-6 rounded-3xl border border-line bg-white p-6 transition-[border-color,box-shadow] duration-300 hover:border-brand/50 hover:shadow-[var(--shadow-card)]"><span><strong className="block text-[1.15rem] leading-snug font-bold">{r.name}</strong><span className="mt-1 block text-[15.5px] text-muted">{r.who}</span></span><ArrowUpRight size={20} aria-hidden="true" className="flex-none text-brand transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/></a></Rise></li>)}</ul>;
+}
+function OtherAreas({current}:{current?:string}){
+  return <section className="pb-16" aria-label="Other service areas"><div className="wrap flex flex-wrap items-center gap-3 border-t border-line pt-10"><p className="mr-2 text-[16px] font-semibold max-sm:w-full">Also serving</p>{locationOrder.filter(o=>o.slug!==current).map(o=><a key={o.slug} href={'/locations/'+o.slug} className="btn btn--outline btn--sm">{o.name}, {o.state} <ArrowRight size={16} aria-hidden="true"/></a>)}</div></section>;
+}
+const serviceCards=(l:Location)=>[
+{Icon:Sun,name:`Solar panels in ${l.name}`,body:'Panels sized to your roof and your bills. Savings usually land between 50% and 100% of your bill.',href:`/locations/${l.slug}/solar-panels`,cta:`Solar panels ${l.name}`},
+{Icon:BatteryCharging,name:`Home batteries in ${l.name}`,body:'Run the evening on your own stored solar. The federal battery discount is open now.',href:`/locations/${l.slug}/home-batteries`,cta:`Home batteries ${l.name}`},
+{Icon:Building2,name:'Business and farm solar',body:'Sheds, shops, cool rooms and offices run in daylight, exactly when panels produce.',href:'/commercial-solar',cta:'Commercial solar'}];
+
+/** Town page: what we do there, why it suits the place, the rebates for that state, proof, the form, questions. */
 export function LocationPage({l}:{l:Location}){
-  const others=locations.filter(o=>o.slug!==l.slug);
   const url=SITE+'/locations/'+l.slug;
   const schema={'@context':'https://schema.org','@graph':[
-    {'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Home',item:SITE+'/'},{'@type':'ListItem',position:2,name:l.name,item:url}]},
-    {'@type':'Service','@id':url+'#service',name:'Solar and battery installation in '+l.name,url,provider:{'@id':SITE+'/#business','@type':'LocalBusiness',name:'Clean Energy Solutions',url:SITE,telephone:'+61260212000'},areaServed:{'@type':'City',name:l.name,address:{'@type':'PostalAddress',addressLocality:l.name,addressRegion:l.state,postalCode:l.postcode,addressCountry:'AU'}},serviceType:['Solar panel installation','Home battery installation','EV charger installation']},
-    {'@type':'FAQPage','@id':url+'#faq',mainEntity:l.faqs.map(f=>({'@type':'Question',name:f.q,acceptedAnswer:{'@type':'Answer',text:f.a}}))}]};
+    crumbSchema([['Home',SITE+'/'],['Areas',SITE+'/locations'],[l.name,url]]),
+    {'@type':'Service','@id':url+'#service',name:'Solar and battery installation in '+l.name,url,provider,areaServed:city(l),serviceType:['Solar panel installation','Home battery installation','EV charger installation'],hasOfferCatalog:{'@type':'OfferCatalog',name:'Services in '+l.name,itemListElement:townServices.map(s=>({'@type':'Offer',itemOffered:{'@type':'Service',name:s.label+' in '+l.name,url:url+'/'+s.slug}}))}},
+    {'@type':'FAQPage','@id':url+'#faq',mainEntity:qa(l.faqs)}]};
   return <><Header/><main id="main">
-    <PageHero crumbs={[{label:'Home',href:'/'},{label:'Areas'},{label:l.name}]} lines={l.heading} intro={l.intro} image={l.image} alt={l.alt} imageWidth={l.imageWidth} imageHeight={l.imageHeight}>
-      <div className="mt-8 flex flex-wrap gap-3"><a href="#quote" className="btn btn--mint">Get my free quote <ArrowRight size={18} aria-hidden="true"/></a><a href={PHONE_HREF} className="btn btn--ghost"><Phone size={17} aria-hidden="true"/>{PHONE}</a></div>
-      <ul className="m-0 mt-8 grid list-none gap-2.5 p-0 text-[15.5px] text-haze"><li className="flex items-start gap-3"><MapPin size={18} className="mt-0.5 flex-none text-mint" aria-hidden="true"/>{l.name} is in {l.region}</li><li className="flex items-start gap-3"><Car size={18} className="mt-0.5 flex-none text-mint" aria-hidden="true"/>{l.fromWodonga.charAt(0).toUpperCase()+l.fromWodonga.slice(1)} from our Wodonga office</li></ul>
+    <PageHero crumbs={[{label:'Home',href:'/'},{label:'Areas',href:'/locations'},{label:l.name}]} lines={l.heading} intro={l.intro} image={l.image} alt={l.alt} imageWidth={l.imageWidth} imageHeight={l.imageHeight}>
+      <HeroActions/>
+      <ul className="m-0 mt-8 grid list-none gap-2.5 p-0 text-[15.5px] text-haze"><li className="flex items-start gap-3"><MapPin size={18} className="mt-0.5 flex-none text-mint" aria-hidden="true"/>{l.name} is in {l.region}</li><li className="flex items-start gap-3"><Car size={18} className="mt-0.5 flex-none text-mint" aria-hidden="true"/>{officeLine(l)}</li></ul>
     </PageHero>
-    <section className="py-20 md:py-28" aria-labelledby="loc-why-heading"><div className="wrap">
+    <section className="py-20 md:py-28" aria-labelledby="loc-services-heading"><div className="wrap">
+      <SectionHead eyebrow={'What we install in '+l.name} id="loc-services-heading" lines={['Solar, batteries','and EV charging.']}>One local team for the design, the install and the support afterwards.</SectionHead>
+      <div className="mt-12 grid gap-4 md:grid-cols-3">{serviceCards(l).map((c,i)=><Rise key={c.href} delay={i*.08} className="flex"><a href={c.href} className="group flex w-full flex-col rounded-3xl border border-line p-7 transition-[border-color,box-shadow] duration-300 hover:border-brand/50 hover:shadow-[var(--shadow-card)]"><span className="grid size-12 place-items-center rounded-2xl bg-tint text-brand"><c.Icon size={24} strokeWidth={1.75} aria-hidden="true"/></span><h3 className="mt-5 text-[1.35rem] leading-tight font-bold tracking-tight">{c.name}</h3><p className="mt-3 text-[16px] text-muted">{c.body}</p><span className="link-arrow mt-auto pt-6">{c.cta} <ArrowRight size={17} aria-hidden="true"/></span></a></Rise>)}</div>
+    </div></section>
+    <section className="bg-stone py-20 md:py-28" aria-labelledby="loc-why-heading"><div className="wrap">
       <SectionHead eyebrow={'Solar in '+l.name} id="loc-why-heading" lines={['Built around',`${l.name}.`]}/>
-      <div className="mt-12 grid gap-4 md:grid-cols-3">{l.why.map((w,i)=><Rise key={w.title} delay={i*.08} className="flex"><article className="w-full rounded-3xl border border-line p-7"><span className="text-[15px] font-bold text-brand tabular-nums" aria-hidden="true">{String(i+1).padStart(2,'0')}</span><h3 className="mt-3 text-[1.35rem] leading-tight font-bold tracking-tight">{w.title}</h3><p className="mt-3 text-[16px] text-muted">{w.body}</p></article></Rise>)}</div>
+      <div className="mt-12 grid gap-4 md:grid-cols-3">{l.why.map((w,i)=><Rise key={w.title} delay={i*.08} className="flex"><article className="w-full rounded-3xl border border-line bg-white p-7"><span className="text-[15px] font-bold text-brand tabular-nums" aria-hidden="true">{String(i+1).padStart(2,'0')}</span><h3 className="mt-3 text-[1.35rem] leading-tight font-bold tracking-tight">{w.title}</h3><p className="mt-3 text-[16px] text-muted">{w.body}</p></article></Rise>)}</div>
     </div></section>
-    <section className="bg-stone py-20 md:py-28" aria-labelledby="loc-rebates-heading"><div className="wrap grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
+    <section className="py-20 md:py-28" aria-labelledby="loc-rebates-heading"><div className="wrap grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
       <SectionHead eyebrow="Rebates" id="loc-rebates-heading" lines={[l.rebates.length===3?'Three rebates':'Two rebates',`for ${l.name} homes.`]}>We apply for every one of these as part of your quote. Eligibility and equipment requirements apply; we confirm them against your address and installation date.</SectionHead>
-      <ul className="m-0 grid list-none gap-3 self-start p-0">{l.rebates.map((r,i)=><Rise key={r.name} delay={.1+i*.08}><li><a href={r.href} className="group flex items-center justify-between gap-6 rounded-3xl border border-line bg-white p-6 transition-[border-color,box-shadow] duration-300 hover:border-brand/50 hover:shadow-[var(--shadow-card)]"><span><strong className="block text-[1.15rem] leading-snug font-bold">{r.name}</strong><span className="mt-1 block text-[15.5px] text-muted">{r.who}</span></span><ArrowUpRight size={20} aria-hidden="true" className="flex-none text-brand transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/></a></li></Rise>)}</ul>
+      <RebateList l={l}/>
     </div></section>
+    <QuoteBand/>
+    <Estimator/>
+    <Reviews/>
     <section className="py-20 md:py-24" aria-labelledby="loc-areas-heading"><div className="wrap">
       <p className="eyebrow">Service area</p><h2 id="loc-areas-heading" className="h-sec">Around {l.name}.</h2>
       <ul className="m-0 mt-8 flex list-none flex-wrap gap-2.5 p-0">{l.suburbs.map(s=><li key={s} className="rounded-full border border-line px-4 py-2 text-[15.5px] font-medium">{s}</li>)}</ul>
-      <p className="lede mt-7 max-w-[60ch]">Somewhere nearby that isn’t listed? Send your address with the form below and our solar consultant will confirm.</p>
+      <p className="lede mt-7 max-w-[60ch]">Somewhere nearby that isn’t listed? Send your address with the form above and our solar consultant will confirm.</p>
+    </div></section>
+    <div className="border-t border-line"><Faq id="loc-faq" items={l.faqs} lines={[`${l.name} questions,`,'answered.']} intro={`What people in ${l.name} ask us most.`}/></div>
+    <OtherAreas current={l.slug}/>
+    <CtaBand/>
+  </main><Footer/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(schema)}}/></>;
+}
+
+/** Town × service page, e.g. solar panels in Wagga Wagga. */
+export function LocationServicePage({l,s}:{l:Location;s:TownService}){
+  const url=`${SITE}/locations/${l.slug}/${s.slug}`;
+  const solar=s.slug==='solar-panels';
+  const faqs=townServiceFaqs(l,s),sections=townServiceSections(l,s);
+  const other=townServices.find(o=>o.slug!==s.slug)!;
+  const schema={'@context':'https://schema.org','@graph':[
+    crumbSchema([['Home',SITE+'/'],['Areas',SITE+'/locations'],[l.name,SITE+'/locations/'+l.slug],[s.label,url]]),
+    {'@type':'Service','@id':url+'#service',name:`${s.label} in ${l.name}`,serviceType:solar?'Residential solar panel installation':'Home battery installation',description:townServiceDescription(l,s),url,provider,areaServed:city(l)},
+    {'@type':'FAQPage','@id':url+'#faq',mainEntity:qa(faqs)}]};
+  return <><Header/><main id="main">
+    <PageHero crumbs={[{label:'Home',href:'/'},{label:'Areas',href:'/locations'},{label:l.name,href:'/locations/'+l.slug},{label:s.label}]} lines={solar?['Solar panels',`in ${l.name}.`]:['Home batteries',`in ${l.name}.`]} intro={solar?`Solar panels for ${l.name} homes, designed from your actual electricity bills and installed by our own licensed electricians, usually in a single day.`:`Home batteries for ${l.name}, sized to your usage and installed by our own licensed electricians. Store your daytime solar and run the evening on it.`} image={solar?l.image:'ces-powerwalls-enclosure.webp'} alt={solar?l.alt:'Two Tesla Powerwall batteries in a purpose-built enclosure, installed by CES'} imageWidth={solar?l.imageWidth:1600} imageHeight={solar?l.imageHeight:1200}>
+      <HeroActions/>
+      <ul className="m-0 mt-8 grid list-none gap-2.5 p-0 text-[15.5px] text-haze"><li className="flex items-start gap-3"><MapPin size={18} className="mt-0.5 flex-none text-mint" aria-hidden="true"/>{l.name}, {l.state} {l.postcode}</li><li className="flex items-start gap-3"><Car size={18} className="mt-0.5 flex-none text-mint" aria-hidden="true"/>{officeLine(l)}</li></ul>
+    </PageHero>
+    <section className="py-20 md:py-28"><div className="wrap grid gap-14 lg:grid-cols-[1fr_340px] lg:gap-20">
+      <div className="grid gap-4">{sections.map((sec,i)=><Rise key={sec.title} delay={i*.05}><article className="grid gap-3 rounded-3xl border border-line p-7 md:grid-cols-[56px_1fr] md:gap-6 md:p-9"><span className="text-[15px] font-bold text-brand tabular-nums md:pt-2" aria-hidden="true">{String(i+1).padStart(2,'0')}</span><div><h2 className="text-[clamp(1.6rem,2.6vw,2.2rem)] leading-tight font-bold tracking-tight">{sec.title}</h2><p className="mt-4 max-w-[66ch] text-[1.08rem] leading-relaxed text-muted">{sec.body}</p></div></article></Rise>)}</div>
+      <aside className="lg:sticky lg:top-28 lg:self-start" aria-label={'More for '+l.name}><div className="rounded-3xl bg-stone p-6"><h2 className="text-[1.15rem] font-bold">More for {l.name}</h2><ul className="m-0 mt-3 grid list-none p-0">{[[`${other.label} in ${l.name}`,`/locations/${l.slug}/${other.slug}`,solar?'Store your solar for the evening':'Panels sized to your roof and bills'],[`All services in ${l.name}`,'/locations/'+l.slug,'Solar, batteries and EV charging'],[s.parentLabel,s.parent,'How we design and install it']].map(([name,href,desc])=><li key={href} className="border-t border-line"><a href={href} className="group flex items-center justify-between gap-4 py-4"><span><strong className="block text-[16px] font-semibold">{name}</strong><span className="text-[14.5px] text-muted">{desc}</span></span><ArrowRight size={18} aria-hidden="true" className="flex-none text-brand transition-transform duration-300 group-hover:translate-x-1"/></a></li>)}</ul></div></aside>
+    </div></section>
+    <section className="bg-stone py-20 md:py-28" aria-labelledby="ts-rebates-heading"><div className="wrap grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
+      <SectionHead eyebrow="Rebates" id="ts-rebates-heading" lines={[solar?'Solar rebates':'The battery rebate',`in ${l.name}.`]}>{l.name} is in {l.state==='VIC'?'Victoria':'New South Wales'}. We apply for what your address is eligible for as part of your quote, and confirm it against your installation date.</SectionHead>
+      <RebateList l={l} only={n=>solar?!/Batteries/.test(n):/Batteries/.test(n)}/>
     </div></section>
     <QuoteBand/>
-    <Faq id="loc-faq" items={l.faqs} lines={[`${l.name} questions,`,'answered.']} intro={`What people in ${l.name} ask us most.`}/>
-    <section className="pb-16" aria-label="Other service areas"><div className="wrap flex flex-wrap items-center gap-3 border-t border-line pt-10"><p className="mr-2 text-[16px] font-semibold max-sm:w-full">Also serving</p>{others.map(o=><a key={o.slug} href={'/locations/'+o.slug} className="btn btn--outline btn--sm">{o.name}, {o.state} <ArrowRight size={16} aria-hidden="true"/></a>)}<a href="/" className="btn btn--outline btn--sm">Albury-Wodonga <ArrowRight size={16} aria-hidden="true"/></a></div></section>
+    {solar&&<Estimator/>}
+    <WorkStrip category={solar?'Solar':'Batteries'} lines={solar?['Roofs we’ve','put to work.']:['Batteries we’ve','installed.']} intro={solar?'A few recent solar installs by our own crews.':'Recent battery installs, in garages and outdoors.'}/>
+    <Reviews/>
+    <Faq id="ts-faq" items={faqs} lines={[`${s.label} in ${l.name}:`,'common questions.']} intro="Straight answers. If yours isn’t here, ring us and ask."/>
+    <OtherAreas current={l.slug}/>
     <CtaBand/>
+  </main><Footer/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(schema)}}/></>;
+}
+
+/** /locations: every town we serve, with its state and the pages for it. */
+export function AreasPage(){
+  const schema={'@context':'https://schema.org','@graph':[crumbSchema([['Home',SITE+'/'],['Areas',SITE+'/locations']]),{'@type':'CollectionPage','@id':SITE+'/locations#page',url:SITE+'/locations',name:'Areas we serve',about:{'@id':SITE+'/#business'},hasPart:locationOrder.map(l=>({'@type':'WebPage',name:'Solar and batteries in '+l.name,url:SITE+'/locations/'+l.slug}))}]};
+  return <><Header/><main id="main">
+    <PageHero crumbs={[{label:'Home',href:'/'},{label:'Areas'}]} lines={['Where we install','solar and batteries.']} intro="We’re based at 79 Elgin Boulevard, Wodonga, and install across Albury-Wodonga and out to Yarrawonga, Wagga Wagga and Shepparton. The rebates depend on which side of the border you’re on, so each area has its own page."><div className="mt-8 flex flex-wrap gap-3"><a href="/#quote" className="btn btn--mint">Get my free quote <ArrowRight size={18} aria-hidden="true"/></a><a href={PHONE_HREF} className="btn btn--ghost"><Phone size={17} aria-hidden="true"/>{PHONE}</a></div></PageHero>
+    <section className="py-20 md:py-28"><div className="wrap grid gap-4 md:grid-cols-2 lg:grid-cols-3">{locationOrder.map((l,i)=><Rise key={l.slug} delay={Math.min(i,3)*.06} className="flex"><article className="flex w-full flex-col overflow-hidden rounded-3xl border border-line"><a href={'/locations/'+l.slug} className="block overflow-hidden"><img className="aspect-[16/10] w-full object-cover transition-transform duration-700 hover:scale-[1.03]" src={'/assets/'+(l.image.startsWith('ces-')?l.image.replace('.webp','-900.webp'):l.image)} alt={l.alt} width={l.imageWidth} height={l.imageHeight} loading={i<3?'eager':'lazy'} decoding="async"/></a><div className="flex flex-1 flex-col p-7"><p className="text-sm font-semibold text-brand">{l.state==='VIC'?'Victoria':'New South Wales'} · {l.rebates.length} rebates</p><h2 className="mt-2 text-[1.6rem] leading-tight font-bold tracking-tight"><a href={'/locations/'+l.slug}>{l.name}</a></h2><p className="mt-3 text-[16px] text-muted">{officeLine(l)}. {l.suburbs.slice(1,5).join(', ')} and surrounds.</p><ul className="m-0 mt-auto grid list-none gap-1 p-0 pt-6"><li><a className="link-arrow min-h-10" href={'/locations/'+l.slug}>Solar and batteries in {l.name} <ArrowRight size={16} aria-hidden="true"/></a></li>{townServices.map(s=><li key={s.slug}><a className="link-arrow min-h-10" href={`/locations/${l.slug}/${s.slug}`}>{s.label} {l.name} <ArrowRight size={16} aria-hidden="true"/></a></li>)}</ul></div></article></Rise>)}</div></section>
+    <CtaBand quote="/#quote"/>
   </main><Footer/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(schema)}}/></>;
 }
 

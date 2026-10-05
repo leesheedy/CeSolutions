@@ -12,7 +12,10 @@
  * __root.tsx) and under prefers-reduced-motion (rule in styles.css).
  */
 import {Children,Fragment,createContext,useContext,useEffect,useRef,useState,type CSSProperties,type ElementType,type ReactNode} from 'react';
-import {animate,motion,useInView,useMotionValueEvent,useReducedMotion,useScroll,useTransform,type MotionValue} from 'motion/react';
+import {animate,motion,useInView,useMotionValueEvent,useReducedMotion as useOsReducedMotion,useScroll,useTransform,type MotionValue} from 'motion/react';
+import {useCalm} from './a11y';
+// Every component here holds still for the visitor's "pause animations" switch as well as the OS setting.
+const useReducedMotion=()=>{const os=useOsReducedMotion();return useCalm()||!!os;};
 
 const EXPO=[0.19,1,0.22,1] as const;
 const VIEW={once:true,margin:'0px 0px -14% 0px'} as const;
