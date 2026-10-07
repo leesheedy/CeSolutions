@@ -33,31 +33,54 @@ export function SectionHead({eyebrow,lines,id,children,center}:{eyebrow?:string;
 
 /** The drone clip. Mounted on the client only, so the prerendered HTML carries just the poster image (that
  *  is the LCP element). Skipped under reduced motion, data saver and 2G; paused when the hero is off screen. */
+const HERO_FILM='/assets/ces-hero-loop-3.mp4';
 function HeroFilm(){
   const [on,setOn]=useState(false);
   const [lit,setLit]=useState(false);
   const [paused,setPaused]=useState(false);
   const calm=useCalm();
-  const ref=useRef<HTMLVideoElement>(null);
+  // Two copies of the clip take turns. The native `loop` attribute seeks back to the start when the clip ends,
+  // and the decoder restarting there froze the picture for a moment on every pass. Instead the idle copy sits
+  // decoded at 0:00 and is cut to the moment the playing one ends, so nothing ever seeks mid-play. The cut is
+  // invisible because the file is edited to loop: its last frame runs straight into its first.
+  const vids=useRef<(HTMLVideoElement|null)[]>([null,null]);
+  const cur=useRef(0);
+  const [front,setFront]=useState(0);
+  const [prev,setPrev]=useState<number|null>(null);
+  const [cut,setCut]=useState(false);
   const held=useRef(false);held.current=paused;
   useEffect(()=>{
     const c=(navigator as Navigator&{connection?:{saveData?:boolean;effectiveType?:string}}).connection;
     setOn(!calm&&!c?.saveData&&!/2g/.test(c?.effectiveType??''));
   },[calm]);
   useEffect(()=>{
-    const v=ref.current;if(!v)return;
+    const all=vids.current;if(!all[0])return;
     // React sets `muted` as a property after the element exists; browsers decide autoplay on the property,
     // so set it and start playback explicitly rather than trusting the attribute.
-    v.muted=true;v.defaultMuted=true;
-    const play=()=>{if(!held.current)void v.play().catch(()=>{});};
+    for(const v of all)if(v){v.muted=true;v.defaultMuted=true;}
+    const active=()=>all[cur.current];
+    const play=()=>{if(!held.current)void active()?.play().catch(()=>{});};
     play();
-    const io=new IntersectionObserver(([e])=>{if(e.isIntersecting)play();else v.pause();},{threshold:.05});
-    io.observe(v);
-    return()=>io.disconnect();
+    let swapping=false,timer:number|undefined;
+    const swap=()=>{
+      const from=active(),to=all[1-cur.current];
+      if(!from||!to||swapping||to.readyState<3)return false;
+      swapping=true;setCut(true);setPrev(cur.current);cur.current=1-cur.current;setFront(cur.current);
+      void to.play().catch(()=>{});
+      // The finished copy stays underneath for a moment, then rewinds out of sight ready for its next turn.
+      timer=window.setTimeout(()=>{from.pause();from.currentTime=0;setPrev(null);swapping=false;},250);
+      return true;
+    };
+    // If the other copy isn't ready (slow connection, throttled tab), fall back to a plain restart.
+    const ended=(e:Event)=>{const v=active();if(e.target===v&&v&&!swapping&&!swap()){v.currentTime=0;play();}};
+    for(const v of all)v?.addEventListener('ended',ended);
+    const io=new IntersectionObserver(([e])=>{if(e.isIntersecting)play();else if(!swapping)for(const v of all)v?.pause();},{threshold:.05});
+    io.observe(all[0]);
+    return()=>{io.disconnect();window.clearTimeout(timer);for(const v of all)v?.removeEventListener('ended',ended);};
   },[on]);
   if(!on)return null;
-  const toggle=()=>{const v=ref.current;if(!v)return;if(paused){setPaused(false);held.current=false;void v.play().catch(()=>{});}else{setPaused(true);v.pause();}};
-  return <><video ref={ref} className={lit?'hero-film is-lit':'hero-film'} autoPlay muted loop playsInline preload="auto" aria-hidden="true" tabIndex={-1} disablePictureInPicture onPlaying={()=>setLit(true)}><source src="/assets/ces-drone-hero-loop-2.mp4" type="video/mp4"/></video>
+  const toggle=()=>{const v=vids.current[cur.current];if(!v)return;if(paused){setPaused(false);held.current=false;void v.play().catch(()=>{});}else{setPaused(true);v.pause();}};
+  return <><div className="absolute inset-0 isolate" aria-hidden="true">{[0,1].map(i=><video key={i} ref={el=>{vids.current[i]=el;}} className={'hero-film'+(lit&&(i===front||i===prev)?' is-lit':'')+(i===front?' is-front':'')+(cut?' is-cut':'')} src={i===0||lit?HERO_FILM:undefined} autoPlay={i===0} muted playsInline preload="auto" tabIndex={-1} disablePictureInPicture onPlaying={i===0?()=>setLit(true):undefined}/>)}</div>
     {/* WCAG 2.2.2: anything that moves for more than five seconds needs a way to stop it. */}
     <button type="button" onClick={toggle} aria-pressed={paused} className="absolute right-5 bottom-5 z-20 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/25 bg-night/55 px-4 text-[14px] font-semibold text-white backdrop-blur-md transition-colors hover:bg-night/80 max-lg:top-[calc(var(--nav-h)+16px)] max-lg:bottom-auto max-lg:min-h-10 max-lg:px-3">{paused?<Play size={15} aria-hidden="true"/>:<Pause size={15} aria-hidden="true"/>}{paused?'Play video':'Pause video'}</button></>;
 }

@@ -8,13 +8,13 @@ import {locationOrder,townServiceDescription,townServiceFaqs,townServices,townSe
 import {Estimator} from './estimator';
 import {CtaBand,MAPS,PageHero,PHONE,PHONE_HREF,QuoteBand,SectionHead,VisitBand} from './sections';
 import {Rise} from './motion';
-import {WorkStrip} from './projects';
+import {WorkGallery,WorkStrip} from './projects';
 import {Reviews} from './reviews';
 import {SystemFlow} from './flow';
 
 const labels:Record<string,string>={solar:'Residential solar',batteries:'Home batteries','commercial-solar':'Commercial solar',about:'Our team'};
 const strips:Record<string,['Solar'|'Batteries'|'Our team',string[],string]>={
-solar:['Solar',['Roofs we’ve','put to work.'],'A few recent solar installs by our own crews.'],
+solar:['Solar',['Some of our','recent solar jobs.'],'Homes, sheds and farms around the Border, all installed by our own electricians.'],
 batteries:['Batteries',['Batteries we’ve','installed.'],'Recent battery installs, in garages and outdoors.'],
 'commercial-solar':['Solar',['Sheds and roofs','we’ve fitted out.'],'Recent installs by our own crews.'],
 about:['Our team',['The people','behind the panels.'],'The crews, designers and office team, all on one payroll in Wodonga.']};
@@ -31,6 +31,7 @@ export function ServicePage({p,page}:{p:PageContent;page:string}){
     </div></section>
     {page==='solar'&&<SystemFlow/>}
     <WorkStrip category={strips[page]?.[0]??'Solar'} lines={strips[page]?.[1]??['Recent work.']} intro={strips[page]?.[2]??''}/>
+    {page==='solar'&&<WorkGallery category="Solar" lines={['More solar installs.']} intro="A few more roofs we’ve done lately. Tap any photo to see it larger."/>}
     <Reviews/>
     {qa&&<div><Faq items={qa} lines={[label+':','common questions.']} intro="Straight answers. If yours isn’t here, ring us and ask."/></div>}
     <VisitBand/><CtaBand quote="/#quote"/>
@@ -137,7 +138,7 @@ export function LocationServicePage({l,s}:{l:Location;s:TownService}){
     </div></section>
     <QuoteBand/>
     {solar&&<Estimator/>}
-    <WorkStrip category={solar?'Solar':'Batteries'} lines={solar?['Roofs we’ve','put to work.']:['Batteries we’ve','installed.']} intro={solar?'A few recent solar installs by our own crews.':'Recent battery installs, in garages and outdoors.'}/>
+    <WorkStrip category={solar?'Solar':'Batteries'} lines={solar?['Some of our','recent solar jobs.']:['Batteries we’ve','installed.']} intro={solar?'Homes, sheds and farms around the Border, all installed by our own electricians.':'Recent battery installs, in garages and outdoors.'}/>
     <Reviews/>
     <Faq id="ts-faq" items={faqs} lines={[`${s.label} in ${l.name}:`,'common questions.']} intro="Straight answers. If yours isn’t here, ring us and ask."/>
     <OtherAreas current={l.slug}/>

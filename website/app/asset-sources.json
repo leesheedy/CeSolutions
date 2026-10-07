@@ -148,5 +148,11 @@
     "source": "https://cesolutions.com.au/wp-content/uploads/2025/08/486680435_122191374530048004_7484476388065899833_n-e1754961841656.jpg",
     "origin": "cesolutions.com.au media library (CES Facebook job photo re-hosted by CES), fetched 2026-09-16, converted to WebP at 1600px",
     "shows": "panels on a dark tin roof, gum trees"
+  },
+  "ces-hero-loop-3.mp4": {
+    "file": "ces-hero-loop-3.mp4",
+    "source": "https://www.facebook.com/CESolutionsNSW/videos/2125161921729785/ (CES drone video, 1080x608, first 11 s) followed by a CES drone clip supplied by Lee on 2026-10-07 (MicrosoftTeams-video (1).mp4, 406x720, stored sideways)",
+    "origin": "Built 2026-10-07 with ffmpeg: second clip rotated upright, both scaled to 1280x720 with light denoise and sharpening, 0.7 s cross-fade between them, CES logo (logo-wide-full.png) faded in at the centre of the frame for about 4 s near the end, then the last second cross-fades back into the opening shot so the file loops without a visible join, H.264, silent, 21 s",
+    "shows": "homepage hero background loop: a home install from above, then a shed roof panning up to paddocks, trees and the lake"
   }
 }

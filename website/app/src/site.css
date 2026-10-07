@@ -262,6 +262,8 @@ html:not(.js-form) .qf__step+.qf__step{margin-top:30px}
 .addr__list li em{display:block;font-style:normal;font-size:13.5px;color:var(--muted)}
 .addr__list li.is-hi{background:var(--tint)}
 .addr__list li.addr__busy,.addr__list li.addr__credit{cursor:default;font-size:13px;color:var(--muted);padding:6px 12px}
+.addr__status{display:flex;align-items:center;gap:6px;margin-top:7px;font-size:14px;color:var(--muted)}
+.addr__status.is-ok{color:var(--brand);font-weight:600}
 .qf__files{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 @media(max-width:560px){.qf__files{grid-template-columns:1fr}}
 .qf__file{position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px dashed #C7D0CB;border-radius:16px;cursor:pointer;transition:border-color .15s,background .15s}
@@ -432,6 +434,8 @@ html:not(.js-form) .qf__step+.qf__step{margin-top:30px}
 /* Hero film: the poster carries the first paint; the video fades in over it once it can play. */
 .hero-film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
 .hero-film.is-lit{opacity:1}
+.hero-film.is-front{z-index:1}
+.hero-film.is-cut{transition:none}
 .fade-x{-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
 .parallax{overflow:hidden}
 .parallax__layer{width:100%;height:100%}
