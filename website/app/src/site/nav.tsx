@@ -24,7 +24,7 @@ const SOLUTIONS:Item[]=[
 {href:'/commercial-solar',Icon:Building2,title:'Business & farm solar',desc:'Sheds, shops, cool rooms, offices'},
 {href:'/#quote',Icon:Car,title:'EV charging',desc:'Charge the car from your roof'},
 {href:'/#quote',Icon:Droplets,title:'Hot water heat pumps',desc:'Replace the electric tank'},
-{href:'/solar#how-it-works',Icon:Workflow,title:'How it works',desc:'Sun to switchboard in six steps'}];
+{href:'/solar#how-it-works',Icon:Workflow,title:'How it works',desc:'A day on solar, hour by hour'}];
 const ABOUT:Item[]=[
 {href:'/about',Icon:Users,title:'Our team',desc:'Family-owned, our own electricians'},
 {href:'/#our-work',Icon:Images,title:'Our work',desc:'Real installs from our crews'},

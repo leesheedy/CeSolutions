@@ -379,41 +379,56 @@ html:not(.js-form) .qf__step+.qf__step{margin-top:30px}
 .lightbox__cap a{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;margin-top:6px;font-size:14px;color:var(--haze);text-decoration:underline;text-underline-offset:3px}
 @media(max-width:600px){.lightbox__prev,.lightbox__next{top:auto;bottom:calc(50% - 24px)}.lightbox__cap p{display:none}}
 
-/* ── 7. Six-step diagram ──────────────────────────────────────────────────────────────────────── */
-.flow-svg{display:block;width:100%;height:auto;margin-top:44px;overflow:visible}
-.flow-svg--v{display:none}
-.flow-link{fill:none;stroke:var(--brand);stroke-width:3;stroke-linecap:round}
-.flow-pulse{fill:none;stroke:var(--mint);stroke-width:4;stroke-linecap:round;opacity:0}
-.gsap-ready .flow-pulse.is-live{opacity:1;animation:flow-pulse linear infinite}
-@keyframes flow-pulse{from{stroke-dashoffset:0}to{stroke-dashoffset:-400}}
-.flow-node circle{fill:var(--tint);stroke:#A9D3BD;stroke-width:2;transition:fill .3s,stroke .3s}
-.flow-node svg{color:var(--ink)}
-.flow-node.is-active circle{fill:var(--brand);stroke:var(--brand)}
-.flow-node.is-active svg{color:#fff}
-.flow-label{font-family:var(--font-sans);font-weight:700;font-size:21px;fill:var(--ink)}
-.flow-detail-panel{margin-top:30px;padding:28px 32px;border-radius:24px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow-card);min-height:176px}
-.flow-detail-body{animation:flow-in .45s var(--ease)}
-@keyframes flow-in{from{opacity:0;transform:translateY(8px)}}
-.flow-detail-n{display:block;font-size:14px;font-weight:600;color:var(--brand)}
-.flow-detail-panel h3{font-size:clamp(22px,2.3vw,28px);margin-top:6px}
-.flow-detail-panel p{margin-top:8px;color:var(--muted);max-width:62ch}
-.flow-dots{display:flex;gap:8px;margin-top:18px}
-.flow-dots button{position:relative;width:34px;height:6px;padding:0;border:0;border-radius:3px;background:var(--line);transition:background .2s,width .2s}
-.flow-dots button::before{content:"";position:absolute;inset:-18px -4px}
-.flow-dots button.is-on{width:56px;background:var(--brand)}
-.flow-steps{list-style:none;margin:0;padding:0}
-@media(min-width:861px){.flow-steps{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}}
+/* ── 7. A day on solar (energy-day.tsx) ─────────────────────────────────────────────────────────────── */
+.eday-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:44px}
+.eday-tabs button{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:10px 14px;border-radius:18px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font-weight:600;font-size:16px;transition:background .25s,border-color .25s,color .25s}
+.eday-tabs button:hover{border-color:var(--brand)}
+.eday-tabs button.is-on{background:var(--night);border-color:var(--night);color:#fff}
+.eday-tabs button.is-on svg{color:var(--mint)}
+.eday-tabs button i{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--mint);transform-origin:left;animation:eday-progress linear both}
+@keyframes eday-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.eday-stage{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-top:16px}
+.eday-diagram{padding:28px 28px 22px;border-radius:28px;background:#fff;border:1px solid var(--line)}
+.eday-svg{display:block;width:100%;height:auto;overflow:visible}
+.eday-svg--tall{display:none}
+.eday-rail{fill:none;stroke:var(--line);stroke-width:4;stroke-linecap:round}
+.eday-flow{fill:none;stroke:var(--brand);stroke-width:4;stroke-linecap:round;stroke-dasharray:2 14;animation:eday-fwd .9s linear infinite}
+.eday-flow--rev{animation-name:eday-rev}
+.eday-flow.is-bought{stroke:var(--ink)}
+@keyframes eday-fwd{from{stroke-dashoffset:16}to{stroke-dashoffset:0}}
+@keyframes eday-rev{from{stroke-dashoffset:0}to{stroke-dashoffset:16}}
+.eday-node rect{fill:var(--stone);stroke:var(--line);stroke-width:2;transition:fill .4s,stroke .4s}
+.eday-node svg{color:#9AA7AE;transition:color .4s}
+.eday-node text{font-family:var(--font-sans);font-weight:700;font-size:17px;fill:#9AA7AE;transition:fill .4s}
+.eday-node.is-on rect{fill:var(--tint);stroke:var(--brand)}
+.eday-node.is-on svg{color:var(--brand)}
+.eday-node.is-on text{fill:var(--ink)}
+.eday-key{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:14px;font-size:14px;color:var(--muted)}
+.eday-key span{display:inline-flex;align-items:center;gap:8px}
+.eday-key i{width:22px;height:4px;border-radius:2px;background:var(--brand)}
+.eday-key i.eday-key__bought{background:var(--ink)}
+.eday-panel{display:flex;flex-direction:column;padding:30px;border-radius:28px;background:var(--night);color:#fff}
+.eday-panel__body{animation:eday-in .45s var(--ease)}
+@keyframes eday-in{from{opacity:0;transform:translateY(8px)}}
+.eday-panel__time{font-size:14px;font-weight:600;color:var(--mint)}
+.eday-panel h3{margin-top:8px;font-size:clamp(24px,2.3vw,30px);line-height:1.15;letter-spacing:-.02em}
+.eday-panel__body>p:not(.eday-panel__time){margin-top:12px;font-size:16.5px;line-height:1.6;color:rgba(255,255,255,.82)}
+.eday-panel ul{list-style:none;margin:22px 0 0;padding:0;border-top:1px solid rgba(255,255,255,.14)}
+.eday-panel li{display:grid;grid-template-columns:92px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:15px}
+.eday-panel li span{color:rgba(255,255,255,.6)}
+.eday-panel li strong{font-weight:600;color:rgba(255,255,255,.6)}
+.eday-panel li.is-on strong{color:#fff}
+.eday-panel .link-arrow{margin-top:auto;padding-top:24px;color:var(--mint)}
+@media(max-width:1020px){.eday-stage{grid-template-columns:1fr}}
 @media(max-width:860px){
-  .flow-svg--h,.flow-svg--v,.flow-detail-panel{display:none}
-  .flow-steps{margin-top:30px}
-  .flow-steps li{position:relative;display:grid;grid-template-columns:48px 1fr;gap:16px;padding-bottom:26px}
-  .flow-steps li:last-child{padding-bottom:0}
-  .flow-steps li:not(:last-child)::before{content:"";position:absolute;left:23px;top:52px;bottom:4px;width:2px;background:#A9D3BD}
-  .flow-steps__icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--tint);color:var(--brand)}
-  .flow-steps li:first-child .flow-steps__icon{background:var(--brand);color:#fff}
-  .flow-steps h3{font-size:19px;line-height:1.25;margin-top:2px;letter-spacing:-.012em}
-  .flow-steps p{font-size:16px;color:var(--muted);margin-top:6px}
+  .eday-tabs{margin-top:30px;gap:6px}
+  .eday-tabs button{flex-direction:column;gap:5px;min-height:64px;padding:8px 4px;border-radius:16px;font-size:13.5px}
+  .eday-svg--wide{display:none}
+  .eday-svg--tall{display:block;max-width:360px;margin-inline:auto}
+  .eday-diagram{padding:22px 16px 18px}
+  .eday-panel{padding:24px 22px}
 }
+
 
 /* ── 8. FAQ, prose, misc ──────────────────────────────────────────────────────────────────────── */
 .faq-list details{border-bottom:1px solid var(--line)}

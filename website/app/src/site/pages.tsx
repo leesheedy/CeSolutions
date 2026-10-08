@@ -10,7 +10,7 @@ import {CtaBand,MAPS,PageHero,PHONE,PHONE_HREF,QuoteBand,SectionHead,VisitBand} 
 import {Rise} from './motion';
 import {WorkGallery,WorkStrip} from './projects';
 import {Reviews} from './reviews';
-import {SystemFlow} from './flow';
+import {SystemFlow} from './energy-day';
 
 const labels:Record<string,string>={solar:'Residential solar',batteries:'Home Batteries','commercial-solar':'Commercial solar',about:'Our team'};
 const strips:Record<string,['Solar'|'Batteries'|'Our team',string[],string]>={
