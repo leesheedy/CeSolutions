@@ -113,7 +113,7 @@ export const locationOrder=['wodonga','albury','yarrawonga','wagga-wagga','shepp
 export type TownService={slug:'solar-panels'|'home-batteries';label:string;noun:string;parent:string;parentLabel:string};
 export const townServices:TownService[]=[
 {slug:'solar-panels',label:'Solar panels',noun:'solar',parent:'/solar',parentLabel:'Residential solar'},
-{slug:'home-batteries',label:'Home batteries',noun:'home battery',parent:'/batteries',parentLabel:'Home batteries'}];
+{slug:'home-batteries',label:'Home Batteries',noun:'home battery',parent:'/batteries',parentLabel:'Home Batteries'}];
 export const townServiceBySlug=Object.fromEntries(townServices.map(s=>[s.slug,s]));
 /** One town-specific paragraph per service, grounded in the same facts as the town page. */
 const notes:Record<string,Record<TownService['slug'],string>>={

@@ -1,6 +1,6 @@
 // Runs automatically whenever Netlify verifies a form submission (the file name is the trigger) and emails the
 // team a readable version of the enquiry: who it is, what they want, one-tap call / reply / map buttons, the
-// attached bill and photos as buttons, and nothing for the fields that were left empty.
+// attached bill and photos as buttons (with a thumbnail for images), and nothing for the fields left empty.
 //
 // Netlify's own notification email cannot be styled, which is why this exists. It sends through Resend
 // (https://resend.com) and stays silent until these are set on the Netlify project:
@@ -9,18 +9,15 @@
 //   ENQUIRY_TO       who receives enquiries, comma-separated (defaults to it@cesolutions.com.au)
 //   ENQUIRY_ACK      set to "on" to also send the customer a short "we've got it" email
 // Until then nothing breaks: the submission is still stored and Netlify's plain notification still goes out.
+import {C,FONT,OFFICE,OFFICE_HREF,REVIEWS,button,esc,review,shell,steps} from '../lib/email.mjs';
 
-const OFFICE='(02) 6021 2000',OFFICE_HREF='tel:+61260212000';
-const C={night:'#0A1D2B',ink:'#0F1E29',muted:'#52616C',line:'#E1E6E3',stone:'#F3F5F2',tint:'#E7F4EC',brand:'#0B7A4E',mint:'#7FE3B2'};
-const FONT="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
 const FILES=[['bill','Power bill'],['roof_photo','Roof photo'],['meter_photo','Meter box'],['battery_photo','Battery location']];
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clean=s=>String(s??'').trim();
 const tel=s=>'tel:'+clean(s).replace(/[^0-9+]/g,'');
 const list=v=>(Array.isArray(v)?v:clean(v).split(/,\s*/)).map(clean).filter(Boolean);
 const fileOf=v=>v&&typeof v==='object'&&v.url?{url:v.url,name:v.filename||'file',size:v.size}:typeof v==='string'&&/^https?:\/\//.test(v)?{url:v,name:'file'}:null;
+const isImage=f=>/\.(jpe?g|png|gif)$/i.test(f.name);
 const kb=n=>!n?'':n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
-const button=(href,label,solid)=>`<a href="${esc(href)}" style="display:inline-block;margin:0 8px 8px 0;padding:13px 20px;border-radius:999px;font:600 15px/1 ${FONT};text-decoration:none;${solid?`background:${C.brand};color:#ffffff;border:1.5px solid ${C.brand}`:`background:#ffffff;color:${C.ink};border:1.5px solid #C7D0CB`}">${esc(label)}</a>`;
 const row=(label,value)=>`<tr><td style="padding:12px 0;border-top:1px solid ${C.line};width:128px;vertical-align:top;font:600 14px/1.45 ${FONT};color:${C.muted}">${esc(label)}</td><td style="padding:12px 0;border-top:1px solid ${C.line};vertical-align:top;font:400 16px/1.45 ${FONT};color:${C.ink}">${value}</td></tr>`;
 
 /** Builds the team email. Exported so it can be previewed without sending anything. */
@@ -38,13 +35,8 @@ export function renderEnquiry(d,meta={}){
     row('Attachments',files.length?files.map(([label])=>esc(label)).join(', '):`<span style="color:${C.muted}">None sent. Ask for a recent bill.</span>`)
   ].filter(Boolean).join('');
   const when=meta.created_at?new Date(meta.created_at).toLocaleString('en-AU',{timeZone:'Australia/Melbourne',weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}):'';
-  const html=`<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>${esc(subject)}</title></head>
-<body style="margin:0;padding:0;background:${C.stone}">
-<div style="display:none;max-height:0;overflow:hidden">${esc([services.join(', '),phone,place].filter(Boolean).join(' · '))}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.stone}"><tr><td align="center" style="padding:28px 14px">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid ${C.line}">
-<tr><td style="background:${C.night};padding:22px 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="font:700 15px/1.2 ${FONT};color:#ffffff;letter-spacing:.02em">Clean Energy Solutions</td><td align="right" style="font:600 13px/1.2 ${FONT};color:${C.mint}">New website enquiry</td></tr></table></td></tr>
-<tr><td style="padding:28px 28px 8px">
+  const fileCard=([label,f])=>`<a href="${esc(f.url)}" style="display:block;margin:0 0 8px;padding:12px 14px;border-radius:14px;border:1.5px solid ${C.line};text-decoration:none"><table role="presentation" cellpadding="0" cellspacing="0"><tr>${isImage(f)?`<td style="padding-right:14px;vertical-align:middle"><img src="${esc(f.url)}" width="64" height="64" alt="" style="display:block;width:64px;height:64px;border-radius:10px;object-fit:cover;border:0"></td>`:''}<td style="vertical-align:middle"><span style="display:block;font:600 15px/1.3 ${FONT};color:${C.ink}">${esc(label)}</span><span style="display:block;font:400 13px/1.4 ${FONT};color:${C.muted}">${esc(f.name)}${f.size?' · '+kb(f.size):''} · Open</span></td></tr></table></a>`;
+  const body=`<tr><td style="padding:28px 28px 8px">
   ${when?`<p style="margin:0 0 6px;font:500 13px/1.4 ${FONT};color:${C.muted}">${esc(when)}</p>`:''}
   <h1 style="margin:0 0 14px;font:700 28px/1.15 ${FONT};color:${C.ink};letter-spacing:-.02em">${esc(name)}</h1>
   ${chips?`<div style="margin:0 0 14px">${chips}</div>`:''}
@@ -52,20 +44,32 @@ export function renderEnquiry(d,meta={}){
 </td></tr>
 ${message?`<tr><td style="padding:8px 28px 4px"><div style="padding:16px 18px;border-radius:14px;background:${C.stone};font:400 16px/1.55 ${FONT};color:${C.ink};white-space:pre-wrap">${esc(message)}</div></td></tr>`:''}
 <tr><td style="padding:14px 28px 6px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rows}</table></td></tr>
-${files.length?`<tr><td style="padding:6px 28px 10px"><p style="margin:10px 0 10px;font:700 15px/1.3 ${FONT};color:${C.ink}">Files they sent</p>${files.map(([label,f])=>`<a href="${esc(f.url)}" style="display:block;margin:0 0 8px;padding:14px 16px;border-radius:14px;border:1.5px solid ${C.line};text-decoration:none"><span style="display:block;font:600 15px/1.3 ${FONT};color:${C.ink}">${esc(label)}</span><span style="display:block;font:400 13px/1.4 ${FONT};color:${C.muted}">${esc(f.name)}${f.size?' · '+kb(f.size):''} · Open</span></a>`).join('')}</td></tr>`:''}
-<tr><td style="padding:18px 28px 26px"><p style="margin:0;padding-top:18px;border-top:1px solid ${C.line};font:400 13px/1.55 ${FONT};color:${C.muted}">The site promises a reply within one business day. Replying to this email goes straight to ${esc(email||'the customer')}.</p></td></tr>
-</table>
-<p style="margin:16px 0 0;font:400 12px/1.5 ${FONT};color:${C.muted}">Sent from the enquiry form on the Clean Energy Solutions website.</p>
-</td></tr></table></body></html>`;
+${files.length?`<tr><td style="padding:6px 28px 10px"><p style="margin:10px 0 10px;font:700 15px/1.3 ${FONT};color:${C.ink}">Files they sent</p>${files.map(fileCard).join('')}</td></tr>`:''}
+<tr><td style="padding:18px 28px 26px"><p style="margin:0;padding-top:18px;border-top:1px solid ${C.line};font:400 13px/1.55 ${FONT};color:${C.muted}">The site promises a reply within one business day. Replying to this email goes straight to ${esc(email||'the customer')}.</p></td></tr>`;
+  const html=shell({title:subject,preheader:[services.join(', '),phone,place].filter(Boolean).join(' · '),tag:'New website enquiry',rows:body,note:'Sent from the enquiry form on the Clean Energy Solutions website.'});
   const text=[`New website enquiry: ${name}`,when,'',services.length?'Interested in: '+services.join(', '):'',phone?'Phone: '+phone:'',email?'Email: '+email:'',address?'Address: '+address:'',message?'\nMessage:\n'+message:'',files.length?'\nFiles:\n'+files.map(([l,f])=>`- ${l}: ${f.url}`).join('\n'):'\nNo files sent.'].filter(Boolean).join('\n');
   return {subject,html,text,email,name};
 }
 
-/** The optional acknowledgement to the customer: short, plain, and no promises beyond what the site makes. */
+const NEXT=[
+  ['We read your enquiry','Our solar consultant calls or emails within one business day.'],
+  ['We design your system','From your power bill, with a visit if the roof or switchboard needs a look.'],
+  ['You get a clear price','A design, expected savings and pricing in writing. Then it’s your call.']];
+/** The optional acknowledgement to the customer: what happens next, and no promises beyond what the site makes. */
 export function renderAck(d){
   const first=(clean(d.name).split(/\s+/)[0]||'there').slice(0,40);
-  const html=`<!doctype html><html lang="en-AU"><body style="margin:0;padding:0;background:${C.stone}"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:28px 14px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid ${C.line}"><tr><td style="background:${C.night};padding:22px 28px;font:700 15px/1.2 ${FONT};color:#ffffff">Clean Energy Solutions</td></tr><tr><td style="padding:28px;font:400 16px/1.6 ${FONT};color:${C.ink}"><h1 style="margin:0 0 12px;font:700 24px/1.2 ${FONT};letter-spacing:-.02em">Thanks, ${esc(first)}. We’ve got it.</h1><p style="margin:0 0 14px">Your enquiry is with the team in Wodonga. Our solar consultant will call or email within one business day.</p><p style="margin:0 0 18px">If you have a recent power bill handy, reply to this email with a photo of it. It’s what we design your system from.</p>${button(OFFICE_HREF,'Call '+OFFICE,true)}<p style="margin:18px 0 0;font-size:14px;color:${C.muted}">79 Elgin Boulevard, Wodonga VIC 3690</p></td></tr></table></td></tr></table></body></html>`;
-  const text=`Thanks, ${first}. We've got it.\n\nYour enquiry is with the team in Wodonga. Our solar consultant will call or email within one business day.\n\nIf you have a recent power bill handy, reply to this email with a photo of it.\n\nClean Energy Solutions\n${OFFICE}\n79 Elgin Boulevard, Wodonga VIC 3690`;
+  const body=`<tr><td style="padding:28px 28px 6px;font:400 16px/1.6 ${FONT};color:${C.ink}">
+  <h1 style="margin:0 0 12px;font:700 26px/1.2 ${FONT};color:${C.ink};letter-spacing:-.02em">Thanks, ${esc(first)}. We’ve got it.</h1>
+  <p style="margin:0">Your enquiry is with our team in Wodonga. Here’s what happens next.</p>
+</td></tr>
+<tr><td style="padding:14px 28px 6px">${steps(NEXT)}</td></tr>
+<tr><td style="padding:10px 28px 24px;font:400 16px/1.6 ${FONT};color:${C.ink}">
+  <p style="margin:0 0 16px;padding-top:18px;border-top:1px solid ${C.line}"><strong>Want to speed it up?</strong> Reply to this email with a photo of a recent power bill. It’s what we design your system from.</p>
+  ${button(OFFICE_HREF,'Call '+OFFICE,true)}
+</td></tr>
+${review(REVIEWS.install)}`;
+  const html=shell({title:'We’ve got your enquiry',preheader:'Our solar consultant will be in touch within one business day.',hero:'ces-install-crew-roof.jpg',heroAlt:'Two Clean Energy Solutions installers fitting solar panels on a roof',rows:body,note:'You’re getting this because you sent an enquiry through the Clean Energy Solutions website.',width:560});
+  const text=`Thanks, ${first}. We've got it.\n\nYour enquiry is with our team in Wodonga. What happens next:\n\n${NEXT.map(([t,b],i)=>`${i+1}. ${t}\n   ${b}`).join('\n')}\n\nWant to speed it up? Reply to this email with a photo of a recent power bill.\n\nClean Energy Solutions\n${OFFICE}\n79 Elgin Boulevard, Wodonga VIC 3690`;
   return {subject:'We’ve got your enquiry | Clean Energy Solutions',html,text};
 }
 

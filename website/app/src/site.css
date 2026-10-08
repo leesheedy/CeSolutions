@@ -132,7 +132,7 @@
    sits over it transparently until the page moves. */
 .site-header{position:sticky;top:0;z-index:50;height:var(--nav-h);margin-bottom:calc(var(--nav-h) * -1);
   display:flex;align-items:center;gap:20px;padding-inline:max(24px,calc((100% - 1240px)/2));color:#fff;
-  background:transparent;border-bottom:1px solid transparent;transition:background .3s,border-color .3s,box-shadow .3s}
+  background:transparent;border-bottom:1px solid transparent;transition:background .3s,border-color .3s,box-shadow .3s,transform .45s var(--ease),opacity .3s}
 .site-header.is-scrolled{background:rgba(10,29,43,.95);backdrop-filter:saturate(160%) blur(16px);-webkit-backdrop-filter:saturate(160%) blur(16px);
   border-bottom-color:rgba(255,255,255,.08);box-shadow:0 12px 30px -22px rgba(4,12,18,.9)}
 .brand{display:inline-flex;flex:none}
@@ -200,13 +200,15 @@
 /* Thumb-reach bar on phones: call or quote, always there. */
 .mobile-dock{display:none}
 @media(max-width:860px){
-  .mobile-dock{position:fixed;left:0;right:0;bottom:0;z-index:45;display:grid;transform:translateY(110%);transition:transform .35s var(--ease);grid-template-columns:1fr 1.25fr;gap:10px;
+  .mobile-dock{position:fixed;left:0;right:0;bottom:0;z-index:45;display:grid;transform:translateY(110%);opacity:0;transition:transform .45s var(--ease),opacity .3s;grid-template-columns:1fr 1.25fr;gap:10px;
     padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line)}
   .mobile-dock a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border-radius:999px;font-weight:700;font-size:15.5px}
   .mobile-dock a:first-child{border:1.5px solid #C7D0CB;color:var(--ink)}
   .mobile-dock a:last-child{background:var(--brand);color:#fff}
   body{padding-bottom:calc(69px + env(safe-area-inset-bottom))}
-  .mobile-dock.is-on{transform:none}
+  .mobile-dock.is-on{transform:none;opacity:1}
+  /* On the enquiry form the header slides up out of the way; keyboard focus inside it brings it back. */
+  .site-header.is-away:not(:focus-within){transform:translateY(-110%);opacity:0;pointer-events:none}
   [inert].mobile-dock{display:none}
 }
 

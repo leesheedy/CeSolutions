@@ -17,6 +17,7 @@ const files = {
   "/": "index.html",
   "/solar": "solar.html",
   "/batteries": "batteries.html",
+  "/battery-rebate": "battery-rebate.html",
   "/commercial-solar": "commercial-solar.html",
   "/about": "about.html",
   "/contact": "contact.html",

@@ -1,5 +1,5 @@
 /* Site header. Desktop: Radix NavigationMenu (src/components/ui/navigation-menu.tsx, viewport=false so each
- * panel opens under its own trigger) with three panels — Solar & batteries, Areas, About — plus phone and the
+ * panel opens under its own trigger) with three panels — Solar & Batteries, Areas, About — plus phone and the
  * quote CTA. Phone/tablet: a hamburger opens a full-screen menu (Motion) with the same links grouped, big tap
  * targets, the phone number and the quote CTA pinned at the bottom. Body scroll locks while it is open; Escape
  * and any link close it; focus goes to the close button and returns to the hamburger afterwards. */
@@ -19,7 +19,8 @@ export const Instagram=({size=20}:{size?:number})=><svg width={size} height={siz
 type Item={href:string;title:string;desc:string;Icon?:ComponentType<LucideProps>};
 const SOLUTIONS:Item[]=[
 {href:'/solar',Icon:Sun,title:'Residential solar',desc:'Panels sized to your roof and your bills'},
-{href:'/batteries',Icon:BatteryCharging,title:'Home batteries',desc:'Run the evening on your own power'},
+{href:'/batteries',Icon:BatteryCharging,title:'Home Batteries',desc:'Run the evening on your own power'},
+{href:'/battery-rebate',Icon:BadgePercent,title:'Battery rebate guide',desc:'Who qualifies and how to get it'},
 {href:'/commercial-solar',Icon:Building2,title:'Business & farm solar',desc:'Sheds, shops, cool rooms, offices'},
 {href:'/#quote',Icon:Car,title:'EV charging',desc:'Charge the car from your roof'},
 {href:'/#quote',Icon:Droplets,title:'Hot water heat pumps',desc:'Replace the electric tank'},
@@ -46,7 +47,7 @@ function PanelLink({item,current}:{item:Item;current:string}){
 function DesktopNav({current,quote}:{current:string;quote:string}){
   return <NavigationMenu viewport={false} className="desk-nav" aria-label="Main navigation">
     <NavigationMenuList className="desk-nav__list">
-      <NavigationMenuItem><NavigationMenuTrigger className="nm-trigger">Solar & batteries</NavigationMenuTrigger><NavigationMenuContent className="nm-panel nm-panel--wide">
+      <NavigationMenuItem><NavigationMenuTrigger className="nm-trigger">Solar & Batteries</NavigationMenuTrigger><NavigationMenuContent className="nm-panel nm-panel--wide">
         <div className="nm-panel__grid"><ul className="nm-panel__links">{SOLUTIONS.map(i=><PanelLink key={i.title} item={i} current={current}/>)}</ul>
         <NavigationMenuLink asChild><a href={quote} className="nm-feature"><span className="nm-feature__kicker">Free quote</span><strong>Not sure where to start?</strong><p>Send a bill. Our solar consultant designs the right setup and replies within one business day.</p><span className="nm-feature__cta">Get my free quote <ArrowRight size={16} aria-hidden="true"/></span></a></NavigationMenuLink></div>
       </NavigationMenuContent></NavigationMenuItem>
@@ -89,6 +90,15 @@ export function Header(){
   const scrolled=useScrolled();
   // The call/quote bar on phones waits until the hero's own two buttons have scrolled away.
   const pastHero=useScrolled(620);
+  // While the enquiry form fills the middle of the screen the header and the phone dock slide out of its way.
+  const [onForm,setOnForm]=useState(false);
+  useEffect(()=>{
+    const forms=[...document.querySelectorAll('form.qf')];if(!forms.length)return;
+    const seen=new Set<Element>();
+    const io=new IntersectionObserver(es=>{for(const e of es){if(e.isIntersecting)seen.add(e.target);else seen.delete(e.target);}setOnForm(seen.size>0);},{rootMargin:'-40% 0px -40% 0px'});
+    for(const f of forms)io.observe(f);
+    return()=>{io.disconnect();setOnForm(false);};
+  },[path]);
   const trigger=useRef<HTMLButtonElement>(null);
   const closeBtn=useRef<HTMLButtonElement>(null);
   // Pages that carry the enquiry form link to it in place; everything else goes to the homepage form.
@@ -110,7 +120,7 @@ export function Header(){
     <a className="skip-link" href="#main">Skip to content</a>
     {/* Announcement strip above the floating nav — same claim the batteries card already makes. */}
     <a className="ribbon" href={quote}><span><b>Federal battery discount is open now.</b><span className="max-sm:hidden"> See what it takes off your quote</span></span><ArrowRight size={14} aria-hidden="true"/></a>
-    <header className={scrolled?'site-header is-scrolled':'site-header'}>
+    <header className={'site-header'+(scrolled?' is-scrolled':'')+(onForm&&!open?' is-away':'')}>
       <a href="/" className="brand" aria-label="Clean Energy Solutions home"><img src="/assets/logo-wide-420.webp" width="420" height="120" alt="Clean Energy Solutions"/></a>
       <DesktopNav current={path} quote={quote}/>
       <a className="nav-phone" href={PHONE}><Phone size={18} aria-hidden="true"/>(02) 6021 2000</a>
@@ -118,6 +128,6 @@ export function Header(){
       <button className="menu-toggle" type="button" ref={trigger} aria-expanded={open} aria-controls="mobile-menu" onClick={()=>setOpen(o=>!o)}>Menu<Menu size={22} aria-hidden="true"/></button>
     </header>
     <MobileMenu open={open} onClose={close} closeRef={closeBtn} quote={quote}/>
-    <nav className={pastHero?'mobile-dock is-on':'mobile-dock'} aria-label="Quick contact"><a href={PHONE}><Phone size={17} aria-hidden="true"/>Call us</a><a href={quote}>Get my free quote</a></nav>
+    <nav className={pastHero&&!onForm?'mobile-dock is-on':'mobile-dock'} aria-label="Quick contact"><a href={PHONE}><Phone size={17} aria-hidden="true"/>Call us</a><a href={quote}>Get my free quote</a></nav>
   </>;
 }

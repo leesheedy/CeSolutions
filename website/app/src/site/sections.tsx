@@ -5,10 +5,10 @@
  * one-day installs, 25–30 yr panels, 4.8/5 from 26 SolarQuotes ratings, Daniel's 15+ years). No staff are
  * named except Daniel; the consultant is "our solar consultant". */
 import {useEffect,useRef,useState,type ReactNode} from 'react';
-import {ArrowRight,ArrowUpRight,BatteryCharging,Building2,Car,Check,ChevronRight,Clock,Droplets,HardHat,HelpCircle,MapPin,Pause,Phone,Play,ShieldCheck,Star,Sun,Users} from 'lucide-react';
+import {ArrowRight,ArrowUpRight,BatteryCharging,Building2,Car,Check,ChevronRight,Droplets,HardHat,HelpCircle,MapPin,Phone,ShieldCheck,Star,Sun,Users} from 'lucide-react';
 import {useCalm} from './a11y';
 import {ChecklistFormRegistration,QuoteForm} from './quote-form';
-import {Parallax,Reveal,Rise} from './motion';
+import {HeroParallax,Parallax,Reveal,Rise} from './motion';
 import {BentoCard,BentoGrid} from '@/components/ui/bento-grid';
 import {InfiniteSlider} from '@/components/ui/infinite-slider';
 import {NumberTicker} from '@/components/ui/number-ticker';
@@ -37,7 +37,6 @@ const HERO_FILM='/assets/ces-hero-loop-3.mp4';
 function HeroFilm(){
   const [on,setOn]=useState(false);
   const [lit,setLit]=useState(false);
-  const [paused,setPaused]=useState(false);
   const calm=useCalm();
   // Two copies of the clip take turns. The native `loop` attribute seeks back to the start when the clip ends,
   // and the decoder restarting there froze the picture for a moment on every pass. Instead the idle copy sits
@@ -48,7 +47,6 @@ function HeroFilm(){
   const [front,setFront]=useState(0);
   const [prev,setPrev]=useState<number|null>(null);
   const [cut,setCut]=useState(false);
-  const held=useRef(false);held.current=paused;
   useEffect(()=>{
     const c=(navigator as Navigator&{connection?:{saveData?:boolean;effectiveType?:string}}).connection;
     setOn(!calm&&!c?.saveData&&!/2g/.test(c?.effectiveType??''));
@@ -59,7 +57,7 @@ function HeroFilm(){
     // so set it and start playback explicitly rather than trusting the attribute.
     for(const v of all)if(v){v.muted=true;v.defaultMuted=true;}
     const active=()=>all[cur.current];
-    const play=()=>{if(!held.current)void active()?.play().catch(()=>{});};
+    const play=()=>{void active()?.play().catch(()=>{});};
     play();
     let swapping=false,timer:number|undefined;
     const swap=()=>{
@@ -79,24 +77,22 @@ function HeroFilm(){
     return()=>{io.disconnect();window.clearTimeout(timer);for(const v of all)v?.removeEventListener('ended',ended);};
   },[on]);
   if(!on)return null;
-  const toggle=()=>{const v=vids.current[cur.current];if(!v)return;if(paused){setPaused(false);held.current=false;void v.play().catch(()=>{});}else{setPaused(true);v.pause();}};
-  return <><div className="absolute inset-0 isolate" aria-hidden="true">{[0,1].map(i=><video key={i} ref={el=>{vids.current[i]=el;}} className={'hero-film'+(lit&&(i===front||i===prev)?' is-lit':'')+(i===front?' is-front':'')+(cut?' is-cut':'')} src={i===0||lit?HERO_FILM:undefined} autoPlay={i===0} muted playsInline preload="auto" tabIndex={-1} disablePictureInPicture onPlaying={i===0?()=>setLit(true):undefined}/>)}</div>
-    {/* WCAG 2.2.2: anything that moves for more than five seconds needs a way to stop it. */}
-    <button type="button" onClick={toggle} aria-pressed={paused} className="absolute right-5 bottom-5 z-20 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/25 bg-night/55 px-4 text-[14px] font-semibold text-white backdrop-blur-md transition-colors hover:bg-night/80 max-lg:top-[calc(var(--nav-h)+16px)] max-lg:bottom-auto max-lg:min-h-10 max-lg:px-3">{paused?<Play size={15} aria-hidden="true"/>:<Pause size={15} aria-hidden="true"/>}{paused?'Play video':'Pause video'}</button></>;
+  return <HeroParallax><div className="absolute inset-0 isolate">{[0,1].map(i=><video key={i} ref={el=>{vids.current[i]=el;}} className={'hero-film'+(lit&&(i===front||i===prev)?' is-lit':'')+(i===front?' is-front':'')+(cut?' is-cut':'')} src={i===0||lit?HERO_FILM:undefined} autoPlay={i===0} muted playsInline preload="auto" tabIndex={-1} disablePictureInPicture onPlaying={i===0?()=>setLit(true):undefined}/>)}</div></HeroParallax>;
 }
 
 const heroProof=['Our own licensed electricians, no subcontractors','Most home systems installed in a single day','25–30 year panel warranties','Shopfront at 79 Elgin Boulevard, Wodonga'];
+const heroRating=(gap='')=><a href={SOLARQUOTES} className={(gap?gap+' ':'')+'inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 py-2 pr-4 pl-3 text-[14.5px] font-medium backdrop-blur-md transition-colors hover:bg-white/20'}><Stars size={15}/><span><strong className="font-bold">4.8/5</strong> from 26 SolarQuotes reviews</span><ArrowUpRight size={15} aria-hidden="true"/></a>;
 /** Full-bleed hero over CES's own drone footage of an install. */
 export function Hero(){
   return <section className="on-dark relative isolate flex min-h-[min(100svh,940px)] items-end overflow-hidden bg-night text-white" aria-labelledby="hero-heading">
-    <img className="absolute inset-0 size-full object-cover" src="/assets/ces-drone-hero-1920.webp" srcSet="/assets/ces-drone-hero-760.webp 760w, /assets/ces-drone-hero-1200.webp 1200w, /assets/ces-drone-hero-1920.webp 1920w" sizes="100vw" alt="" width={1920} height={1080} fetchPriority="high" decoding="async"/>
+    <HeroParallax><img className="absolute inset-0 size-full object-cover" src="/assets/ces-drone-hero-1920.webp" srcSet="/assets/ces-drone-hero-760.webp 760w, /assets/ces-drone-hero-1200.webp 1200w, /assets/ces-drone-hero-1920.webp 1920w" sizes="100vw" alt="" width={1920} height={1080} fetchPriority="high" decoding="async"/></HeroParallax>
     <HeroFilm/>
     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,29,43,.72)_0%,rgba(10,29,43,.18)_26%,rgba(10,29,43,.5)_56%,rgba(10,29,43,.94)_100%)] max-lg:bg-[linear-gradient(180deg,rgba(10,29,43,.74)_0%,rgba(10,29,43,.38)_24%,rgba(10,29,43,.72)_52%,rgba(10,29,43,.96)_100%)]" aria-hidden="true"/>
     <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,29,43,.78)_0%,rgba(10,29,43,.3)_55%,rgba(10,29,43,0)_100%)] max-lg:hidden" aria-hidden="true"/>
     <div className="wrap relative z-10 grid gap-10 pt-[calc(var(--nav-h)+88px)] pb-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,.7fr)] lg:items-end lg:gap-16 lg:pb-20">
       <div>
-        <Rise><a href={SOLARQUOTES} className="mb-7 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 py-2 pr-4 pl-3 text-[14.5px] font-medium backdrop-blur-md transition-colors hover:bg-white/20"><Stars size={15}/><span><strong className="font-bold">4.8/5</strong> from 26 SolarQuotes reviews</span><ArrowUpRight size={15} aria-hidden="true"/></a></Rise>
-        <Reveal as="h1" id="hero-heading" className="h-display sm:[&_.reveal__line]:whitespace-nowrap" lines={['Solar and batteries','for Albury-Wodonga','homes.']} stagger={.08}/>
+        <Rise className="max-lg:hidden">{heroRating('mb-7')}</Rise>
+        <Reveal as="h1" id="hero-heading" className="h-display sm:[&_.reveal__line]:whitespace-nowrap" lines={['Solar and Batteries','for Albury-Wodonga','homes.']} stagger={.08}/>
         <Rise delay={.2}>
           <p className="mt-6 max-w-[52ch] text-[clamp(1.08rem,1.4vw,1.28rem)] leading-relaxed text-white/90">Designed from your actual power bills and installed by our own licensed electricians, usually in a single day. Savings typically land between 50% and 100% of your bill.</p>
           <div className="mt-8 flex flex-wrap gap-3"><a href="#quote" className="btn btn--mint">Get my free quote <ArrowRight size={18} aria-hidden="true"/></a><a href={PHONE_HREF} className="btn btn--ghost"><Phone size={17} aria-hidden="true"/>{PHONE}</a></div>
@@ -107,6 +103,8 @@ export function Hero(){
         <ul className="grid gap-3 rounded-3xl border border-white/15 bg-night/45 p-6 backdrop-blur-xl sm:grid-cols-2 lg:max-w-sm lg:grid-cols-1" aria-label="Why people choose CES">
           {heroProof.map(t=><li key={t} className="flex items-start gap-3 text-[15.5px] leading-snug font-medium"><span className="mt-0.5 grid size-5 flex-none place-items-center rounded-full bg-mint text-night"><Check size={13} strokeWidth={3} aria-hidden="true"/></span>{t}</li>)}
         </ul>
+        {/* On phones the rating sits under the proof list so the headline leads; on desktop it stays above it. */}
+        <div className="mt-5 lg:hidden">{heroRating()}</div>
       </Rise>
     </div>
   </section>;
@@ -117,7 +115,11 @@ const stats:{value:number;decimals?:number;suffix:string;label:string}[]=[
 {value:26,suffix:'',label:'Independent customer reviews'},
 {value:15,suffix:'+',label:'Years installing solar on the Border'},
 {value:1,suffix:' day',label:'Typical home installation'}];
-const brands=['Tesla','Sungrow','Sigenergy','BYD','Fronius','Enphase','Jinko'];
+// [name, file, intrinsic width, intrinsic height, display height]. Heights differ so the marks read as the same
+// optical size: a long wordmark needs less height than a stacked badge. Sigenergy leads as the recommended brand.
+const brands:[string,string,number,number,number][]=[
+['Sigenergy','brand-sigenergy.png',370,72,30],['Tesla','brand-tesla.svg',1236,161,17],['Sungrow','brand-sungrow.svg',1552,340,26],
+['BYD','brand-byd.svg',843,510,36],['Fronius','brand-fronius.png',480,140,34],['Enphase','brand-enphase.svg',312,56,22],['Jinko Solar','brand-jinko.png',146,59,34]];
 /** Proof directly under the hero: four published figures, then the equipment brands on a slow rail. */
 export function ProofBar(){
   return <section className="border-b border-line bg-white" aria-label="Clean Energy Solutions in numbers">
@@ -131,7 +133,10 @@ export function ProofBar(){
       <div className="flex flex-col gap-4 border-t border-line py-7 md:flex-row md:items-center md:gap-10">
         <p className="flex-none text-[15px] font-semibold text-ink">Equipment we install and service</p>
         <InfiniteSlider className="fade-x min-w-0 flex-1" gap={56} speed={38} speedOnHover={14}>
-          {brands.map(b=><span key={b} className="text-[1.35rem] font-bold tracking-tight whitespace-nowrap text-muted">{b}</span>)}
+          {brands.map(([name,file,w,h,show],i)=><span key={name} className="flex flex-none items-center gap-3 whitespace-nowrap">
+            <img src={'/assets/'+file} alt={name} width={Math.round(w*show/h)} height={show} loading="lazy" decoding="async" style={{height:show,width:'auto'}}/>
+            {i===0&&<span className="rounded-full bg-tint px-2.5 py-1 text-[12.5px] leading-none font-semibold text-brand">CES recommended</span>}
+          </span>)}
         </InfiniteSlider>
       </div>
     </div>
@@ -144,7 +149,7 @@ export function Services(){
   return <section id="solutions" className="bg-stone py-20 md:py-28" aria-labelledby="services-heading">
     <div className="wrap">
       <div className="grid items-end gap-6 lg:grid-cols-[1.15fr_.85fr] lg:gap-16">
-        <SectionHead eyebrow="What we install" id="services-heading" lines={['Solar, batteries and EV charging.','One local team.']}/>
+        <SectionHead eyebrow="What we install" id="services-heading" lines={['Solar, Batteries and EV charging.','One local team.']}/>
         <Rise delay={.12}><p className="lede">Start with panels or go the whole way to a battery and an EV charger. Either way we design around your bills and what you’re planning next, and we’re still on the phone years later.</p></Rise>
       </div>
       <Rise delay={.1}><BentoGrid className="mt-12">
@@ -159,7 +164,7 @@ export function Services(){
   </section>;
 }
 
-const promises=['Designed from your actual usage, not a brochure','Clear pricing with expected savings, before you commit','Free, no obligation, no pushy follow-up'];
+const promises=['Sized from your own power bills','Clear price and expected savings up front','Free, no obligation, and a reply within one business day'];
 /** Dark band: the pitch on the left, the three-step enquiry form on the right. */
 export function QuoteBand(){
   return <section id="quote" className="on-dark relative overflow-hidden bg-night py-20 text-white md:py-28" aria-labelledby="quote-heading">
@@ -167,11 +172,10 @@ export function QuoteBand(){
     <div className="pointer-events-none absolute -top-40 -left-40 size-[520px] rounded-full bg-brand/30 blur-[120px]" aria-hidden="true"/>
     <div className="wrap relative grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16">
       <div>
-        <SectionHead eyebrow="Free quote" id="quote-heading" lines={['Get a real number,','not a sales pitch.']}>Tell us what you’re after and send a bill. We design around how you use power, then come back with clear pricing. No pressure, no call centre.</SectionHead>
+        <SectionHead eyebrow="Free quote" id="quote-heading" lines={['Get a real number,','not a sales pitch.']}>Tell us what you’re after and send a recent bill. We’ll come back with a system sized to your home and a clear price.</SectionHead>
         <Rise delay={.2}>
-          <ul className="mt-8 grid gap-3.5">{promises.map(p=><li key={p} className="flex items-start gap-3 text-[16.5px] font-medium"><span className="mt-0.5 grid size-6 flex-none place-items-center rounded-full bg-mint/15 text-mint"><Check size={14} strokeWidth={3} aria-hidden="true"/></span>{p}</li>)}</ul>
-          <p className="mt-8 flex items-center gap-2.5 text-[15.5px] font-semibold text-mint"><Clock size={18} aria-hidden="true"/>Reply within one business day</p>
-          <a href={PHONE_HREF} className="mt-6 flex max-w-sm items-center gap-4 rounded-2xl border border-white/12 bg-white/6 p-4 transition-colors hover:bg-white/10"><span className="grid size-12 flex-none place-items-center rounded-full bg-mint text-night"><Phone size={20} aria-hidden="true"/></span><span className="text-[15px] text-haze">Prefer to talk?<strong className="block text-[1.35rem] leading-tight font-bold text-white">{PHONE}</strong></span></a>
+          <ul className="mt-6 grid gap-3 lg:mt-8 lg:gap-3.5">{promises.map(p=><li key={p} className="flex items-start gap-3 text-[15.5px] font-medium lg:text-[16.5px]"><span className="mt-0.5 grid size-6 flex-none place-items-center rounded-full bg-mint/15 text-mint"><Check size={14} strokeWidth={3} aria-hidden="true"/></span>{p}</li>)}</ul>
+          <a href={PHONE_HREF} className="mt-6 flex max-w-sm items-center gap-3 transition-colors lg:mt-8 lg:gap-4 lg:rounded-2xl lg:border lg:border-white/12 lg:bg-white/6 lg:p-4 lg:hover:bg-white/10"><span className="grid size-9 flex-none place-items-center rounded-full bg-mint text-night lg:size-12"><Phone size={18} aria-hidden="true"/></span><span className="text-[15px] text-haze">Prefer to talk? <strong className="font-bold text-white lg:block lg:text-[1.35rem] lg:leading-tight">{PHONE}</strong></span></a>
         </Rise>
       </div>
       <QuoteForm/>
@@ -181,7 +185,7 @@ export function QuoteBand(){
 }
 
 const reasons=[
-{Icon:ShieldCheck,title:'Products that last',body:'Tesla, Sungrow, Sigenergy, BYD, Fronius, Enphase and Jinko. Brands we know and can service, with 25–30 year panel warranties.'},
+{Icon:ShieldCheck,title:'Products that last',body:'Sigenergy is our recommended pick, alongside Tesla, Sungrow, BYD, Fronius, Enphase and Jinko. Brands we know and can service, with 25–30 year panel warranties.'},
 {Icon:HardHat,title:'Our own licensed, accredited electricians',body:'Led by Daniel, with more than 15 years installing solar on the Border. No subcontractors. Tidy work on every roof.'},
 {Icon:Users,title:'Rated 4.8/5 by real customers',body:'26 SolarQuotes reviews: installation 5.0, customer service 4.9. The people who quote and install are the ones who answer the phone.'}];
 /** Why CES: the crew photograph beside three reasons. */
@@ -232,7 +236,7 @@ export function Rebates(){
         <Rise delay={.12}><p className="lede">Every eligible solar install gets the federal STC discount on panels, and eligible home batteries get the federal Cheaper Home Batteries discount. Both come off the price you pay. We handle the applications and the distributor paperwork.</p></Rise>
       </div>
       <ul className="mt-12 grid gap-4 md:grid-cols-3">{rebates.map((r,i)=><li key={r.name} className="flex"><Rise delay={i*.08} className="flex w-full"><a href={r.href} className="group flex w-full flex-col rounded-3xl border border-line bg-white p-7 transition-[border-color,box-shadow] duration-300 hover:border-brand/50 hover:shadow-[var(--shadow-card)]"><span className="text-sm font-semibold text-brand">{r.who}</span><h3 className="mt-2 text-[1.45rem] leading-tight font-bold tracking-tight">{r.name}</h3><p className="mt-3 text-[16px] text-muted">{r.body}</p><span className="mt-auto flex items-center gap-2 pt-7 text-[15px] font-semibold text-ink">Official program page<ArrowUpRight size={17} aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/></span></a></Rise></li>)}</ul>
-      <p className="mt-6 max-w-[80ch] text-[14.5px] text-muted">The battery discount steps down on a fixed schedule, so an earlier install date gets the bigger discount. Eligibility and equipment requirements apply. Solar Victoria applies to Victorian properties only; Albury customers are covered by the federal programs. Confirm current requirements for your installation date.</p>
+      <p className="mt-6 max-w-[80ch] text-[14.5px] text-muted">The battery discount steps down on a fixed schedule, so an earlier install date gets the bigger discount. Eligibility and equipment requirements apply. Solar Victoria applies to Victorian properties only; Albury customers are covered by the federal programs. Confirm current requirements for your installation date. <a className="font-semibold text-brand underline underline-offset-2" href="/battery-rebate">How to get the battery rebate</a>.</p>
     </div>
   </section>;
 }

@@ -13,6 +13,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BatteryRebateRouteImport } from './routes/battery-rebate'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as PageRouteImport } from './routes/$page'
 import { Route as IndexRouteImport } from './routes/index'
@@ -38,6 +39,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BatteryRebateRoute = BatteryRebateRouteImport.update({
+  id: '/battery-rebate',
+  path: '/battery-rebate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$page': typeof PageRoute
   '/app': typeof AppRoute
+  '/battery-rebate': typeof BatteryRebateRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$page': typeof PageRoute
   '/app': typeof AppRoute
+  '/battery-rebate': typeof BatteryRebateRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$page': typeof PageRoute
   '/app': typeof AppRoute
+  '/battery-rebate': typeof BatteryRebateRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$page'
     | '/app'
+    | '/battery-rebate'
     | '/contact'
     | '/privacy'
     | '/robots.txt'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$page'
     | '/app'
+    | '/battery-rebate'
     | '/contact'
     | '/privacy'
     | '/robots.txt'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$page'
     | '/app'
+    | '/battery-rebate'
     | '/contact'
     | '/privacy'
     | '/robots.txt'
@@ -151,6 +163,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PageRoute: typeof PageRoute
   AppRoute: typeof AppRoute
+  BatteryRebateRoute: typeof BatteryRebateRoute
   ContactRoute: typeof ContactRoute
   PrivacyRoute: typeof PrivacyRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
@@ -188,6 +201,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/battery-rebate': {
+      id: '/battery-rebate'
+      path: '/battery-rebate'
+      fullPath: '/battery-rebate'
+      preLoaderRoute: typeof BatteryRebateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -239,6 +259,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PageRoute: PageRoute,
   AppRoute: AppRoute,
+  BatteryRebateRoute: BatteryRebateRoute,
   ContactRoute: ContactRoute,
   PrivacyRoute: PrivacyRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,

@@ -30,6 +30,15 @@ export function Parallax({children,className,intensity=34,scale=1.12}:{children:
   return <div ref={ref} className={className?'parallax '+className:'parallax'}><motion.div className="parallax__layer" data-motion="" style={reduce?undefined:{y,scale}}>{children}</motion.div></div>;
 }
 
+/** The homepage hero's background layer: it travels at 70% of the page's speed while the hero scrolls away, so
+ * the footage appears to sit behind the copy. Only the first screen of scrolling moves it. */
+export function HeroParallax({children}:{children:ReactNode}){
+  const reduce=useReducedMotion();
+  const {scrollY}=useScroll();
+  const y=useTransform(scrollY,v=>Math.min(v,1100)*.3);
+  return <motion.div className="absolute inset-0" data-motion="" aria-hidden="true" style={reduce?undefined:{y}}>{children}</motion.div>;
+}
+
 /** Heading whose lines slide up out of a mask. Pass each visual line separately.
  * The heading itself is observed: the masked spans sit outside their clip until
  * they animate, so an observer on them would never report an intersection. */

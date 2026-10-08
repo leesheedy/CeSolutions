@@ -7,7 +7,7 @@ const MAPS_LINK='https://www.google.com/maps/search/?api=1&query=79%20Elgin%20Bo
 /** Marks a link that leaves the site. */
 export function Arrow(){return <ArrowUpRight size={17} aria-hidden="true"/>}
 const footerColumns=[
-{title:'Services',links:[['Residential solar','/solar'],['Home batteries','/batteries'],['Commercial solar','/commercial-solar'],['How solar works','/solar#how-it-works'],['Rebates','/#rebates']]},
+{title:'Services',links:[['Residential solar','/solar'],['Home Batteries','/batteries'],['Commercial solar','/commercial-solar'],['How solar works','/solar#how-it-works'],['Battery rebate guide','/battery-rebate'],['Rebates','/#rebates']]},
 {title:'Company',links:[['Our team','/about'],['Our work','/#our-work'],['Reviews','/#reviews'],['FAQ','/#faq'],['Contact','/contact']]},
 {title:'Areas',links:[['Wodonga','/locations/wodonga'],['Albury','/locations/albury'],['Yarrawonga','/locations/yarrawonga'],['Wagga Wagga','/locations/wagga-wagga'],['Shepparton','/locations/shepparton'],['All areas','/locations']]}];
 /** Footer: brand and contact details, three link columns, then the legal line. */
