@@ -10,7 +10,6 @@
 //   ENQUIRY_TO       who receives enquiries, comma-separated (defaults to it@cesolutions.com.au)
 //   ENQUIRY_ACK      set to "on" to also send the customer a short "we've got it" email
 // Until then nothing breaks: the submission is still stored and Netlify's plain notification still goes out.
-import {connectLambda} from '@netlify/blobs';
 import {C,FONT,OFFICE,OFFICE_HREF,REVIEWS,button,esc,review,shell,steps} from '../lib/email.mjs';
 import {close,openStore} from '../lib/checklist.mjs';
 
@@ -106,11 +105,13 @@ export function renderUpload(d,rec,meta={}){
   return {subject,html,text,email,count:files.length};
 }
 
-export const handler=async(event)=>{
-  let payload;try{payload=JSON.parse(event.body||'{}').payload;}catch{return {statusCode:400,body:'bad payload'};}
-  if(!payload||!['enquiry','checklist-upload'].includes(payload.form_name))return {statusCode:200,body:'ignored'};
+// Modern handler (Request in, Response out): the checklist store is only reachable from this runtime.
+const reply=(body,status=200)=>new Response(body,{status});
+export default async(req)=>{
+  let payload;try{payload=(await req.json()).payload;}catch{return reply('bad payload',400);}
+  if(!payload||!['enquiry','checklist-upload'].includes(payload.form_name))return reply('ignored');
   const key=process.env.RESEND_API_KEY,sender=process.env.ENQUIRY_FROM||process.env.CHECKLIST_FROM;
-  if(!key||!sender)return {statusCode:200,body:'unconfigured'};
+  if(!key||!sender)return reply('unconfigured');
   // A bare address shows in inboxes as "info"; give it the business name.
   const from=sender.includes('<')?sender:`Clean Energy Solutions <${sender.trim()}>`;
   const to=(process.env.ENQUIRY_TO||'it@cesolutions.com.au').split(',').map(s=>s.trim()).filter(Boolean);
@@ -118,15 +119,15 @@ export const handler=async(event)=>{
   if(payload.form_name==='checklist-upload'){
     // Uploading is what stops the reminders, so close the request before anything else can fail.
     let rec=null;
-    try{connectLambda(event);rec=await close(openStore(),clean(d.ref),'uploaded');}catch(err){console.error('checklist store',err);}
+    try{rec=await close(openStore(),clean(d.ref),'uploaded');}catch(err){console.error('checklist store',err);}
     const u=renderUpload(d,rec,{created_at:payload.created_at});
-    if(!u.count)return {statusCode:200,body:'no files'};
+    if(!u.count)return reply('no files');
     const sentOk=await send(key,{from,to,subject:u.subject,html:u.html,text:u.text,...(u.email?{reply_to:u.email}:{})});
-    return {statusCode:sentOk?200:502,body:sentOk?'sent':'send failed'};
+    return sentOk?reply('sent'):reply('send failed',502);
   }
   const m=renderEnquiry(d,{created_at:payload.created_at});
   const valid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email);
   const ok=await send(key,{from,to,subject:m.subject,html:m.html,text:m.text,...(valid?{reply_to:m.email}:{})});
   if(ok&&valid&&process.env.ENQUIRY_ACK==='on'){const a=renderAck(d);await send(key,{from,to:[m.email],reply_to:'info@cesolutions.com.au',subject:a.subject,html:a.html,text:a.text});}
-  return {statusCode:ok?200:502,body:ok?'sent':'send failed'};
+  return ok?reply('sent'):reply('send failed',502);
 };
