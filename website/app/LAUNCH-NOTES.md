@@ -15,3 +15,7 @@ Final browser verification passed at 1440px desktop and 390px mobile: no horizon
 ## Where the emails go (9 October 2026)
 
 Staff emails (new enquiry, checklist sent, checklist files) go to `ENQUIRY_TO`, set on the Netlify project to info@cesolutions.com.au. Customer emails are sent from and reply to info@cesolutions.com.au. Environment variables are frozen per deploy, so a change needs a new deploy that touches `website/app` (Netlify skips builds for commits outside the base directory).
+
+## Live on cesolutions.com.au (9 October 2026)
+
+The domain now serves this site. In the Cloudflare zone the apex `A` record points at Netlify (`75.2.60.5`, was `45.77.235.129`) and `www` is a `CNAME` to `cesolutions.netlify.app` (was `uhnyqmsn.elementor.cloud`), both DNS only. cesolutions.com.au is the primary domain on the Netlify project, www redirects to it, and cesolutions.automatrix.au stays as an alias so links in earlier emails keep working. Mail records were not changed. To roll back, restore the two old values.
