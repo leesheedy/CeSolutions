@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UploadRouteImport } from './routes/upload'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -21,6 +22,11 @@ import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as LocationsSlugServiceRouteImport } from './routes/locations.$slug_.$service'
 
+const UploadRoute = UploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/upload': typeof UploadRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/locations/': typeof LocationsIndexRoute
   '/locations/$slug/$service': typeof LocationsSlugServiceRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/upload': typeof UploadRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/locations': typeof LocationsIndexRoute
   '/locations/$slug/$service': typeof LocationsSlugServiceRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/upload': typeof UploadRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/locations/': typeof LocationsIndexRoute
   '/locations/$slug_/$service': typeof LocationsSlugServiceRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/upload'
     | '/locations/$slug'
     | '/locations/'
     | '/locations/$slug/$service'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/upload'
     | '/locations/$slug'
     | '/locations'
     | '/locations/$slug/$service'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/upload'
     | '/locations/$slug'
     | '/locations/'
     | '/locations/$slug_/$service'
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  UploadRoute: typeof UploadRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
   LocationsSlugServiceRoute: typeof LocationsSlugServiceRoute
@@ -175,6 +188,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/upload': {
+      id: '/upload'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof UploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -264,6 +284,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  UploadRoute: UploadRoute,
   LocationsSlugRoute: LocationsSlugRoute,
   LocationsIndexRoute: LocationsIndexRoute,
   LocationsSlugServiceRoute: LocationsSlugServiceRoute,

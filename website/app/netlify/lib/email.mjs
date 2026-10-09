@@ -6,7 +6,7 @@
 export const OFFICE='(02) 6021 2000',OFFICE_HREF='tel:+61260212000';
 export const C={night:'#0A1D2B',ink:'#0F1E29',muted:'#52616C',line:'#E1E6E3',stone:'#F3F5F2',tint:'#E7F4EC',brand:'#0B7A4E',mint:'#7FE3B2',sun:'#F5B400'};
 export const FONT="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
-const SITE=(process.env.URL||'https://cesolutions.automatrix.au').replace(/\/$/,'');
+export const SITE=(process.env.URL||'https://cesolutions.automatrix.au').replace(/\/$/,'');
 const SOLARQUOTES='https://www.solarquotes.com.au/installer-review/clean-energy-solutions/';
 export const asset=name=>`${SITE}/assets/email/${name}`;
 export const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

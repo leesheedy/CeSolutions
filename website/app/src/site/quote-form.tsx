@@ -23,18 +23,18 @@ const SERVICES:Service[]=[
 const STEPS=['What you need','About you','Send'] as const;
 // .heic/.heif are listed as well: Windows file pickers leave them out of image/*.
 const PHOTO='image/*,.heic,.heif';
-const FILES:[string,string,string][]=[['bill','Recent power bill','.pdf,'+PHOTO],['roof_photo','Photo of your roof',PHOTO],['meter_photo','Your meter box',PHOTO],['battery_photo','Where a battery could go',PHOTO]];
+export const FILES:[string,string,string][]=[['bill','Recent power bill','.pdf,'+PHOTO],['roof_photo','Photo of your roof',PHOTO],['meter_photo','Your meter box',PHOTO],['battery_photo','Where a battery could go',PHOTO]];
 // One limit for a single file and for all of them together: Netlify caps the whole request, not each file.
 // 7.5 rather than 8: the limit is on the whole multipart request, which is a little bigger than the files in it.
-const MAX_BYTES=7.5*1024*1024;
+export const MAX_BYTES=7.5*1024*1024;
 const isOffline=()=>navigator.onLine===false;
 /** POST the enquiry to Netlify Forms, giving up after `ms` so a stalled mobile upload doesn't hang on "Sending…". */
-async function post(fd:FormData,ms:number){
+export async function post(fd:FormData,ms:number){
   const ctl=new AbortController(),t=window.setTimeout(()=>ctl.abort(),ms);
   try{return (await fetch('/',{method:'POST',body:fd,signal:ctl.signal})).ok;}catch{return false;}finally{window.clearTimeout(t);}
 }
 const DRAFT='ces-enquiry-draft',DRAFT_FIELDS=['name','phone','email','message'] as const;
-const fmtSize=(n:number)=>n>=1024*1024?(n/1024/1024).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
+export const fmtSize=(n:number)=>n>=1024*1024?(n/1024/1024).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
 
 const isHeic=(f:File)=>/^image\/hei[cf]/i.test(f.type)||/\.hei[cf]$/i.test(f.name);
 const isImage=(f:File)=>f.type.startsWith('image/')||/\.(jpe?g|png|webp|gif|bmp|avif|hei[cf])$/i.test(f.name);
@@ -52,7 +52,7 @@ async function decode(file:File):Promise<ImageBitmap>{
 }
 /** Turn any photo into a JPEG of a sensible size: HEIC is converted so the office can open it, and big photos are
  * scaled down. Returns the original when it is already a small JPEG/PNG/WebP, is not an image, or cannot be decoded. */
-async function shrink(file:File):Promise<File>{
+export async function shrink(file:File):Promise<File>{
   if(!isImage(file))return file;
   const plain=/^image\/(jpeg|png|webp)$/.test(file.type);
   if(plain&&file.size<=600_000)return file;

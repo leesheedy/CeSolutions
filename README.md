@@ -53,7 +53,10 @@ website/app/src
 │  ├─ sections.tsx    hero (video), enquiry band, service stack, why-us, process, visit band
 │  ├─ quote-form.tsx  three-step Netlify Forms enquiry (services → contact → bill/photos), photo shrinking, checklist button
 │  ├─ address-field.tsx  address combobox (Google Places when keyed, else OpenStreetMap) → suburb/state/postcode
-│  netlify/functions/send-checklist.mjs  emails the visitor a what-to-send list via Resend
+│  netlify/functions/send-checklist.mjs  emails the visitor a what-to-send list via Resend, with a personal upload link (/upload)
+│  netlify/functions/checklist-reminders.mjs  hourly: reminds on day 2 and day 6 if nothing was uploaded, then stops
+│  netlify/functions/checklist-link.mjs  "Stop reminders" (team) and "No thanks" (customer) links; upload-page lookup
+│  netlify/lib/checklist.mjs  checklist requests in Netlify Blobs (store "checklist") and the checklist emails
 │  ├─ estimator.tsx   bill-slider savings estimator (CES-published 50–100% range only)
 │  ├─ flow.tsx        GSAP "sun to switchboard" six-step diagram with a following detail panel
 │  ├─ projects.tsx    "Our work" scroll intro + filterable photo grid with a feature tile

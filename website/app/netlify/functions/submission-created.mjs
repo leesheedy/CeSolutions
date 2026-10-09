@@ -1,6 +1,7 @@
 // Runs automatically whenever Netlify verifies a form submission (the file name is the trigger) and emails the
 // team a readable version of the enquiry: who it is, what they want, one-tap call / reply / map buttons, the
 // attached bill and photos as buttons (with a thumbnail for images), and nothing for the fields left empty.
+// It also emails the team the files sent through a checklist upload link, and closes that checklist request.
 //
 // Netlify's own notification email cannot be styled, which is why this exists. It sends through Resend
 // (https://resend.com) and stays silent until these are set on the Netlify project:
@@ -9,7 +10,9 @@
 //   ENQUIRY_TO       who receives enquiries, comma-separated (defaults to it@cesolutions.com.au)
 //   ENQUIRY_ACK      set to "on" to also send the customer a short "we've got it" email
 // Until then nothing breaks: the submission is still stored and Netlify's plain notification still goes out.
+import {connectLambda} from '@netlify/blobs';
 import {C,FONT,OFFICE,OFFICE_HREF,REVIEWS,button,esc,review,shell,steps} from '../lib/email.mjs';
+import {close,openStore} from '../lib/checklist.mjs';
 
 const FILES=[['bill','Power bill'],['roof_photo','Roof photo'],['meter_photo','Meter box'],['battery_photo','Battery location']];
 const clean=s=>String(s??'').trim();
@@ -19,6 +22,8 @@ const fileOf=v=>v&&typeof v==='object'&&v.url?{url:v.url,name:v.filename||'file'
 const isImage=f=>/\.(jpe?g|png|gif)$/i.test(f.name);
 const kb=n=>!n?'':n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
 const row=(label,value)=>`<tr><td style="padding:12px 0;border-top:1px solid ${C.line};width:128px;vertical-align:top;font:600 14px/1.45 ${FONT};color:${C.muted}">${esc(label)}</td><td style="padding:12px 0;border-top:1px solid ${C.line};vertical-align:top;font:400 16px/1.45 ${FONT};color:${C.ink}">${value}</td></tr>`;
+
+const fileCard=([label,f])=>`<a href="${esc(f.url)}" style="display:block;margin:0 0 8px;padding:12px 14px;border-radius:14px;border:1.5px solid ${C.line};text-decoration:none"><table role="presentation" cellpadding="0" cellspacing="0"><tr>${isImage(f)?`<td style="padding-right:14px;vertical-align:middle"><img src="${esc(f.url)}" width="64" height="64" alt="" style="display:block;width:64px;height:64px;border-radius:10px;object-fit:cover;border:0"></td>`:''}<td style="vertical-align:middle"><span style="display:block;font:600 15px/1.3 ${FONT};color:${C.ink}">${esc(label)}</span><span style="display:block;font:400 13px/1.4 ${FONT};color:${C.muted}">${esc(f.name)}${f.size?' · '+kb(f.size):''} · Open</span></td></tr></table></a>`;
 
 /** Builds the team email. Exported so it can be previewed without sending anything. */
 export function renderEnquiry(d,meta={}){
@@ -35,7 +40,6 @@ export function renderEnquiry(d,meta={}){
     row('Attachments',files.length?files.map(([label])=>esc(label)).join(', '):`<span style="color:${C.muted}">None sent. Ask for a recent bill.</span>`)
   ].filter(Boolean).join('');
   const when=meta.created_at?new Date(meta.created_at).toLocaleString('en-AU',{timeZone:'Australia/Melbourne',weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}):'';
-  const fileCard=([label,f])=>`<a href="${esc(f.url)}" style="display:block;margin:0 0 8px;padding:12px 14px;border-radius:14px;border:1.5px solid ${C.line};text-decoration:none"><table role="presentation" cellpadding="0" cellspacing="0"><tr>${isImage(f)?`<td style="padding-right:14px;vertical-align:middle"><img src="${esc(f.url)}" width="64" height="64" alt="" style="display:block;width:64px;height:64px;border-radius:10px;object-fit:cover;border:0"></td>`:''}<td style="vertical-align:middle"><span style="display:block;font:600 15px/1.3 ${FONT};color:${C.ink}">${esc(label)}</span><span style="display:block;font:400 13px/1.4 ${FONT};color:${C.muted}">${esc(f.name)}${f.size?' · '+kb(f.size):''} · Open</span></td></tr></table></a>`;
   const body=`<tr><td style="padding:28px 28px 8px">
   ${when?`<p style="margin:0 0 6px;font:500 13px/1.4 ${FONT};color:${C.muted}">${esc(when)}</p>`:''}
   <h1 style="margin:0 0 14px;font:700 28px/1.15 ${FONT};color:${C.ink};letter-spacing:-.02em">${esc(name)}</h1>
@@ -79,15 +83,47 @@ async function send(key,body){
   return res.ok;
 }
 
+/** Team email for files sent through a checklist upload link (the `checklist-upload` form). `rec` is the stored
+ * checklist request the link belongs to, or null when the link's reference was missing or unknown. */
+export function renderUpload(d,rec,meta={}){
+  const files=FILES.map(([k,label])=>[label,fileOf(d[k])]).filter(([,f])=>f);
+  const name=clean(rec?.name)||'Someone',email=clean(rec?.email),services=rec?.services||[];
+  const subject=`Checklist files: ${name}${files.length?' · '+files.map(([l])=>l).join(', '):''}`;
+  const when=meta.created_at?new Date(meta.created_at).toLocaleString('en-AU',{timeZone:'Australia/Melbourne',weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}):'';
+  const chips=services.map(s=>`<span style="display:inline-block;margin:0 6px 6px 0;padding:7px 13px;border-radius:999px;background:${C.tint};color:${C.brand};font:600 14px/1 ${FONT}">${esc(s)}</span>`).join('');
+  const missing=FILES.map(([,label])=>label).filter(l=>!files.some(([x])=>x===l));
+  const body=`<tr><td style="padding:28px 28px 8px">
+  ${when?`<p style="margin:0 0 6px;font:500 13px/1.4 ${FONT};color:${C.muted}">${esc(when)}</p>`:''}
+  <h1 style="margin:0 0 14px;font:700 28px/1.15 ${FONT};color:${C.ink};letter-spacing:-.02em">${esc(name)}</h1>
+  ${chips?`<div style="margin:0 0 14px">${chips}</div>`:''}
+  <p style="margin:0 0 10px;font:400 16px/1.55 ${FONT};color:${C.ink}">${rec?'Sent through their checklist upload link. Their reminders have stopped.':'These came through a checklist upload link the website could not match to a request, so check the files to see whose they are.'}</p>
+  ${email?`<div style="margin:6px 0 4px">${button('mailto:'+email+'?subject='+encodeURIComponent('Your solar quote from Clean Energy Solutions'),'Reply by email',true)}</div>`:''}
+</td></tr>
+<tr><td style="padding:6px 28px 10px"><p style="margin:10px 0 10px;font:700 15px/1.3 ${FONT};color:${C.ink}">Files they sent</p>${files.map(fileCard).join('')}</td></tr>
+<tr><td style="padding:8px 28px 26px"><p style="margin:0;padding-top:18px;border-top:1px solid ${C.line};font:400 13px/1.55 ${FONT};color:${C.muted}">${missing.length?'Not sent: '+esc(missing.join(', '))+'. ':''}${email?'Replying to this email goes straight to '+esc(email)+'.':''}</p></td></tr>`;
+  const html=shell({title:subject,preheader:files.map(([l])=>l).join(', '),tag:'Checklist files',rows:body,note:'Sent from a checklist upload link on the Clean Energy Solutions website.'});
+  const text=[`Checklist files from ${name}${email?' <'+email+'>':''}`,when,'',...files.map(([l,f])=>`- ${l}: ${f.url}`),missing.length?'\nNot sent: '+missing.join(', '):''].filter(Boolean).join('\n');
+  return {subject,html,text,email,count:files.length};
+}
+
 export const handler=async(event)=>{
   let payload;try{payload=JSON.parse(event.body||'{}').payload;}catch{return {statusCode:400,body:'bad payload'};}
-  if(!payload||payload.form_name!=='enquiry')return {statusCode:200,body:'ignored'};
+  if(!payload||!['enquiry','checklist-upload'].includes(payload.form_name))return {statusCode:200,body:'ignored'};
   const key=process.env.RESEND_API_KEY,sender=process.env.ENQUIRY_FROM||process.env.CHECKLIST_FROM;
   if(!key||!sender)return {statusCode:200,body:'unconfigured'};
   // A bare address shows in inboxes as "info"; give it the business name.
   const from=sender.includes('<')?sender:`Clean Energy Solutions <${sender.trim()}>`;
   const to=(process.env.ENQUIRY_TO||'it@cesolutions.com.au').split(',').map(s=>s.trim()).filter(Boolean);
   const d=payload.data||{};
+  if(payload.form_name==='checklist-upload'){
+    // Uploading is what stops the reminders, so close the request before anything else can fail.
+    let rec=null;
+    try{connectLambda(event);rec=await close(openStore(),clean(d.ref),'uploaded');}catch(err){console.error('checklist store',err);}
+    const u=renderUpload(d,rec,{created_at:payload.created_at});
+    if(!u.count)return {statusCode:200,body:'no files'};
+    const sentOk=await send(key,{from,to,subject:u.subject,html:u.html,text:u.text,...(u.email?{reply_to:u.email}:{})});
+    return {statusCode:sentOk?200:502,body:sentOk?'sent':'send failed'};
+  }
   const m=renderEnquiry(d,{created_at:payload.created_at});
   const valid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email);
   const ok=await send(key,{from,to,subject:m.subject,html:m.html,text:m.text,...(valid?{reply_to:m.email}:{})});
