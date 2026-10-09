@@ -11,3 +11,7 @@ Source review: https://cesolutions.com.au/ and its service/team/contact pages. D
 Restored 13 September 2026 after the earlier interrupted cloud session. Typecheck and production build passed. See final conversation for deployment status.
 
 Final browser verification passed at 1440px desktop and 390px mobile: no horizontal overflow, one H1, no broken eager images or browser exceptions, video seeks forward and backward, mobile menu opens/closes with Escape, FAQ opens and validated enquiries produce the correct mailto link. Reduced motion requests zero MP4s. All six pages, robots and sitemap return 200; unknown pages return 404. Runtime verification details are in runtime-verification.json.
+
+## Where the emails go (9 October 2026)
+
+Staff emails (new enquiry, checklist sent, checklist files) go to `ENQUIRY_TO`, set on the Netlify project to info@cesolutions.com.au. Customer emails are sent from and reply to info@cesolutions.com.au. Environment variables are frozen per deploy, so a change needs a new deploy that touches `website/app` (Netlify skips builds for commits outside the base directory).
